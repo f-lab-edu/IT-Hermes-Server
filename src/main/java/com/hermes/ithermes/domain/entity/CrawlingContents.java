@@ -5,27 +5,25 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class User extends BaseEntity {
+public class CrawlingContents extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String nickname;
+    private String title;
 
     @Column(nullable = false)
-    private String userId;
+    private String content;
 
     @Column(nullable = false)
-    private String password;
+    private String image;
 
     @Column(nullable = false)
-    private String job;
+    private String url;
 
     @Column(nullable = false)
-    private Integer experience;
-
-    private String telegramId;
+    private Long referenceCnt;
 
 }
