@@ -35,14 +35,4 @@ public class UserCreateUserRequestDto {
         this.job = job;
         this.experience = experience;
     }
-
-    public User parseUserToLoginRequest(UserCreateUserRequestDto userLoginRequestDto) {
-        return User.builder()
-                .userId(userLoginRequestDto.getId())
-                .password(userLoginRequestDto.getPassword())
-                .nickname(userLoginRequestDto.getNickname())
-                .job(userLoginRequestDto.getJob())
-                .experience(Integer.parseInt(userLoginRequestDto.getExperience()))
-                .build();
-    }
 }

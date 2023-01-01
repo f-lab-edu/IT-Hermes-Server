@@ -19,12 +19,12 @@ public class UserRepository {
     public String save(User user) {
         user.initDefaultValue();
         em.persist(user);
-        return user.getUserId();
+        return user.getLoginId();
     }
 
-    public List<User> findByUserId(String userId) {
-        return em.createQuery("select u from User u where u.userId = :userId", User.class)
-                .setParameter("userId", userId)
+    public List<User> findByUserId(String loginId) {
+        return em.createQuery("select u from User u where u.loginId = :loginId", User.class)
+                .setParameter("loginId", loginId)
                 .getResultList();
     }
 
@@ -34,9 +34,9 @@ public class UserRepository {
                 .getResultList();
     }
 
-    public List<User> findUserIdAndPassword(String id, String password) {
-        return em.createQuery("select u from User u where u.userId = :userId and u.password= :password", User.class)
-                .setParameter("userId", id)
+    public List<User> findUserIdAndPassword(String loginId, String password) {
+        return em.createQuery("select u from User u where u.loginId = :loginId and u.password= :password", User.class)
+                .setParameter("loginId", loginId)
                 .setParameter("password", password)
                 .getResultList();
     }

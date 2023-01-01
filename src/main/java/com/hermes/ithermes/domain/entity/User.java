@@ -6,10 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +14,7 @@ import java.util.List;
 @Getter
 @Builder
 @RequiredArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor()
 @Table(name = "USER")
 public class User extends BaseEntity {
 
@@ -29,7 +26,7 @@ public class User extends BaseEntity {
     private String nickname;
 
     @Column(nullable = false)
-    private String userId;
+    private String loginId;
 
     @Column(nullable = false)
     private String password;

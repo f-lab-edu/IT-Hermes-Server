@@ -2,6 +2,7 @@ package com.hermes.ithermes.application;
 
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.exception.*;
+import com.hermes.ithermes.domain.factory.UserFactory;
 import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.presentation.dto.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,12 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class UserService {
     UserRepository userRepository;
+    UserFactory userFactory;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserFactory userFactory) {
         this.userRepository = userRepository;
+        this.userFactory = userFactory;
     }
 
     @Transactional
@@ -26,7 +29,7 @@ public class UserService {
             throw new UnMatchedPasswordException();
         }
         if (findUserId(userLoginRequestDto.getId()).isEmpty()) {
-            userRepository.save(userLoginRequestDto.parseUserToLoginRequest(userLoginRequestDto));
+            userRepository.save(userFactory.parseLoginRequestDtoToUser(userLoginRequestDto));
             return new UserCreateUserResponseDto("success");
         } else {
             throw new SameUserException();
@@ -50,7 +53,7 @@ public class UserService {
     }
 
     public UserDuplicateIdResponseDto isCheckDuplicateId(UserDuplicateIdRequestDto userDuplicateIdRequestDto) {
-        if (findUserNickname(userDuplicateIdRequestDto.getId()).isEmpty()) {
+        if (findUserId(userDuplicateIdRequestDto.getId()).isEmpty()) {
             return new UserDuplicateIdResponseDto("success");
         } else {
             throw new SameIdException();
@@ -70,14 +73,6 @@ public class UserService {
     @Transactional
     public List<User> findUserIdAndPassword(String id, String password) {
         return userRepository.findUserIdAndPassword(id, password);
-    }
-
-    public UserChangeNicknameResponseDto changeNickname(UserChangeNicknameRequestDto userChangeNicknameRequestDto) {
-        List<User> userList = findUserNickname(userChangeNicknameRequestDto.getNickname());
-        if (userList.isEmpty()) {
-        } else {
-        }
-        return new UserChangeNicknameResponseDto("success");
     }
 
     public boolean isCheckPassword(String password, String passwordConfirm) {

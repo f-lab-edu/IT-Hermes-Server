@@ -2,7 +2,6 @@ package com.hermes.ithermes.presentation.controller;
 
 import com.hermes.ithermes.application.UserService;
 import com.hermes.ithermes.presentation.dto.user.*;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -10,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RestController
+@RestController()
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 
@@ -33,21 +33,15 @@ public class UserController {
         return ResponseEntity.ok(userLoginResponseDto);
     }
 
-    @RequestMapping(value = "/duplicate/nickname", method = RequestMethod.POST)
+    @RequestMapping(value = "/duplicate-nickname", method = RequestMethod.POST)
     public ResponseEntity<UserDuplicateNicknameResponseDto> isCheckDuplicateNickname(@Valid @RequestBody UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {
         UserDuplicateNicknameResponseDto userDuplicateNicknameResponseDto = userService.isCheckDuplicateNickname(userDuplicateNicknameRequestDto);
         return ResponseEntity.ok(userDuplicateNicknameResponseDto);
     }
 
-    @RequestMapping(value = "/duplicate/id", method = RequestMethod.POST)
+    @RequestMapping(value = "/duplicate-id", method = RequestMethod.POST)
     public ResponseEntity<UserDuplicateIdResponseDto> isCheckDuplicateNickname(@Valid @RequestBody UserDuplicateIdRequestDto userDuplicateIdRequestDto) {
         UserDuplicateIdResponseDto userDuplicateIdResponseDto = userService.isCheckDuplicateId(userDuplicateIdRequestDto);
         return ResponseEntity.ok(userDuplicateIdResponseDto);
-    }
-
-    @RequestMapping(value = "/nickname", method = RequestMethod.PUT)
-    public ResponseEntity<UserChangeNicknameResponseDto> changeNickname(@Valid @RequestBody UserChangeNicknameRequestDto userChangeNicknameRequestDto) {
-        UserChangeNicknameResponseDto userLoginResponseDto = userService.changeNickname(userChangeNicknameRequestDto);
-        return ResponseEntity.ok(userLoginResponseDto);
     }
 }
