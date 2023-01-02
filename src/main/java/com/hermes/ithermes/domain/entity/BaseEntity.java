@@ -1,6 +1,5 @@
 package com.hermes.ithermes.domain.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -20,8 +19,5 @@ public class BaseEntity {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
-    @Column(nullable = false)
-    private Boolean isDelete;
 
 }
