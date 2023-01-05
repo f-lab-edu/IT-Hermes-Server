@@ -34,8 +34,4 @@ public class CrawlingContents extends BaseEntity {
     @OneToMany(mappedBy = "crawlingContents")
     private List<CrawlingContentsRegistry> crawlingContentsRegistryList;
 
-    @ManyToOne
-    @JoinColumn(name = "categoryId")
-    private Category category;
-
 }

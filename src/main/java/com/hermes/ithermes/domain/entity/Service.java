@@ -3,6 +3,8 @@ package com.hermes.ithermes.domain.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.List;
+
 @Entity
 @Getter
 public class Service extends BaseEntity{
@@ -14,12 +16,15 @@ public class Service extends BaseEntity{
 
     private Boolean isDelete;
 
-    @ManyToOne
-    @JoinColumn(name = "categoryId")
-    private Category category;
+    private String name;
+
+    private String category;
 
     @ManyToOne
     @JoinColumn(name = "alarmId")
     private Alarm alarm;
+
+    @OneToMany(mappedBy = "service")
+    private List<YoutubeAndNewsContents> youtubeAndNewsContents;
 
 }
