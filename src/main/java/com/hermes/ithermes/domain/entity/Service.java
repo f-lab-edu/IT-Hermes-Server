@@ -1,7 +1,9 @@
 package com.hermes.ithermes.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
@@ -25,6 +27,6 @@ public class Service extends BaseEntity{
     private Alarm alarm;
 
     @OneToMany(mappedBy = "service")
-    private List<YoutubeAndNewsContents> youtubeAndNewsContents;
+    private List<YoutubeAndNews> youtubeAndNewsContents;
 
 }

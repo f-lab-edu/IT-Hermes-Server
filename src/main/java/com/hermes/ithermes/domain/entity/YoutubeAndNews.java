@@ -5,11 +5,11 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class YoutubeAndNewsContents extends BaseEntity{
+public class YoutubeAndNews extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "YoutubeAndNewsContentsId")
+    @Column(name = "YoutubeAndNewsId")
     private Long id;
 
     private String title;
@@ -26,7 +26,7 @@ public class YoutubeAndNewsContents extends BaseEntity{
 
     private Long viewCount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "serviceId")
     private Service service;
 
