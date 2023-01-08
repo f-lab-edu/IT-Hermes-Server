@@ -1,30 +1,22 @@
 package com.hermes.ithermes.infrastructure;
 
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
-import jakarta.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public class YoutubeAndNewsRepository {
+public interface YoutubeAndNewsRepository extends JpaRepository<YoutubeAndNews,Long> {
 
-    private final EntityManager em;
+    @Query(
+            value = "select c from YoutubeAndNews c left join c.service where c.service.category=:category",
+            countQuery = "select count(c.title) from YoutubeAndNews c"
+    )
+    Page<YoutubeAndNews> findYoutubeAndNewsByCategory(Pageable pageable,String category);
 
-    @Autowired
-    public YoutubeAndNewsRepository(EntityManager em) {
-        this.em = em;
-    }
+    @Query("select c from YoutubeAndNews c left join c.service")
+    Page<YoutubeAndNews> findTop10YoutubeAndNews(Pageable pageable);
 
-    public void save(YoutubeAndNews youtubeAndNews){
-        em.persist(youtubeAndNews);
-    }
-
-    public List<YoutubeAndNews> findAllYoutubeAndNews(){
-        return em.createQuery("select c from YoutubeAndNews c join fetch c.service order by c.viewCount desc",YoutubeAndNews.class)
-                .setFirstResult(0)
-                .setMaxResults(10)
-                .getResultList();
-    }
 }

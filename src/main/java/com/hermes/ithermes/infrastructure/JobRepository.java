@@ -8,12 +8,13 @@ import org.springframework.stereotype.Repository;
 
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 @Repository
 public interface JobRepository extends JpaRepository<Job,Long> {
 
-    @Query(value = "select j from Job j join fetch j.service")
-    List<Job> findAllJob();
+    @Query(
+            value = "select j from Job j left join j.service where j.service.category=:category",
+            countQuery = "select count(j.title) from Job j"
+    )
+    Page<Job> findJobByCategory(Pageable pageable, String category);
 
 }

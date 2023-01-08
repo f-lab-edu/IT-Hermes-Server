@@ -25,10 +25,10 @@ public class ContentsController {
         return ResponseEntity.ok(contentsService.getMainContents());
     }
 
-    /*
+
     @RequestMapping(value = "/category",method = RequestMethod.GET)
     public ResponseEntity<List<ContentsDto>> getCategoryContents(@RequestParam(value = "type",required = true)String type,@RequestParam(value = "page",required = true)int page){
         return ResponseEntity.ok(contentsService.getCategoryContents(type,page));
-    }*/
+    }
 
 }

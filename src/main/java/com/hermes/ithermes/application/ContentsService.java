@@ -24,37 +24,35 @@ public class ContentsService {
     private final JobRepository jobRepository;
 
     public List<MainContentsDto> getMainContents(){
-        List<YoutubeAndNews> contents=youtubeAndNewsRepository.findAllYoutubeAndNews();
+        Page<YoutubeAndNews> contents= youtubeAndNewsRepository.findTop10YoutubeAndNews(PageRequest.of(0,10,Sort.by("viewCount").descending()));
 
-        return contents.stream()
+        return contents.getContent().stream()
                 .map(m->MainContentsDto.ContentsEntityToDto(m))
                 .collect(Collectors.toList());
     }
 
-    /*
+
     public List<ContentsDto> getCategoryContents(String type,int page){
+        Pageable sortedByCreatedAt = PageRequest.of(page,3,Sort.by("createdAt").descending());
         if(type.equals("job")){
-            Pageable sortedByCreatedAt = PageRequest.of(page,12,Sort.by("createdAt").descending());
-            Page<Job> result=jobRepository.findAllJob(sortedByCreatedAt);
+            Page<Job> result=jobRepository.findJobByCategory(sortedByCreatedAt,"job");
             List<Job> jobcontents = result.getContent();
             return jobcontents.stream()
                     .map(m->ContentsDto.JobToContentsDto(m))
                     .collect(Collectors.toList());
         }else if(type.equals("news")){
-            Pageable sortedByCreatedAt = PageRequest.of(page,12,Sort.by("createdAt").descending());
-            Page<YoutubeAndNews> result = youtubeAndNewsRepository.findAllByService("news",sortedByCreatedAt);
+            Page<YoutubeAndNews> result = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(sortedByCreatedAt,"news");
             List<YoutubeAndNews> newsContents = result.getContent();
             return newsContents.stream()
                     .map(m->ContentsDto.YoutubeAndNewsToContentsDto(m))
                     .collect(Collectors.toList());
         }else{
-            Pageable sortedByCreatedAt = PageRequest.of(page,12,Sort.by("createdAt").descending());
-            Page<YoutubeAndNews> result = youtubeAndNewsRepository.findAllByService("youtube",sortedByCreatedAt);
+            Page<YoutubeAndNews> result = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(sortedByCreatedAt,"youtube");
             List<YoutubeAndNews> youtubeContents=result.getContent();
             return youtubeContents.stream()
                     .map(m->ContentsDto.YoutubeAndNewsToContentsDto(m))
                     .collect(Collectors.toList());
         }
-    }*/
+    }
 
 }
