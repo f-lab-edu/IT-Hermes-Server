@@ -1,32 +1,30 @@
 package com.hermes.ithermes.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class YoutubeAndNews extends BaseEntity{
+public class Job extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "YoutubeAndNewsId")
+    @Column(name = "JobId")
     private Long id;
 
     private String title;
 
-    private String description;
-
-    private String image;
-
     private String url;
 
-    private Boolean isDelete;
+    private String location;
 
-    private String contentsDate;
+    private String company;
+
+    private String startDate;
+
+    private String endDate;
+
+    private Boolean isDelete;
 
     private Long viewCount;
 

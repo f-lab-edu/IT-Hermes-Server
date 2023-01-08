@@ -1,14 +1,14 @@
 package com.hermes.ithermes.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Service extends BaseEntity{
 
     @Id
@@ -29,4 +29,10 @@ public class Service extends BaseEntity{
     @OneToMany(mappedBy = "service")
     private List<YoutubeAndNews> youtubeAndNewsContents;
 
+    public Service(Long id, Boolean isDelete, String name, String category) {
+        this.id = id;
+        this.isDelete = isDelete;
+        this.name = name;
+        this.category = category;
+    }
 }
