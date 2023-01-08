@@ -1,9 +1,9 @@
 package com.hermes.ithermes.presentation.controller;
 
 import com.hermes.ithermes.application.ContentsService;
-import com.hermes.ithermes.infrastructure.YoutubeAndNewRepository;
-import com.hermes.ithermes.infrastructure.YoutubeAndNewRepository.*;
+import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
+import com.hermes.ithermes.presentation.dto.contents.MainContentsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,13 +21,14 @@ public class ContentsController {
     private final ContentsService contentsService;
 
     @RequestMapping(value = "/main",method = RequestMethod.GET)
-    public ResponseEntity<List<MainContents>> getMainContents(){
+    public ResponseEntity<List<MainContentsDto>> getMainContents(){
         return ResponseEntity.ok(contentsService.getMainContents());
     }
 
+    /*
     @RequestMapping(value = "/category",method = RequestMethod.GET)
-    public ResponseEntity<List<ContentsDto>> getCategoryContents(@RequestParam(value = "type",required = false)String type){
-        return ResponseEntity.ok(contentsService.getCategoryContents(type));
-    }
+    public ResponseEntity<List<ContentsDto>> getCategoryContents(@RequestParam(value = "type",required = true)String type,@RequestParam(value = "page",required = true)int page){
+        return ResponseEntity.ok(contentsService.getCategoryContents(type,page));
+    }*/
 
 }
