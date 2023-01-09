@@ -10,13 +10,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface YoutubeAndNewsRepository extends JpaRepository<YoutubeAndNews,Long> {
 
-    @Query(
-            value = "select c from YoutubeAndNews c left join c.service where c.service.category=:category",
-            countQuery = "select count(c.title) from YoutubeAndNews c"
-    )
+    @Query("select c from YoutubeAndNews c left join c.service where c.service.category=:category and c.isDelete=false")
     Page<YoutubeAndNews> findYoutubeAndNewsByCategory(Pageable pageable,String category);
 
-    @Query("select c from YoutubeAndNews c left join c.service")
+    @Query("select c from YoutubeAndNews c left join c.service where c.isDelete=false")
     Page<YoutubeAndNews> findTop10YoutubeAndNews(Pageable pageable);
 
 }

@@ -12,12 +12,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ContentsService {
 
     private final YoutubeAndNewsRepository youtubeAndNewsRepository;
@@ -33,21 +35,21 @@ public class ContentsService {
 
 
     public List<ContentsDto> getCategoryContents(String type,int page){
-        Pageable sortedByCreatedAt = PageRequest.of(page,3,Sort.by("createdAt").descending());
+        Pageable pageSortedByCreatedAt = PageRequest.of(page,12,Sort.by("createdAt").descending());
         if(type.equals("job")){
-            Page<Job> result=jobRepository.findJobByCategory(sortedByCreatedAt,"job");
+            Page<Job> result=jobRepository.findJobByCategory(pageSortedByCreatedAt,"job");
             List<Job> jobcontents = result.getContent();
             return jobcontents.stream()
                     .map(m->ContentsDto.JobToContentsDto(m))
                     .collect(Collectors.toList());
         }else if(type.equals("news")){
-            Page<YoutubeAndNews> result = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(sortedByCreatedAt,"news");
+            Page<YoutubeAndNews> result = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageSortedByCreatedAt,"news");
             List<YoutubeAndNews> newsContents = result.getContent();
             return newsContents.stream()
                     .map(m->ContentsDto.YoutubeAndNewsToContentsDto(m))
                     .collect(Collectors.toList());
         }else{
-            Page<YoutubeAndNews> result = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(sortedByCreatedAt,"youtube");
+            Page<YoutubeAndNews> result = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageSortedByCreatedAt,"youtube");
             List<YoutubeAndNews> youtubeContents=result.getContent();
             return youtubeContents.stream()
                     .map(m->ContentsDto.YoutubeAndNewsToContentsDto(m))

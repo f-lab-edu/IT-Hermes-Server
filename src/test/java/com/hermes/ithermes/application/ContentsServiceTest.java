@@ -1,6 +1,5 @@
-package com.hermes.ithermes.presentation;
+package com.hermes.ithermes.application;
 
-import com.hermes.ithermes.application.ContentsService;
 import com.hermes.ithermes.domain.entity.Service;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.infrastructure.ServiceRepository;
@@ -18,10 +17,11 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class ContentsControllerTest {
+class ContentsServiceTest {
 
     @Autowired
     private ContentsService contentsService;
@@ -85,7 +85,6 @@ class ContentsControllerTest {
         youtubeAndNewsRepository.save(youtubeAndNews12);
     }
 
-
     @Test
     @DisplayName("main contents를 10개 반환하는지 테스트")
     void checkMainContentsCount(){
@@ -101,6 +100,7 @@ class ContentsControllerTest {
         Page<YoutubeAndNews> youtubeAndNewsResults = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageRequest,"youtube");
 
         Assertions.assertEquals(2,youtubeAndNewsResults.getContent().size());
+        Assertions.assertTrue(youtubeAndNewsResults.isFirst());
+        Assertions.assertTrue(youtubeAndNewsResults.hasNext());
     }
-
 }
