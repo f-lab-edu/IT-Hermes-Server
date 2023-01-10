@@ -1,6 +1,5 @@
 package com.hermes.ithermes.domain.entity;
 
-import com.hermes.ithermes.domain.util.JobType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,31 +11,38 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class User extends BaseEntity {
-
+public class YoutubeAndNews extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String nickname;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SERVICE_ID")
+    Service service;
 
     @Column(nullable = false)
-    private String loginId;
+    private String title;
 
     @Column(nullable = false)
-    private String password;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private JobType job;
+    private String description;
 
     @Column(nullable = false)
-    private Integer yearOfExperience;
+    private String image;
 
-    private String telegramId;
+    @Column(nullable = false)
+    private String url;
 
-    public void changeNickname(String nickname) {
-        this.nickname=nickname;
+    @Column(nullable = false)
+    private String contentsDate;
+
+    @Column(nullable = false)
+    private Long viewCount;
+
+    public void setService(Service service) {
+        this.service = service;
+    }
+
+    public void initDefaultData() {
+        viewCount=0L;
     }
 }

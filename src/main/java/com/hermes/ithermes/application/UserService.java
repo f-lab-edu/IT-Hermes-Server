@@ -1,85 +1,125 @@
 package com.hermes.ithermes.application;
 
+import com.hermes.ithermes.domain.entity.Keyword;
 import com.hermes.ithermes.domain.entity.User;
+import com.hermes.ithermes.domain.entity.UserKeywordRegistry;
 import com.hermes.ithermes.domain.exception.*;
+import com.hermes.ithermes.domain.factory.KeywordFactory;
 import com.hermes.ithermes.domain.factory.UserFactory;
+import com.hermes.ithermes.domain.factory.UserKeywordRegistryFactory;
+import com.hermes.ithermes.infrastructure.UserKeywordRegistryRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
+import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 public class UserService {
+
     UserRepository userRepository;
+    UserKeywordRegistryRepository userKeywordRegistryRepository;
     UserFactory userFactory;
+    KeywordFactory keywordFactory;
+    UserKeywordRegistryFactory userKeywordRegistryFactory;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserFactory userFactory) {
+    public UserService(UserRepository userRepository, UserKeywordRegistryRepository userKeywordRegistryRepository,
+                       UserFactory userFactory, KeywordFactory keywordFactory, UserKeywordRegistryFactory userKeywordRegistryFactory) {
         this.userRepository = userRepository;
+        this.userKeywordRegistryRepository = userKeywordRegistryRepository;
         this.userFactory = userFactory;
+        this.keywordFactory = keywordFactory;
+        this.userKeywordRegistryFactory = userKeywordRegistryFactory;
     }
 
     @Transactional
     public UserCreateUserResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
+
         if (!isCheckPassword(userLoginRequestDto.getPassword(), userLoginRequestDto.getPasswordConfirm())) {
             throw new UnMatchedPasswordException();
         }
-        if (findUserId(userLoginRequestDto.getId()).isEmpty()) {
-            userRepository.save(userFactory.parseLoginRequestDtoToUser(userLoginRequestDto));
-            return new UserCreateUserResponseDto("success");
-        } else {
+
+        findUserId(userLoginRequestDto.getId()).ifPresent(a -> {
             throw new SameUserException();
-        }
+        });
+        User user = userFactory.parseLoginRequestDtoToUser(userLoginRequestDto);
+
+        Arrays.stream(userLoginRequestDto.getKeywordList()).filter(v -> Objects.nonNull(v)).forEach(v -> {
+            Keyword keyword = keywordFactory.parseKeywordNameToKeyword(v);
+            UserKeywordRegistry userKeywordRegistry = userKeywordRegistryFactory.parseUserAndKeyword(user, keyword);
+            userKeywordRegistryRepository.save(userKeywordRegistry);
+        });
+        return new UserCreateUserResponseDto("success");
     }
 
+    @Transactional(readOnly = true)
     public UserLoginResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) {
-        if(findUserIdAndPassword(userLoginRequestDto.getId(),userLoginRequestDto.getPassword()).isEmpty()) {
-            throw new WrongIdOrPasswordException();
-        } else {
-            return new UserLoginResponseDto("success");
-        }
+        findUserIdAndPassword(userLoginRequestDto.getId(), userLoginRequestDto.getPassword()).orElseThrow(() -> new WrongIdOrPasswordException());
+        return new UserLoginResponseDto("success");
     }
 
+    @Transactional(readOnly = true)
     public UserDuplicateNicknameResponseDto isCheckDuplicateNickname(UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {
-        if (findUserNickname(userDuplicateNicknameRequestDto.getNickname()).isEmpty()) {
-            return new UserDuplicateNicknameResponseDto("success");
-        } else {
+        findUserNickname(userDuplicateNicknameRequestDto.getNickname()).ifPresent(a -> {
             throw new SameNicknameException();
-        }
+        });
+        return new UserDuplicateNicknameResponseDto("success");
     }
 
+    @Transactional(readOnly = true)
     public UserDuplicateIdResponseDto isCheckDuplicateId(UserDuplicateIdRequestDto userDuplicateIdRequestDto) {
-        if (findUserId(userDuplicateIdRequestDto.getId()).isEmpty()) {
-            return new UserDuplicateIdResponseDto("success");
-        } else {
+        findUserId(userDuplicateIdRequestDto.getId()).ifPresent(a -> {
             throw new SameIdException();
-        }
+        });
+        return new UserDuplicateIdResponseDto("success");
     }
 
     @Transactional
-    public List<User> findUserId(String userId) {
-        return userRepository.findByUserId(userId);
+    public UserUpdateNicknameResponseDto isUpdateNickname(UserUpdateNicknameRequestDto userUpdateNicknameRequestDto) {
+        String newNickname = userUpdateNicknameRequestDto.getNickname();
+        findUserNickname(newNickname).ifPresent(a -> {
+            throw new SameNicknameException();
+        });
+
+        User user = findUserId(userUpdateNicknameRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
+        user.changeNickname(newNickname);
+        return new UserUpdateNicknameResponseDto("success");
     }
 
     @Transactional
-    public List<User> findUserNickname(String nickname) {
-        return userRepository.findByUserNickname(nickname);
+    public CommonResponseDto isDeleteUser(UserDeleteUserRequestDto userDeleteUserRequestDto) {
+        User user = findUserId(userDeleteUserRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
+
+        user.isDelete();
+        return new CommonResponseDto();
     }
 
-    @Transactional
-    public List<User> findUserIdAndPassword(String id, String password) {
-        return userRepository.findUserIdAndPassword(id, password);
+    @Transactional(readOnly = true)
+    public UserFindMyDataResponseDto isFindMyData(UserFindMyDataRequestDto userFindMyDataRequestDto) {
+        User user = findUserId(userFindMyDataRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
+        return new UserFindMyDataResponseDto(user.getLoginId(), user.getNickname());
     }
 
-    public boolean isCheckPassword(String password, String passwordConfirm) {
-        if (password.equals(passwordConfirm)) {
-            return true;
-        } else {
-            return false;
-        }
+    private Optional<User> findUserId(String userId) {
+        return userRepository.findByLoginId(userId);
+    }
+
+    private Optional<User> findUserNickname(String nickname) {
+        return userRepository.findByNickname(nickname);
+    }
+
+    private Optional<User> findUserIdAndPassword(String id, String password) {
+        return userRepository.findByLoginIdAndPasswordAndIsDelete(id, password, false);
+    }
+
+    private boolean isCheckPassword(String password, String passwordConfirm) {
+        return password.equals(passwordConfirm) ? true : false;
     }
 }

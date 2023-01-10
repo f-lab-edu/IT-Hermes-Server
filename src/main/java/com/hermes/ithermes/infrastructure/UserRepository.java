@@ -1,43 +1,15 @@
 package com.hermes.ithermes.infrastructure;
 
 import com.hermes.ithermes.domain.entity.User;
-import jakarta.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import java.util.Optional;
 
-@Repository
-public class UserRepository {
-    private final EntityManager em;
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByLoginId(@Param("loginId") String loginId);
 
-    @Autowired
-    public UserRepository(EntityManager em) {
-        this.em = em;
-    }
+    Optional<User> findByLoginIdAndPasswordAndIsDelete(@Param("loginId") String loginId, @Param("password") String password, @Param("isDelete") boolean isDelete);
 
-    public String save(User user) {
-        user.initDefaultValue();
-        em.persist(user);
-        return user.getLoginId();
-    }
-
-    public List<User> findByUserId(String loginId) {
-        return em.createQuery("select u from User u where u.loginId = :loginId", User.class)
-                .setParameter("loginId", loginId)
-                .getResultList();
-    }
-
-    public List<User> findByUserNickname(String nickname) {
-        return em.createQuery("select u from User u where u.nickname = :nickname", User.class)
-                .setParameter("nickname", nickname)
-                .getResultList();
-    }
-
-    public List<User> findUserIdAndPassword(String loginId, String password) {
-        return em.createQuery("select u from User u where u.loginId = :loginId and u.password= :password", User.class)
-                .setParameter("loginId", loginId)
-                .setParameter("password", password)
-                .getResultList();
-    }
+    Optional<User> findByNickname(@Param("nickname") String nickname);
 }

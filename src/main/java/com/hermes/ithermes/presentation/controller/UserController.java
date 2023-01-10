@@ -1,6 +1,7 @@
 package com.hermes.ithermes.presentation.controller;
 
 import com.hermes.ithermes.application.UserService;
+import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,4 +45,23 @@ public class UserController {
         UserDuplicateIdResponseDto userDuplicateIdResponseDto = userService.isCheckDuplicateId(userDuplicateIdRequestDto);
         return ResponseEntity.ok(userDuplicateIdResponseDto);
     }
+
+    @RequestMapping(value = "/nickname", method = RequestMethod.PUT)
+    public ResponseEntity<UserUpdateNicknameResponseDto> isCheckDuplicateNickname(@Valid @RequestBody UserUpdateNicknameRequestDto userUpdateNicknameRequestDto) {
+        UserUpdateNicknameResponseDto userUpdateNicknameResponseDto = userService.isUpdateNickname(userUpdateNicknameRequestDto);
+        return ResponseEntity.ok(userUpdateNicknameResponseDto);
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    public ResponseEntity<CommonResponseDto> isDeleteUser(@Valid @RequestBody UserDeleteUserRequestDto userDeleteUserRequestDto) {
+        CommonResponseDto commonResponseDto = userService.isDeleteUser(userDeleteUserRequestDto);
+        return ResponseEntity.ok(commonResponseDto);
+    }
+
+    @RequestMapping(value = "/my-page", method = RequestMethod.POST)
+    public ResponseEntity<UserFindMyDataResponseDto> isFindMyData(@Valid @RequestBody UserFindMyDataRequestDto userFindMyDataRequestDto) {
+        UserFindMyDataResponseDto userFindMyDataResponseDto = userService.isFindMyData(userFindMyDataRequestDto);
+        return ResponseEntity.ok(userFindMyDataResponseDto);
+    }
+
 }

@@ -14,7 +14,7 @@ public class UserCreateUserRequestDto {
     @NotBlank(message = "아이디는 필수 입력사항 입니다.")
     private String id;
     @NotBlank(message = "비밀번호는 필수 입력사항 입니다.")
-    @Pattern(regexp="(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}",
+    @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}",
             message = "비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호여야 합니다.")
     private String password;
     @NotBlank(message = "비밀번호 확인은 필수 입력사항 입니다.")
@@ -26,13 +26,18 @@ public class UserCreateUserRequestDto {
     private String job;
     @NotBlank(message = "경력은 필수 입력사항 입니다.")
     private String experience;
+    /** 키워드는 최대 5개, 5개 이하 일 시, 배열에 null 삽입*/
+    @NotEmpty(message = "키워드는 필수 입력사항 입니다.")
+    private String[] keywordList;
 
-    public UserCreateUserRequestDto(String id, String password, String passwordConfirm, String nickname, String job, String experience) {
+    public UserCreateUserRequestDto(String id, String password, String passwordConfirm, String nickname, String job,
+                                    String experience, String[] keywordList) {
         this.id = id;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
         this.nickname = nickname;
         this.job = job;
         this.experience = experience;
+        this.keywordList = keywordList;
     }
 }
