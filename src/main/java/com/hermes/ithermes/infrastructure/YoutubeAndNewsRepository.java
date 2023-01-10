@@ -13,6 +13,12 @@ public interface YoutubeAndNewsRepository extends JpaRepository<YoutubeAndNews,L
     @Query("select c from YoutubeAndNews c left join c.service where c.service.category=:category and c.isDelete=false")
     Page<YoutubeAndNews> findYoutubeAndNewsByCategory(Pageable pageable,String category);
 
+    @Query("select c from YoutubeAndNews c left join c.service where c.service.category=:category and c.isDelete=false order by c.viewCount desc")
+    Page<YoutubeAndNews> findYoutubeAndNewsByCategoryOrderByViewCount(Pageable pageable,String category);
+
+    @Query("select c from YoutubeAndNews c left join c.service where c.service.category=:category and c.isDelete=false order by c.createdAt desc")
+    Page<YoutubeAndNews> findYoutubeAndNewsByCategoryOrderByCreatedAt(Pageable pageable,String category);
+
     @Query("select c from YoutubeAndNews c left join c.service where c.isDelete=false")
     Page<YoutubeAndNews> findTop10YoutubeAndNews(Pageable pageable);
 

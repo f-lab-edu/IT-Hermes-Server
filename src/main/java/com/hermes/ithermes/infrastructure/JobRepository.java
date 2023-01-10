@@ -14,4 +14,10 @@ public interface JobRepository extends JpaRepository<Job,Long> {
     @Query(value = "select j from Job j left join j.service where j.service.category=:category and j.isDelete=false")
     Page<Job> findJobByCategory(Pageable pageable, String category);
 
+    @Query(value = "select j from Job j left join j.service where j.service.category=:category and j.isDelete=false order by j.viewCount desc")
+    Page<Job> findJobByCategoryorderByViewCount(Pageable pageable, String category);
+
+    @Query(value = "select j from Job j left join j.service where j.service.category=:category and j.isDelete=false order by j.createdAt desc")
+    Page<Job> findJobByCategoryorderByCreatedAt(Pageable pageable, String category);
+
 }

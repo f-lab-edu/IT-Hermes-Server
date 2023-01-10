@@ -26,8 +26,9 @@ public class ContentsController {
     }
 
     @RequestMapping(value = "/category",method = RequestMethod.GET)
-    public ResponseEntity<List<ContentsDto>> getCategoryContents(@RequestParam(value = "type",required = true)String type,@RequestParam(value = "page",required = true)int page){
-        return ResponseEntity.ok(contentsService.getCategoryContents(type,page));
+    public ResponseEntity<List<ContentsDto>> getCategoryContents(@RequestParam(value = "type",required = true)String type,@RequestParam(value = "page",required = true)int page,
+                                                                 @RequestParam(value = "order",required = false)String order){
+        return ResponseEntity.ok(contentsService.getCategoryContents(type,page,order));
     }
 
 }
