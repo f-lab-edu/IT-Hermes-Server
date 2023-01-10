@@ -42,9 +42,9 @@ public class UserService {
     @Transactional
     public UserCreateUserResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
 
-        if (!isCheckPassword(userLoginRequestDto.getPassword(), userLoginRequestDto.getPasswordConfirm())) {
-            throw new UnMatchedPasswordException();
-        }
+        Optional.ofNullable(userLoginRequestDto.getPassword().equals(userLoginRequestDto.getPasswordConfirm()))
+                .filter(v -> v)
+                .orElseThrow(() -> new UnMatchedPasswordException());
 
         findUserId(userLoginRequestDto.getId()).ifPresent(a -> {
             throw new SameUserException();
@@ -117,9 +117,5 @@ public class UserService {
 
     private Optional<User> findUserIdAndPassword(String id, String password) {
         return userRepository.findByLoginIdAndPasswordAndIsDelete(id, password, false);
-    }
-
-    private boolean isCheckPassword(String password, String passwordConfirm) {
-        return password.equals(passwordConfirm) ? true : false;
     }
 }
