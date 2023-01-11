@@ -25,12 +25,29 @@ public class ContentsService {
     private final YoutubeAndNewsRepository youtubeAndNewsRepository;
     private final JobRepository jobRepository;
 
-    public List<MainContentsDto> getMainContents(){
-        Page<YoutubeAndNews> contents= youtubeAndNewsRepository.findTop10YoutubeAndNews(PageRequest.of(0,10,Sort.by("viewCount").descending()));
-
-        return contents.getContent().stream()
-                .map(m->MainContentsDto.ContentsEntityToDto(m))
-                .collect(Collectors.toList());
+    public List<MainContentsDto> getMainContents(String type){
+        Pageable pageInfo = PageRequest.of(0,10);
+        if(type.equals("youtubeAndNews")){
+            Page<YoutubeAndNews> youtubeAndNewscontents= youtubeAndNewsRepository.findTop10YoutubeAndNews(pageInfo);
+            return youtubeAndNewscontents.getContent().stream()
+                    .map(m->MainContentsDto.YoutubeAndNewsEntityToDto(m))
+                    .collect(Collectors.toList());
+        }else if(type.equals("youtube")){
+            Page<YoutubeAndNews> youtubeContents=youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByViewCount(pageInfo,"youtube");
+            return youtubeContents.getContent().stream()
+                    .map(m->MainContentsDto.YoutubeAndNewsEntityToDto(m))
+                    .collect(Collectors.toList());
+        }else if(type.equals("news")){
+            Page<YoutubeAndNews> newsContents=youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByViewCount(pageInfo,"news");
+            return newsContents.getContent().stream()
+                    .map(m->MainContentsDto.YoutubeAndNewsEntityToDto(m))
+                    .collect(Collectors.toList());
+        }else{
+            Page<Job> jobsContents=jobRepository.findJobByCategoryorderByViewCount(pageInfo,"job");
+            return jobsContents.getContent().stream()
+                    .map(m->MainContentsDto.JobEntityToDto(m))
+                    .collect(Collectors.toList());
+        }
     }
 
     public List<ContentsDto> getCategoryContents(String type,int page,String order){

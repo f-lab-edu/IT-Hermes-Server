@@ -21,12 +21,12 @@ public class ContentsController {
     private final ContentsService contentsService;
 
     @RequestMapping(value = "/main",method = RequestMethod.GET)
-    public ResponseEntity<List<MainContentsDto>> getMainContents(){
-        return ResponseEntity.ok(contentsService.getMainContents());
+    public ResponseEntity<List<MainContentsDto>> getMainContents(@RequestParam(value = "type")String type){
+        return ResponseEntity.ok(contentsService.getMainContents(type));
     }
 
     @RequestMapping(value = "/category",method = RequestMethod.GET)
-    public ResponseEntity<List<ContentsDto>> getCategoryContents(@RequestParam(value = "type",required = true)String type,@RequestParam(value = "page",required = true)int page,
+    public ResponseEntity<List<ContentsDto>> getCategoryContents(@RequestParam(value = "type")String type,@RequestParam(value = "page")int page,
                                                                  @RequestParam(value = "order",required = false)String order){
         return ResponseEntity.ok(contentsService.getCategoryContents(type,page,order));
     }

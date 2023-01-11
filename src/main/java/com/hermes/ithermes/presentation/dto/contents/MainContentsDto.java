@@ -1,5 +1,6 @@
 package com.hermes.ithermes.presentation.dto.contents;
 
+import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class MainContentsDto {
 
     public String contentsDate;
 
-    public static MainContentsDto ContentsEntityToDto(YoutubeAndNews youtubeAndNews){
+    public static MainContentsDto YoutubeAndNewsEntityToDto(YoutubeAndNews youtubeAndNews){
         return MainContentsDto.builder()
                 .title(youtubeAndNews.getTitle())
                 .image(youtubeAndNews.getImage())
@@ -28,6 +29,17 @@ public class MainContentsDto {
                 .category(youtubeAndNews.getService().getCategory())
                 .service(youtubeAndNews.getService().getName())
                 .contentsDate(youtubeAndNews.getContentsDate())
+                .build();
+    }
+
+    public static MainContentsDto JobEntityToDto(Job job){
+        return MainContentsDto.builder()
+                .title(job.getTitle())
+                .image(null)
+                .url(job.getUrl())
+                .category(job.getService().getCategory())
+                .service(job.getService().getName())
+                .contentsDate(job.getEndDate())
                 .build();
     }
 
