@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MainContentsDto {
+public class MainPageContentsDto {
 
     public String title;
 
@@ -21,8 +21,8 @@ public class MainContentsDto {
 
     public String contentsDate;
 
-    public static MainContentsDto YoutubeAndNewsEntityToDto(YoutubeAndNews youtubeAndNews){
-        return MainContentsDto.builder()
+    public static MainPageContentsDto YoutubeAndNewsEntityToDto(YoutubeAndNews youtubeAndNews){
+        return MainPageContentsDto.builder()
                 .title(youtubeAndNews.getTitle())
                 .image(youtubeAndNews.getImage())
                 .url(youtubeAndNews.getUrl())
@@ -32,8 +32,8 @@ public class MainContentsDto {
                 .build();
     }
 
-    public static MainContentsDto JobEntityToDto(Job job){
-        return MainContentsDto.builder()
+    public static MainPageContentsDto JobEntityToDto(Job job){
+        return MainPageContentsDto.builder()
                 .title(job.getTitle())
                 .image(null)
                 .url(job.getUrl())

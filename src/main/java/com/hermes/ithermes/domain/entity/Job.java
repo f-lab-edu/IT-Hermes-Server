@@ -9,7 +9,7 @@ public class Job extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "JobId")
+    @Column(name = "jobId")
     private Long id;
 
     private String title;

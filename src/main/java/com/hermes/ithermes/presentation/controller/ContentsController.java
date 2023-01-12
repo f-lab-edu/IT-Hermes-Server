@@ -1,9 +1,10 @@
 package com.hermes.ithermes.presentation.controller;
 
 import com.hermes.ithermes.application.ContentsService;
-import com.hermes.ithermes.domain.entity.YoutubeAndNews;
+import com.hermes.ithermes.domain.util.ContentsType;
+import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
-import com.hermes.ithermes.presentation.dto.contents.MainContentsDto;
+import com.hermes.ithermes.presentation.dto.contents.MainPageContentsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,14 +22,14 @@ public class ContentsController {
     private final ContentsService contentsService;
 
     @RequestMapping(value = "/main",method = RequestMethod.GET)
-    public ResponseEntity<List<MainContentsDto>> getMainContents(@RequestParam(value = "type")String type){
-        return ResponseEntity.ok(contentsService.getMainContents(type));
+    public ResponseEntity<List<MainPageContentsDto>> getMainContents(@RequestParam(value = "type") ContentsType type){
+        return ResponseEntity.ok(contentsService.getMainContents(type.getName()));
     }
 
     @RequestMapping(value = "/category",method = RequestMethod.GET)
-    public ResponseEntity<List<ContentsDto>> getCategoryContents(@RequestParam(value = "type")String type,@RequestParam(value = "page")int page,
-                                                                 @RequestParam(value = "order",required = false)String order){
-        return ResponseEntity.ok(contentsService.getCategoryContents(type,page,order));
+    public ResponseEntity<List<ContentsDto>> getCategoryContents(@RequestParam(value = "type")ContentsType type, @RequestParam(value = "page")int page,
+                                                                 @RequestParam(value = "order",required = false)OrderType order){
+        return ResponseEntity.ok(contentsService.getCategoryContents(type.getName(), page,order.getName()));
     }
 
 }
