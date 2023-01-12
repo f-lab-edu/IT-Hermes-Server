@@ -15,4 +15,14 @@ public enum ContentsType {
     ContentsType(String name) {
         this.name = name;
     }
+
+    public static boolean contentsTypeContains(String type){
+        for(ContentsType c:ContentsType.values()){
+            if(c.getName().equals(type)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

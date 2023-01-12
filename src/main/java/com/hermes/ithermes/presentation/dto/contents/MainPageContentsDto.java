@@ -2,10 +2,12 @@ package com.hermes.ithermes.presentation.dto.contents;
 
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 @Builder
 public class MainPageContentsDto {
 
