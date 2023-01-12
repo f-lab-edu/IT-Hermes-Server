@@ -6,6 +6,7 @@ import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
 import com.hermes.ithermes.presentation.dto.contents.MainPageContentsDto;
+import com.sun.tools.javac.Main;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,67 +28,56 @@ public class ContentsService {
     public List<MainPageContentsDto> getMainContents(String type){
         Pageable pageInfo = PageRequest.of(0,10);
         if(type.equals("YOUTUBEANDNEWS")){
-            Page<YoutubeAndNews> youtubeAndNewscontents= youtubeAndNewsRepository.findTop10YoutubeAndNews(pageInfo);
-            return youtubeAndNewscontents.getContent().stream()
-                    .map(m-> MainPageContentsDto.YoutubeAndNewsEntityToDto(m))
-                    .collect(Collectors.toList());
+            return PageYoutubeAndNewsConvertMainPageContentsDto(youtubeAndNewsRepository.findTop10YoutubeAndNews(pageInfo));
         }else if(type.equals("YOUTUBE")){
-            Page<YoutubeAndNews> youtubeContents=youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByViewCount(pageInfo,"YOUTUBE");
-            return youtubeContents.getContent().stream()
-                    .map(m-> MainPageContentsDto.YoutubeAndNewsEntityToDto(m))
-                    .collect(Collectors.toList());
+            return PageYoutubeAndNewsConvertMainPageContentsDto(youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByViewCount(pageInfo,"YOUTUBE"));
         }else if(type.equals("NEWS")){
-            Page<YoutubeAndNews> newsContents=youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByViewCount(pageInfo,"NEWS");
-            return newsContents.getContent().stream()
-                    .map(m-> MainPageContentsDto.YoutubeAndNewsEntityToDto(m))
-                    .collect(Collectors.toList());
+            return PageYoutubeAndNewsConvertMainPageContentsDto(youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByViewCount(pageInfo,"NEWS"));
         }else{
-            Page<Job> jobsContents=jobRepository.findJobByCategoryorderByViewCount(pageInfo,"JOB");
-            return jobsContents.getContent().stream()
-                    .map(m-> MainPageContentsDto.JobEntityToDto(m))
-                    .collect(Collectors.toList());
+            return PageJobConvertMainPageContentsDto(jobRepository.findJobByCategoryorderByViewCount(pageInfo,"JOB"));
         }
     }
 
     public List<ContentsDto> getCategoryContents(String type,int page,String order){
         Pageable pageInfo = PageRequest.of(page,12);
         if(type.equals("JOB") && order==null){
-            Page<Job> jobResult=jobRepository.findJobByCategory(pageInfo,"JOB");
-            List<Job> jobcontents = jobResult.getContent();
-            return jobcontents.stream()
-                    .map(m->ContentsDto.JobToContentsDto(m))
-                    .collect(Collectors.toList());
+            return PageJobToConvertContentsDto(jobRepository.findJobByCategory(pageInfo,"JOB"));
         }else if(type.equals("JOB") && order.equals("RECENT")){
-            Page<Job> jobRecentResult=jobRepository.findJobByCategoryorderByCreatedAt(pageInfo,"JOB");
-            List<Job> jobRecentContents=jobRecentResult.getContent();
-            return jobRecentContents.stream()
-                    .map(m->ContentsDto.JobToContentsDto(m))
-                    .collect(Collectors.toList());
+            return PageJobToConvertContentsDto(jobRepository.findJobByCategoryorderByCreatedAt(pageInfo,"JOB"));
         }else if(type.equals("JOB") && order.equals("POPULAR")){
-            Page<Job> jobPopularResult=jobRepository.findJobByCategoryorderByViewCount(pageInfo,"JOB");
-            List<Job> jobPopularContents=jobPopularResult.getContent();
-            return jobPopularContents.stream()
-                    .map(m->ContentsDto.JobToContentsDto(m))
-                    .collect(Collectors.toList());
+            return PageJobToConvertContentsDto(jobRepository.findJobByCategoryorderByViewCount(pageInfo,"JOB"));
         }else if((type.equals("NEWS") || type.equals("YOUTUBE")) && order==null){
-            Page<YoutubeAndNews> youtubeAndNewsResult = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageInfo,type);
-            List<YoutubeAndNews> youtubeAndNewsContents = youtubeAndNewsResult.getContent();
-            return youtubeAndNewsContents.stream()
-                    .map(m->ContentsDto.YoutubeAndNewsToContentsDto(m))
-                    .collect(Collectors.toList());
+            return PageYoutubeAndNewsConvertContentsDto(youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageInfo,type));
         }else if((type.equals("NEWS") || type.equals("YOUTUBE")) && order.equals("RECENT")){
-            Page<YoutubeAndNews> youtubeAndNewsRecentResult=youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByCreatedAt(pageInfo,type);
-            List<YoutubeAndNews> youtubeAndNewsRecentContents=youtubeAndNewsRecentResult.getContent();
-            return youtubeAndNewsRecentContents.stream()
-                    .map(m->ContentsDto.YoutubeAndNewsToContentsDto(m))
-                    .collect(Collectors.toList());
+            return PageYoutubeAndNewsConvertContentsDto(youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByCreatedAt(pageInfo,type));
         }else{
-            Page<YoutubeAndNews> youtubeAndNewsRecentResult=youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByViewCount(pageInfo,type);
-            List<YoutubeAndNews> youtubeAndNewsRecentContents=youtubeAndNewsRecentResult.getContent();
-            return youtubeAndNewsRecentContents.stream()
-                    .map(m->ContentsDto.YoutubeAndNewsToContentsDto(m))
-                    .collect(Collectors.toList());
+            return PageYoutubeAndNewsConvertContentsDto(youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByViewCount(pageInfo,type));
         }
     }
+
+    public List<MainPageContentsDto> PageYoutubeAndNewsConvertMainPageContentsDto(Page<YoutubeAndNews> pageYoutubeAndNews){
+        return pageYoutubeAndNews.getContent().stream()
+                .map(m->MainPageContentsDto.YoutubeAndNewsEntityToDto(m))
+                .collect(Collectors.toList());
+    }
+
+    public List<MainPageContentsDto> PageJobConvertMainPageContentsDto(Page<Job> pageJob){
+        return pageJob.getContent().stream()
+                .map(m->MainPageContentsDto.JobEntityToDto(m))
+                .collect(Collectors.toList());
+    }
+
+    public List<ContentsDto> PageJobToConvertContentsDto(Page<Job> pageJob){
+        return pageJob.getContent().stream()
+                .map(m->ContentsDto.JobToContentsDto(m))
+                .collect(Collectors.toList());
+    }
+
+    public List<ContentsDto> PageYoutubeAndNewsConvertContentsDto(Page<YoutubeAndNews> pageYoutubeAndNews){
+        return pageYoutubeAndNews.getContent().stream()
+                .map(m->ContentsDto.YoutubeAndNewsToContentsDto(m))
+                .collect(Collectors.toList());
+    }
+
 
 }
