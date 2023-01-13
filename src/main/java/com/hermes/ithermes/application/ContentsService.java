@@ -29,7 +29,7 @@ public class ContentsService {
 
     public List<MainPageContentsDto> getMainContents(CategoryType type){
         Pageable pageInfo = PageRequest.of(0,10);
-        if(type.equals("JOB")){
+        if(type.getName().equals("JOB")){
             return PageJobConvertMainPageContentsDto(jobRepository.findJobByCategoryorderByViewCount(pageInfo,type));
         }else{
             return PageYoutubeAndNewsConvertMainPageContentsDto(pageInfo,type);
@@ -38,7 +38,7 @@ public class ContentsService {
 
     public List<ContentsDto> getCategoryContents(CategoryType type, int page, OrderType order){
         Pageable pageInfo = PageRequest.of(page,12);
-        if(type.equals("JOB")) {
+        if(type.getName().equals("JOB")) {
             return PageJobToConvertContentsDto(pageInfo,order);
         }else{
             return PageYoutubeAndNewsConvertContentsDto(pageInfo,order,type);
@@ -47,7 +47,7 @@ public class ContentsService {
 
     public List<MainPageContentsDto> PageYoutubeAndNewsConvertMainPageContentsDto(Pageable page, CategoryType category){
         List<YoutubeAndNews> youtubeAndNewsContents=new ArrayList<>();
-        if(category.equals("YOUTUBE_AND_NEWS")){
+        if(category.getName().equals("YOUTUBE_AND_NEWS")){
             youtubeAndNewsContents=youtubeAndNewsRepository.findTop10YoutubeAndNews(page).getContent();
         }else{
             youtubeAndNewsContents=youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByViewCount(page,category).getContent();
@@ -66,9 +66,9 @@ public class ContentsService {
 
     public List<ContentsDto> PageJobToConvertContentsDto(Pageable page,OrderType order){
         List<Job> jobContents=new ArrayList<>();
-        if(order.equals("RECENT")){
+        if(order.getName().equals("RECENT")){
             jobContents=jobRepository.findJobByCategoryorderByCreatedAt(page,CategoryType.JOB).getContent();
-        }else if(order.equals("POPULAR")){
+        }else if(order.getName().equals("POPULAR")){
             jobContents=jobRepository.findJobByCategoryorderByViewCount(page, CategoryType.JOB).getContent();
         }else{
             jobContents= jobRepository.findJobByCategory(page,CategoryType.JOB).getContent();
@@ -80,9 +80,9 @@ public class ContentsService {
 
     public List<ContentsDto> PageYoutubeAndNewsConvertContentsDto(Pageable page, OrderType order, CategoryType type){
         List<YoutubeAndNews> youtubeAndNewsContents=new ArrayList<>();
-        if(order.equals("RECENT")) {
+        if(order.getName().equals("RECENT")) {
             youtubeAndNewsContents=youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByCreatedAt(page,type).getContent();
-        }else if(order.equals("POPULAR")){
+        }else if(order.getName().equals("POPULAR")){
             youtubeAndNewsContents=youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByViewCount(page,type).getContent();
         }else{
             youtubeAndNewsContents=youtubeAndNewsRepository.findYoutubeAndNewsByCategory(page,type).getContent();
