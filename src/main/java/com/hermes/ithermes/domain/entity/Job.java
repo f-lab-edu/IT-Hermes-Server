@@ -1,7 +1,10 @@
 package com.hermes.ithermes.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -20,9 +23,11 @@ public class Job extends BaseEntity{
 
     private String company;
 
-    private String startDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime startDate;
 
-    private String endDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime endDate;
 
     private Boolean isDelete;
 

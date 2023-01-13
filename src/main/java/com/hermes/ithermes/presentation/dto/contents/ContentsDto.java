@@ -1,10 +1,13 @@
 package com.hermes.ithermes.presentation.dto.contents;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -21,7 +24,8 @@ public class ContentsDto {
 
     public String service;
 
-    public String contentsDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public LocalDateTime contentsDate;
 
     private String description;
 
