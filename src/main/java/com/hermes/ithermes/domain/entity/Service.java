@@ -1,5 +1,6 @@
 package com.hermes.ithermes.domain.entity;
 
+import com.hermes.ithermes.domain.util.CategoryType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,8 @@ public class Service extends BaseEntity{
 
     private String name;
 
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private CategoryType category;
 
     @ManyToOne
     @JoinColumn(name = "alarmId")
@@ -29,7 +31,7 @@ public class Service extends BaseEntity{
     @OneToMany(mappedBy = "service")
     private List<YoutubeAndNews> youtubeAndNewsContents;
 
-    public Service(Long id, Boolean isDelete, String name, String category) {
+    public Service(Long id, Boolean isDelete, String name, CategoryType category) {
         this.id = id;
         this.isDelete = isDelete;
         this.name = name;

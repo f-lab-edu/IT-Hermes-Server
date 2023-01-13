@@ -3,7 +3,7 @@ package com.hermes.ithermes.domain.util;
 import lombok.Getter;
 
 @Getter
-public enum ContentsType {
+public enum CategoryType {
 
     JOB("JOB"),
     NEWS("NEWS"),
@@ -12,12 +12,12 @@ public enum ContentsType {
 
     private String name;
 
-    ContentsType(String name) {
+    CategoryType(String name) {
         this.name = name;
     }
 
-    public static boolean contentsTypeContains(String type){
-        for(ContentsType c:ContentsType.values()){
+    public static boolean categoryTypeContains(String type){
+        for(CategoryType c: CategoryType.values()){
             if(c.getName().equals(type)){
                 return true;
             }

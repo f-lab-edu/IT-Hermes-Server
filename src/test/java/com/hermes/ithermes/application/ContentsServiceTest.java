@@ -2,7 +2,7 @@ package com.hermes.ithermes.application;
 
 import com.hermes.ithermes.domain.entity.Service;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
-import com.hermes.ithermes.domain.util.ContentsType;
+import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.infrastructure.ServiceRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.contents.MainPageContentsDto;
@@ -33,11 +33,11 @@ class ContentsServiceTest {
 
     @BeforeEach
     void setUp() {
-        Service service1=new Service(1L,false,"노마드","youtube");
-        Service service2=new Service(2L,false,"드림코딩엘리","youtube");
-        Service service3=new Service(3L,false,"네이버뉴스","news");
-        Service service4=new Service(4L,false,"요즘 IT","news");
-        Service service5=new Service(5L,false,"코딩월드뉴스","news");
+        Service service1=new Service(1L,false,"노마드", CategoryType.YOUTUBE);
+        Service service2=new Service(2L,false,"드림코딩엘리", CategoryType.YOUTUBE);
+        Service service3=new Service(3L,false,"네이버뉴스", CategoryType.NEWS);
+        Service service4=new Service(4L,false,"요즘 IT", CategoryType.NEWS);
+        Service service5=new Service(5L,false,"코딩월드뉴스", CategoryType.NEWS);
 
         Service s1=serviceRepository.save(service1);
         Service s2=serviceRepository.save(service2);
@@ -87,7 +87,7 @@ class ContentsServiceTest {
     @Test
     @DisplayName("main contents를 10개 반환하는지 테스트")
     void checkMainContentsCount(){
-        List<MainPageContentsDto> results=contentsService.getMainContents(ContentsType.YOUTUBEANDNEWS.getName());
+        List<MainPageContentsDto> results=contentsService.getMainContents(CategoryType.YOUTUBEANDNEWS);
         Assertions.assertEquals(10,results.size());
     }
 
@@ -103,3 +103,4 @@ class ContentsServiceTest {
         Assertions.assertTrue(youtubeAndNewsResults.hasNext());
     }
 }
+

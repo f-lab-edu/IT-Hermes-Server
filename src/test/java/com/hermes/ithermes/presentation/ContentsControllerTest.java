@@ -1,7 +1,7 @@
 package com.hermes.ithermes.presentation;
 
 import com.hermes.ithermes.application.ContentsService;
-import com.hermes.ithermes.domain.util.ContentsType;
+import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.presentation.controller.ContentsController;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
@@ -49,7 +49,7 @@ class ContentsControllerTest {
     @Test
     @DisplayName("ContentType에 존재하는 enum값으로 요청시에 200 성공 상태코드가 반환되어야 한다.")
     void existsContentTypeTest() throws Exception {
-        ContentsType contentsType = ContentsType.JOB;
+        CategoryType categoryType = CategoryType.JOB;
 
         List<MainPageContentsDto> mainPageContentsDtoList = new ArrayList<>();
         mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎ", "ㅎㅎㅎㅎ"));
@@ -57,7 +57,7 @@ class ContentsControllerTest {
         when(contentsService.getMainContents(any())).thenReturn(mainPageContentsDtoList);
 
         mockMvc.perform(get("/contents/main")
-                        .param("type", String.valueOf(contentsType)))
+                        .param("type", String.valueOf(categoryType)))
                         .andExpect(status().isOk());
     }
 
@@ -82,7 +82,7 @@ class ContentsControllerTest {
     @Test
     @DisplayName("존재하는 contents,order 타입값으로 요청시 200 성공 코드가 반환되어야 한다.")
     void existContentTypeOrOrderType()throws Exception{
-        ContentsType contentsType=ContentsType.JOB;
+        CategoryType categoryType = CategoryType.JOB;
         OrderType orderType=OrderType.RECENT;
 
         List<ContentsDto> contentsDtoList=new ArrayList<>();
@@ -91,7 +91,7 @@ class ContentsControllerTest {
         when(contentsService.getCategoryContents(any(),anyInt(),any())).thenReturn(contentsDtoList);
 
         mockMvc.perform(get("/contents/category")
-                .param("type", String.valueOf(contentsType))
+                .param("type", String.valueOf(categoryType))
                 .param("page",String.valueOf(0))
                 .param("order", String.valueOf(orderType)))
                 .andExpect(status().isOk());

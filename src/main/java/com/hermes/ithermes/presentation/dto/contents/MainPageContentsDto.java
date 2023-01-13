@@ -28,7 +28,7 @@ public class MainPageContentsDto {
                 .title(youtubeAndNews.getTitle())
                 .image(youtubeAndNews.getImage())
                 .url(youtubeAndNews.getUrl())
-                .category(youtubeAndNews.getService().getCategory())
+                .category(youtubeAndNews.getService().getCategory().getName())
                 .service(youtubeAndNews.getService().getName())
                 .contentsDate(youtubeAndNews.getContentsDate())
                 .build();
@@ -39,7 +39,7 @@ public class MainPageContentsDto {
                 .title(job.getTitle())
                 .image(null)
                 .url(job.getUrl())
-                .category(job.getService().getCategory())
+                .category(job.getService().getCategory().getName())
                 .service(job.getService().getName())
                 .contentsDate(job.getEndDate())
                 .build();
