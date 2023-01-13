@@ -10,9 +10,10 @@ public class UserKeywordRegistryFactory {
 
     public UserKeywordRegistry parseUserAndKeyword(User user, Keyword keyword) {
         keyword.initDefaultValue();
-        UserKeywordRegistry userKeywordRegistry = UserKeywordRegistry.builder().build();
-        userKeywordRegistry.setUser(user);
-        userKeywordRegistry.setKeyword(keyword);
+        UserKeywordRegistry userKeywordRegistry = UserKeywordRegistry.builder()
+                .user(user)
+                .keyword(keyword)
+                .build();
         userKeywordRegistry.initDefaultValue();
         return userKeywordRegistry;
     }

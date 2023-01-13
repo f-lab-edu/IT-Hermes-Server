@@ -15,7 +15,6 @@ import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.alarm.AlarmFindSubscribeRequestDto;
 import com.hermes.ithermes.presentation.dto.alarm.AlarmFindSubscribeResponseDto;
 import com.hermes.ithermes.presentation.dto.alarm.AlarmUpdateSubscribeRequestDto;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +24,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-@Slf4j
 public class AlarmService {
     UserRepository userRepository;
     ServiceRepository serviceRepository;
@@ -42,19 +40,16 @@ public class AlarmService {
 
     @Transactional
     public CommonResponseDto updateSubscribe(AlarmUpdateSubscribeRequestDto alarmUpdateSubScribeActiveRequestDto) {
-        List<com.hermes.ithermes.domain.entity.Service> serviceList = serviceRepository.findAll();
+        var services = serviceRepository.findAll();
         User user = userRepository.findByLoginId(alarmUpdateSubScribeActiveRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         String startDateOfExperience = alarmUpdateSubScribeActiveRequestDto.getStartDateOfExperience();
         String endDateOfExperience = alarmUpdateSubScribeActiveRequestDto.getEndDateOfExperience();
-        JobType jobType = JobType.parseJobType(alarmUpdateSubScribeActiveRequestDto.getJob());
+        JobType jobType = JobType.valueOf(alarmUpdateSubScribeActiveRequestDto.getJob());
         int index = 0;
         for (String active : alarmUpdateSubScribeActiveRequestDto.getKeywordList()) {
-            ServiceType serviceType = ServiceType.parseCodeToServiceType(index);
-            log.info("ServiceType = {}", serviceType.name());
-            ActiveType activeType = ActiveType.parseActiveType(active);
-            log.info("ActiveType = {}", activeType.name());
-            log.info("ServiceTypeCode = {}", serviceType.getCode());
-            Optional<Alarm> alarmOptional = alarmRepository.findByServiceId(Long.valueOf(serviceType.getCode() + 1));
+            ServiceType serviceType = ServiceType.values()[index];
+            ActiveType activeType = ActiveType.valueOf(active);
+            Optional<Alarm> alarmOptional = alarmRepository.findByServiceId(Long.valueOf(index + 1));
             alarmOptional.ifPresentOrElse(
                     v -> {
                         v.changeIsActive(activeType);
@@ -62,7 +57,10 @@ public class AlarmService {
                         alarmRepository.save(v);
                     }
                     , () -> {
-                        com.hermes.ithermes.domain.entity.Service service = serviceList.stream().filter(v -> v.getName().equals(serviceType)).findFirst().orElseThrow(() -> new EnumTypeFormatException());
+                        var service = services.stream()
+                                .filter(v -> v.getName().equals(serviceType))
+                                .findFirst().orElseThrow(() -> new EnumTypeFormatException());
+
                         Alarm alarm = alarmFactory.parseUpdateSubscribeToAlarm(user, service, activeType, jobType, startDateOfExperience, endDateOfExperience);
                         alarmRepository.save(alarm);
                     }
@@ -75,13 +73,16 @@ public class AlarmService {
     public AlarmFindSubscribeResponseDto findSubscribe(AlarmFindSubscribeRequestDto alarmFindSubScribeRequestDto) {
         User user = userRepository.findByLoginId(alarmFindSubScribeRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         List<Alarm> alarms = alarmRepository.findByUserId(user.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
-        List<String> activeTypeList = alarms.stream().map(v -> v.getIsActive().getTitle()).toList();
 
-        Alarm alarmOptional = alarms.stream().filter(v -> Objects.nonNull(v.getJob()) || Objects.nonNull(v.getMinDate()) || Objects.nonNull(v.getMaxDate()))
+        List<String> activeTypes = alarms.stream()
+                .map(v -> v.getIsActive().getTitle()).toList();
+
+        Alarm alarmOptional = alarms.stream()
+                .filter(v -> Objects.nonNull(v.getJob()) || Objects.nonNull(v.getMinDate()) || Objects.nonNull(v.getMaxDate()))
                 .findFirst().orElse(null);
-        String job= Optional.ofNullable(alarmOptional.getJob().getTitle()).orElse(null);
+        String job = Optional.ofNullable(alarmOptional.getJob().getTitle()).orElse(null);
         String startDateOfExperience = Optional.ofNullable(alarmOptional.getMinDate()).orElse(null);
         String endDateOfExperience = Optional.ofNullable(alarmOptional.getMaxDate()).orElse(null);
-        return new AlarmFindSubscribeResponseDto(activeTypeList,job,startDateOfExperience,endDateOfExperience);
+        return new AlarmFindSubscribeResponseDto(activeTypes, job, startDateOfExperience, endDateOfExperience);
     }
 }

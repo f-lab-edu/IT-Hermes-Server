@@ -18,8 +18,9 @@ public class BaseEntity {
     private LocalDateTime updatedAt;
 
     public void initDefaultValue() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        var nowTime = LocalDateTime.now();
+        this.createdAt = nowTime;
+        this.updatedAt = nowTime;
     }
 
     public void changeUpdateAt() {

@@ -35,32 +35,32 @@ public class UserController {
     }
 
     @RequestMapping(value = "/duplicate-nickname", method = RequestMethod.POST)
-    public ResponseEntity<UserDuplicateNicknameResponseDto> isCheckDuplicateNickname(@Valid @RequestBody UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {
-        UserDuplicateNicknameResponseDto userDuplicateNicknameResponseDto = userService.isCheckDuplicateNickname(userDuplicateNicknameRequestDto);
+    public ResponseEntity<UserDuplicateNicknameResponseDto> checkDuplicateNickname(@Valid @RequestBody UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {
+        UserDuplicateNicknameResponseDto userDuplicateNicknameResponseDto = userService.checkDuplicateNickname(userDuplicateNicknameRequestDto);
         return ResponseEntity.ok(userDuplicateNicknameResponseDto);
     }
 
     @RequestMapping(value = "/duplicate-id", method = RequestMethod.POST)
-    public ResponseEntity<UserDuplicateIdResponseDto> isCheckDuplicateNickname(@Valid @RequestBody UserDuplicateIdRequestDto userDuplicateIdRequestDto) {
-        UserDuplicateIdResponseDto userDuplicateIdResponseDto = userService.isCheckDuplicateId(userDuplicateIdRequestDto);
+    public ResponseEntity<UserDuplicateIdResponseDto> checkDuplicateNickname(@Valid @RequestBody UserDuplicateIdRequestDto userDuplicateIdRequestDto) {
+        UserDuplicateIdResponseDto userDuplicateIdResponseDto = userService.checkDuplicateId(userDuplicateIdRequestDto);
         return ResponseEntity.ok(userDuplicateIdResponseDto);
     }
 
     @RequestMapping(value = "/nickname", method = RequestMethod.PUT)
-    public ResponseEntity<UserUpdateNicknameResponseDto> isCheckDuplicateNickname(@Valid @RequestBody UserUpdateNicknameRequestDto userUpdateNicknameRequestDto) {
-        UserUpdateNicknameResponseDto userUpdateNicknameResponseDto = userService.isUpdateNickname(userUpdateNicknameRequestDto);
+    public ResponseEntity<UserUpdateNicknameResponseDto> checkDuplicateNickname(@Valid @RequestBody UserUpdateNicknameRequestDto userUpdateNicknameRequestDto) {
+        UserUpdateNicknameResponseDto userUpdateNicknameResponseDto = userService.updateNickname(userUpdateNicknameRequestDto);
         return ResponseEntity.ok(userUpdateNicknameResponseDto);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.PUT)
-    public ResponseEntity<CommonResponseDto> isDeleteUser(@Valid @RequestBody UserDeleteUserRequestDto userDeleteUserRequestDto) {
-        CommonResponseDto commonResponseDto = userService.isDeleteUser(userDeleteUserRequestDto);
+    public ResponseEntity<CommonResponseDto> deleteUser(@Valid @RequestBody UserDeleteUserRequestDto userDeleteUserRequestDto) {
+        CommonResponseDto commonResponseDto = userService.deleteUser(userDeleteUserRequestDto);
         return ResponseEntity.ok(commonResponseDto);
     }
 
     @RequestMapping(value = "/my-page", method = RequestMethod.POST)
-    public ResponseEntity<UserFindMyDataResponseDto> isFindMyData(@Valid @RequestBody UserFindMyDataRequestDto userFindMyDataRequestDto) {
-        UserFindMyDataResponseDto userFindMyDataResponseDto = userService.isFindMyData(userFindMyDataRequestDto);
+    public ResponseEntity<UserFindMyDataResponseDto> findMyData(@Valid @RequestBody UserFindMyDataRequestDto userFindMyDataRequestDto) {
+        UserFindMyDataResponseDto userFindMyDataResponseDto = userService.findMyData(userFindMyDataRequestDto);
         return ResponseEntity.ok(userFindMyDataResponseDto);
     }
 

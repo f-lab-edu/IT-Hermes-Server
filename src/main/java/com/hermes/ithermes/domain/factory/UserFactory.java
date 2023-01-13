@@ -16,8 +16,9 @@ public class UserFactory {
                 .loginId(userLoginRequestDto.getId())
                 .password(userLoginRequestDto.getPassword())
                 .nickname(userLoginRequestDto.getNickname())
-                .job(JobType.parseJobType("backend"))
+                .job(JobType.valueOf(userLoginRequestDto.getJob()))
                 .yearOfExperience(Integer.parseInt(userLoginRequestDto.getExperience()))
+                .isDelete(false)
                 .build();
         user.initDefaultValue();
         return user;

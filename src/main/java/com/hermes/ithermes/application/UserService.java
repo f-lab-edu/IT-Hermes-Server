@@ -51,11 +51,14 @@ public class UserService {
         });
         User user = userFactory.parseLoginRequestDtoToUser(userLoginRequestDto);
 
-        Arrays.stream(userLoginRequestDto.getKeywordList()).filter(v -> Objects.nonNull(v)).forEach(v -> {
-            Keyword keyword = keywordFactory.parseKeywordNameToKeyword(v);
-            UserKeywordRegistry userKeywordRegistry = userKeywordRegistryFactory.parseUserAndKeyword(user, keyword);
-            userKeywordRegistryRepository.save(userKeywordRegistry);
-        });
+        Arrays.stream(userLoginRequestDto.getKeywordList())
+                .filter(v -> Objects.nonNull(v))
+                .forEach(v -> {
+                    Keyword keyword = keywordFactory.parseKeywordNameToKeyword(v);
+                    UserKeywordRegistry userKeywordRegistry = userKeywordRegistryFactory.parseUserAndKeyword(user, keyword);
+                    userKeywordRegistryRepository.save(userKeywordRegistry);
+                });
+
         return new UserCreateUserResponseDto("success");
     }
 
@@ -66,7 +69,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserDuplicateNicknameResponseDto isCheckDuplicateNickname(UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {
+    public UserDuplicateNicknameResponseDto checkDuplicateNickname(UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {
         findUserNickname(userDuplicateNicknameRequestDto.getNickname()).ifPresent(a -> {
             throw new SameNicknameException();
         });
@@ -74,7 +77,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserDuplicateIdResponseDto isCheckDuplicateId(UserDuplicateIdRequestDto userDuplicateIdRequestDto) {
+    public UserDuplicateIdResponseDto checkDuplicateId(UserDuplicateIdRequestDto userDuplicateIdRequestDto) {
         findUserId(userDuplicateIdRequestDto.getId()).ifPresent(a -> {
             throw new SameIdException();
         });
@@ -82,7 +85,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserUpdateNicknameResponseDto isUpdateNickname(UserUpdateNicknameRequestDto userUpdateNicknameRequestDto) {
+    public UserUpdateNicknameResponseDto updateNickname(UserUpdateNicknameRequestDto userUpdateNicknameRequestDto) {
         String newNickname = userUpdateNicknameRequestDto.getNickname();
         findUserNickname(newNickname).ifPresent(a -> {
             throw new SameNicknameException();
@@ -94,7 +97,7 @@ public class UserService {
     }
 
     @Transactional
-    public CommonResponseDto isDeleteUser(UserDeleteUserRequestDto userDeleteUserRequestDto) {
+    public CommonResponseDto deleteUser(UserDeleteUserRequestDto userDeleteUserRequestDto) {
         User user = findUserId(userDeleteUserRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
 
         user.isDelete();
@@ -102,7 +105,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserFindMyDataResponseDto isFindMyData(UserFindMyDataRequestDto userFindMyDataRequestDto) {
+    public UserFindMyDataResponseDto findMyData(UserFindMyDataRequestDto userFindMyDataRequestDto) {
         User user = findUserId(userFindMyDataRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         return new UserFindMyDataResponseDto(user.getLoginId(), user.getNickname());
     }
