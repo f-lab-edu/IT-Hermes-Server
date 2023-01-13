@@ -1,6 +1,8 @@
 package com.hermes.ithermes.presentation;
 
 import com.hermes.ithermes.application.ContentsService;
+import com.hermes.ithermes.domain.util.ContentsType;
+import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.presentation.controller.ContentsController;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
 import com.hermes.ithermes.presentation.dto.contents.MainPageContentsDto;
@@ -13,6 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,30 +34,30 @@ class ContentsControllerTest {
     @Test
     @DisplayName("ContentsType에 존재하지 않는 enum값으로 요청시에 400 상태코드가 반환되어야 한다.")
     void notExistsContentTypeTest() throws Exception {
-        String badContentsType="ABCDE";
+        String badContentsType= "ABCDE";
 
         List<MainPageContentsDto> mainPageContentsDtoList=new ArrayList<>();
         mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎ","ㅎㅎㅎㅎ"));
 
-        when(contentsService.getMainContents(badContentsType)).thenReturn(mainPageContentsDtoList);
+        when(contentsService.getMainContents(any())).thenReturn(mainPageContentsDtoList);
 
         mockMvc.perform(get("/contents/main")
-                        .param("type",badContentsType))
+                        .param("type", badContentsType))
                         .andExpect(status().isBadRequest());
     }
 
     @Test
     @DisplayName("ContentType에 존재하는 enum값으로 요청시에 200 성공 상태코드가 반환되어야 한다.")
     void existsContentTypeTest() throws Exception {
-        String contentsType = "JOB";
+        ContentsType contentsType = ContentsType.JOB;
 
         List<MainPageContentsDto> mainPageContentsDtoList = new ArrayList<>();
         mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎ", "ㅎㅎㅎㅎ"));
 
-        when(contentsService.getMainContents(contentsType)).thenReturn(mainPageContentsDtoList);
+        when(contentsService.getMainContents(any())).thenReturn(mainPageContentsDtoList);
 
         mockMvc.perform(get("/contents/main")
-                        .param("type",contentsType))
+                        .param("type", String.valueOf(contentsType)))
                         .andExpect(status().isOk());
     }
 
@@ -66,10 +70,10 @@ class ContentsControllerTest {
         List<ContentsDto> contentsDtoList=new ArrayList<>();
         contentsDtoList.add(new ContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ"));
 
-        when(contentsService.getCategoryContents(badContentsType,0,badOrderType)).thenReturn(contentsDtoList);
+        when(contentsService.getCategoryContents(any(),anyInt(),any())).thenReturn(contentsDtoList);
 
         mockMvc.perform(get("/contents/category")
-                .param("type",badContentsType)
+                        .param("type",badContentsType)
                         .param("page", String.valueOf(0))
                         .param("order",badOrderType))
                 .andExpect(status().isBadRequest());
@@ -78,20 +82,21 @@ class ContentsControllerTest {
     @Test
     @DisplayName("존재하는 contents,order 타입값으로 요청시 200 성공 코드가 반환되어야 한다.")
     void existContentTypeOrOrderType()throws Exception{
-        String contentsType="JOB";
-        String orderType="RECENT";
+        ContentsType contentsType=ContentsType.JOB;
+        OrderType orderType=OrderType.RECENT;
 
         List<ContentsDto> contentsDtoList=new ArrayList<>();
         contentsDtoList.add(new ContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ"));
 
-        when(contentsService.getCategoryContents(contentsType,0,orderType)).thenReturn(contentsDtoList);
+        when(contentsService.getCategoryContents(any(),anyInt(),any())).thenReturn(contentsDtoList);
 
         mockMvc.perform(get("/contents/category")
-                .param("type",contentsType)
+                .param("type", String.valueOf(contentsType))
                 .param("page",String.valueOf(0))
-                .param("order",orderType))
+                .param("order", String.valueOf(orderType)))
                 .andExpect(status().isOk());
     }
 
 
 }
+
