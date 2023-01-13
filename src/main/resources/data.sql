@@ -1,42 +1,11 @@
 INSERT
 INTO
-    Service (createdAt, isDelete, updatedAt, category, name)
+    Service (createdAt, updatedAt, category, name)
 VALUES
-    (NOW(), 0, NOW(),"JOB", "SARAMIN");
-
-INSERT
-INTO
-    Service (createdAt, isDelete, updatedAt, category, name)
-VALUES
-    (NOW(), 0, NOW(),"JOB", "WANTED");
-
-INSERT
-INTO
-    Service (createdAt, isDelete, updatedAt, category, name)
-VALUES
-    (NOW(), 0, NOW(),"NEWS", "CODING_WORLD");
-
-INSERT
-INTO
-    Service (createdAt, isDelete, updatedAt, category, name)
-VALUES
-    (NOW(), 0, NOW(),"NEWS", "NAVER");
-
-INSERT
-INTO
-    Service (createdAt, isDelete, updatedAt, category, name)
-VALUES
-    (NOW(), 0, NOW(),"NEWS", "YOZM");
-
-INSERT
-INTO
-    Service (createdAt, isDelete, updatedAt, category, name)
-VALUES
-    (NOW(), 0, NOW(),"YOUTUBE", "NOMAD_CODERS");
-
-INSERT
-INTO
-    Service (createdAt, isDelete, updatedAt, category, name)
-VALUES
-    (NOW(), 0, NOW(),"YOUTUBE", "DREAM_CODING");
-
+    (NOW(), NOW(),"JOB", "SARAMIN"),
+    (NOW(), NOW(),"JOB", "WANTED"),
+    (NOW(), NOW(),"NEWS", "CODING_WORLD"),
+    (NOW(), NOW(),"NEWS", "NAVER"),
+    (NOW(), NOW(),"NEWS", "YOZM"),
+    (NOW(), NOW(),"YOUTUBE", "NOMAD_CODERS"),
+    (NOW(), NOW(),"YOUTUBE", "DREAM_CODING");

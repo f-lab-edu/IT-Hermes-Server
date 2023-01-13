@@ -17,20 +17,12 @@ public class BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
 
-    @Column(nullable = false)
-    private Boolean isDelete;
-
     public void initDefaultValue() {
-        this.isDelete=false;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
     public void changeUpdateAt() {
         this.updatedAt = LocalDateTime.now();
-    }
-
-    public void isDelete() {
-        this.isDelete=true;
     }
 }

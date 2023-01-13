@@ -19,11 +19,11 @@ public class Alarm extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "userId")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "SERVICE_ID")
+    @JoinColumn(name = "serviceId")
     private Service service;
 
     private String minDate;

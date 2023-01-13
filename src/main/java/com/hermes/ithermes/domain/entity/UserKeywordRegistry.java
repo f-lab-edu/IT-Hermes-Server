@@ -17,7 +17,7 @@ public class UserKeywordRegistry extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "userId")
     private User user;
 
     public void setUser(User user) {
@@ -25,7 +25,7 @@ public class UserKeywordRegistry extends BaseEntity {
     }
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "KEYWORD_ID")
+    @JoinColumn(name = "keywordId")
     private Keyword keyword;
 
     public void setKeyword(Keyword keyword) {

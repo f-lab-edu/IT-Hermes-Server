@@ -36,7 +36,14 @@ public class User extends BaseEntity {
 
     private String telegramId;
 
+    @Column(nullable = false)
+    private Boolean isDelete;
+
     public void changeNickname(String nickname) {
         this.nickname=nickname;
+    }
+
+    public void isDelete() {
+        this.isDelete = true;
     }
 }
