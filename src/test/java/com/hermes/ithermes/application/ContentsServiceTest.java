@@ -87,7 +87,7 @@ class ContentsServiceTest {
     @Test
     @DisplayName("main contents를 10개 반환하는지 테스트")
     void checkMainContentsCount(){
-        List<MainPageContentsDto> results=contentsService.getMainContents(CategoryType.YOUTUBEANDNEWS);
+        List<MainPageContentsDto> results=contentsService.getMainContents(CategoryType.YOUTUBE_AND_NEWS);
         Assertions.assertEquals(10,results.size());
     }
 
@@ -96,7 +96,7 @@ class ContentsServiceTest {
     void checkpaging() {
         PageRequest pageRequest = PageRequest.of(0,2);
 
-        Page<YoutubeAndNews> youtubeAndNewsResults = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageRequest,"youtube");
+        Page<YoutubeAndNews> youtubeAndNewsResults = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageRequest,CategoryType.YOUTUBE);
 
         Assertions.assertEquals(2,youtubeAndNewsResults.getContent().size());
         Assertions.assertTrue(youtubeAndNewsResults.isFirst());

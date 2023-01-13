@@ -8,7 +8,7 @@ public enum CategoryType {
     JOB("JOB"),
     NEWS("NEWS"),
     YOUTUBE("YOUTUBE"),
-    YOUTUBEANDNEWS("YOUTUBEANDNEWS");
+    YOUTUBE_AND_NEWS("YOUTUBE_AND_NEWS");
 
     private String name;
 
