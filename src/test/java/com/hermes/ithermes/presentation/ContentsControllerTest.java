@@ -5,6 +5,7 @@ import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.presentation.controller.ContentsController;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
+import com.hermes.ithermes.presentation.dto.contents.DtoInterface;
 import com.hermes.ithermes.presentation.dto.contents.MainPageContentsDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -36,8 +38,8 @@ class ContentsControllerTest {
     void notExistsContentTypeTest() throws Exception {
         String badContentsType= "ABCDE";
 
-        List<MainPageContentsDto> mainPageContentsDtoList=new ArrayList<>();
-        mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎ","ㅎㅎㅎㅎ"));
+        List<DtoInterface> mainPageContentsDtoList=new ArrayList<>();
+        mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎ", LocalDateTime.now()));
 
         when(contentsService.getMainContents(any())).thenReturn(mainPageContentsDtoList);
 
@@ -51,8 +53,8 @@ class ContentsControllerTest {
     void existsContentTypeTest() throws Exception {
         CategoryType categoryType = CategoryType.JOB;
 
-        List<MainPageContentsDto> mainPageContentsDtoList = new ArrayList<>();
-        mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎ", "ㅎㅎㅎㅎ"));
+        List<DtoInterface> mainPageContentsDtoList = new ArrayList<>();
+        mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎ", LocalDateTime.now()));
 
         when(contentsService.getMainContents(any())).thenReturn(mainPageContentsDtoList);
 
@@ -67,8 +69,8 @@ class ContentsControllerTest {
         String badContentsType="FGH";
         String badOrderType="ABCDE";
 
-        List<ContentsDto> contentsDtoList=new ArrayList<>();
-        contentsDtoList.add(new ContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ"));
+        List<DtoInterface> contentsDtoList=new ArrayList<>();
+        contentsDtoList.add(new ContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ",LocalDateTime.now(),"ㅎㅎㅎㅎㅎ"));
 
         when(contentsService.getCategoryContents(any(),anyInt(),any())).thenReturn(contentsDtoList);
 
@@ -85,8 +87,8 @@ class ContentsControllerTest {
         CategoryType categoryType = CategoryType.JOB;
         OrderType orderType=OrderType.RECENT;
 
-        List<ContentsDto> contentsDtoList=new ArrayList<>();
-        contentsDtoList.add(new ContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ"));
+        List<DtoInterface> contentsDtoList=new ArrayList<>();
+        contentsDtoList.add(new ContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ",LocalDateTime.now(),"ㅎㅎㅎㅎㅎ"));
 
         when(contentsService.getCategoryContents(any(),anyInt(),any())).thenReturn(contentsDtoList);
 

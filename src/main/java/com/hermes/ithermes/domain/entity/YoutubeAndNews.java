@@ -1,6 +1,7 @@
 package com.hermes.ithermes.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hermes.ithermes.presentation.dto.contents.EntityInterface;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class YoutubeAndNews extends BaseEntity{
+public class YoutubeAndNews extends BaseEntity implements EntityInterface {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
