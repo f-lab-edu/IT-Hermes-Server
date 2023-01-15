@@ -17,7 +17,8 @@ public class BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
 
-    public void initDefaultValue() {
+    @PrePersist
+    public void prePersist() {
         var nowTime = LocalDateTime.now();
         this.createdAt = nowTime;
         this.updatedAt = nowTime;

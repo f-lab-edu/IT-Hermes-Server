@@ -17,10 +17,9 @@ public class UserFactory {
                 .password(userLoginRequestDto.getPassword())
                 .nickname(userLoginRequestDto.getNickname())
                 .job(JobType.valueOf(userLoginRequestDto.getJob()))
-                .yearOfExperience(Integer.parseInt(userLoginRequestDto.getExperience()))
+                .yearOfExperience(Integer.parseInt(userLoginRequestDto.getYearOfExperience()))
                 .isDelete(false)
                 .build();
-        user.initDefaultValue();
         return user;
     }
 }

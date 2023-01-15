@@ -2,9 +2,9 @@ package com.hermes.ithermes.presentation.controller;
 
 import com.hermes.ithermes.application.AlarmService;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
-import com.hermes.ithermes.presentation.dto.alarm.AlarmFindSubscribeRequestDto;
-import com.hermes.ithermes.presentation.dto.alarm.AlarmFindSubscribeResponseDto;
-import com.hermes.ithermes.presentation.dto.alarm.AlarmUpdateSubscribeRequestDto;
+import com.hermes.ithermes.presentation.dto.alarm.AlarmFindAlarmRequestDto;
+import com.hermes.ithermes.presentation.dto.alarm.AlarmFindAlarmResponseDto;
+import com.hermes.ithermes.presentation.dto.alarm.AlarmPutAlarmRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,17 +24,17 @@ public class AlarmController {
         this.alarmService = alarmService;
     }
 
-    @RequestMapping(value = "/subscribe", method = RequestMethod.PUT)
-    public ResponseEntity<CommonResponseDto> updateSubscribe(@Valid @RequestBody AlarmUpdateSubscribeRequestDto alarmUpdateSubScribeActiveRequestDto) {
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    public ResponseEntity<CommonResponseDto> putAlarm(@Valid @RequestBody AlarmPutAlarmRequestDto alarmPutAlarmRequestDto) {
 
-        CommonResponseDto commonResponseDto = alarmService.updateSubscribe(alarmUpdateSubScribeActiveRequestDto);
+        CommonResponseDto commonResponseDto = alarmService.putAlarm(alarmPutAlarmRequestDto);
         return ResponseEntity.ok(commonResponseDto);
     }
 
-    @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
-    public ResponseEntity<AlarmFindSubscribeResponseDto> findSubscribe(@Valid @RequestBody AlarmFindSubscribeRequestDto alarmFindSubscribeRequestDto) {
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    public ResponseEntity<AlarmFindAlarmResponseDto> findAlarm(@Valid @RequestBody AlarmFindAlarmRequestDto alarmFindSubscribeRequestDto) {
 
-        AlarmFindSubscribeResponseDto alarmFindSubscribeResponseDto = alarmService.findSubscribe(alarmFindSubscribeRequestDto);
+        AlarmFindAlarmResponseDto alarmFindSubscribeResponseDto = alarmService.findAlarm(alarmFindSubscribeRequestDto);
         return ResponseEntity.ok(alarmFindSubscribeResponseDto);
     }
 }

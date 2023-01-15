@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 public class KeywordFactory {
     public Keyword parseKeywordNameToKeyword(String keywordName) {
         Keyword keyword = Keyword.builder().name(keywordName).build();
-        keyword.initDefaultValue();
         return keyword;
     }
 }

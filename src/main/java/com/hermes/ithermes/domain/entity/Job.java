@@ -1,6 +1,9 @@
 package com.hermes.ithermes.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 public class Job extends BaseEntity {
     @Id
@@ -23,11 +26,15 @@ public class Job extends BaseEntity {
     @Column(nullable = false)
     private String company;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(nullable = false)
-    private String startDate;
+    private LocalDateTime contentsStartAt;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(nullable = false)
-    private String endDate;
+    private LocalDateTime contentsEndAt;
 
     @Column(nullable = false)
     private Long viewCount;

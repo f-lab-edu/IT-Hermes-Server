@@ -11,7 +11,7 @@ import com.hermes.ithermes.infrastructure.UserKeywordRegistryRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.user.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,24 +20,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class UserService {
 
-    UserRepository userRepository;
-    UserKeywordRegistryRepository userKeywordRegistryRepository;
-    UserFactory userFactory;
-    KeywordFactory keywordFactory;
-    UserKeywordRegistryFactory userKeywordRegistryFactory;
-
-    @Autowired
-    public UserService(UserRepository userRepository, UserKeywordRegistryRepository userKeywordRegistryRepository,
-                       UserFactory userFactory, KeywordFactory keywordFactory, UserKeywordRegistryFactory userKeywordRegistryFactory) {
-        this.userRepository = userRepository;
-        this.userKeywordRegistryRepository = userKeywordRegistryRepository;
-        this.userFactory = userFactory;
-        this.keywordFactory = keywordFactory;
-        this.userKeywordRegistryFactory = userKeywordRegistryFactory;
-    }
+    private final UserRepository userRepository;
+    private final UserKeywordRegistryRepository userKeywordRegistryRepository;
+    private final UserFactory userFactory;
+    private final KeywordFactory keywordFactory;
+    private final UserKeywordRegistryFactory userKeywordRegistryFactory;
 
     @Transactional
     public UserCreateUserResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
@@ -46,7 +36,7 @@ public class UserService {
                 .filter(v -> v)
                 .orElseThrow(() -> new UnMatchedPasswordException());
 
-        findUserId(userLoginRequestDto.getId()).ifPresent(a -> {
+        findLoginId(userLoginRequestDto.getId()).ifPresent(a -> {
             throw new SameUserException();
         });
         User user = userFactory.parseLoginRequestDtoToUser(userLoginRequestDto);
@@ -64,13 +54,13 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserLoginResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) {
-        findUserIdAndPassword(userLoginRequestDto.getId(), userLoginRequestDto.getPassword()).orElseThrow(() -> new WrongIdOrPasswordException());
+        findLoginIdAndPassword(userLoginRequestDto.getId(), userLoginRequestDto.getPassword()).orElseThrow(() -> new WrongIdOrPasswordException());
         return new UserLoginResponseDto("success");
     }
 
     @Transactional(readOnly = true)
     public UserDuplicateNicknameResponseDto checkDuplicateNickname(UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {
-        findUserNickname(userDuplicateNicknameRequestDto.getNickname()).ifPresent(a -> {
+        findNickname(userDuplicateNicknameRequestDto.getNickname()).ifPresent(a -> {
             throw new SameNicknameException();
         });
         return new UserDuplicateNicknameResponseDto("success");
@@ -78,7 +68,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserDuplicateIdResponseDto checkDuplicateId(UserDuplicateIdRequestDto userDuplicateIdRequestDto) {
-        findUserId(userDuplicateIdRequestDto.getId()).ifPresent(a -> {
+        findLoginId(userDuplicateIdRequestDto.getId()).ifPresent(a -> {
             throw new SameIdException();
         });
         return new UserDuplicateIdResponseDto("success");
@@ -87,18 +77,18 @@ public class UserService {
     @Transactional
     public UserUpdateNicknameResponseDto updateNickname(UserUpdateNicknameRequestDto userUpdateNicknameRequestDto) {
         String newNickname = userUpdateNicknameRequestDto.getNickname();
-        findUserNickname(newNickname).ifPresent(a -> {
+        findNickname(newNickname).ifPresent(a -> {
             throw new SameNicknameException();
         });
 
-        User user = findUserId(userUpdateNicknameRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
+        User user = findLoginId(userUpdateNicknameRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         user.changeNickname(newNickname);
         return new UserUpdateNicknameResponseDto("success");
     }
 
     @Transactional
     public CommonResponseDto deleteUser(UserDeleteUserRequestDto userDeleteUserRequestDto) {
-        User user = findUserId(userDeleteUserRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
+        User user = findLoginId(userDeleteUserRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
 
         user.isDelete();
         return new CommonResponseDto();
@@ -106,19 +96,19 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserFindMyDataResponseDto findMyData(UserFindMyDataRequestDto userFindMyDataRequestDto) {
-        User user = findUserId(userFindMyDataRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
+        User user = findLoginId(userFindMyDataRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         return new UserFindMyDataResponseDto(user.getLoginId(), user.getNickname());
     }
 
-    private Optional<User> findUserId(String userId) {
+    private Optional<User> findLoginId(String userId) {
         return userRepository.findByLoginId(userId);
     }
 
-    private Optional<User> findUserNickname(String nickname) {
+    private Optional<User> findNickname(String nickname) {
         return userRepository.findByNickname(nickname);
     }
 
-    private Optional<User> findUserIdAndPassword(String id, String password) {
+    private Optional<User> findLoginIdAndPassword(String id, String password) {
         return userRepository.findByLoginIdAndPasswordAndIsDelete(id, password, false);
     }
 }

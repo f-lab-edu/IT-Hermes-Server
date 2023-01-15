@@ -9,12 +9,10 @@ import org.springframework.stereotype.Component;
 public class UserKeywordRegistryFactory {
 
     public UserKeywordRegistry parseUserAndKeyword(User user, Keyword keyword) {
-        keyword.initDefaultValue();
         UserKeywordRegistry userKeywordRegistry = UserKeywordRegistry.builder()
                 .user(user)
                 .keyword(keyword)
                 .build();
-        userKeywordRegistry.initDefaultValue();
         return userKeywordRegistry;
     }
 }

@@ -6,13 +6,18 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 public class Alarm extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,11 +31,14 @@ public class Alarm extends BaseEntity {
     @JoinColumn(name = "serviceId")
     private Service service;
 
-    private String minDate;
+    @ColumnDefault("0")
+    private Integer minYearOfExperience;
 
-    private String maxDate;
+    @ColumnDefault("30")
+    private Integer maxYearOfExperience;
 
     @Enumerated(EnumType.STRING)
+    @ColumnDefault("'ENTIRE'")
     private JobType job;
 
     @Enumerated(EnumType.STRING)

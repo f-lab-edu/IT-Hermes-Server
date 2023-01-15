@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class AlarmFindSubscribeRequestDto {
+public class AlarmFindAlarmRequestDto {
     @NotBlank(message = "아이디는 필수 입력사항 입니다.")
     private String id;
 }

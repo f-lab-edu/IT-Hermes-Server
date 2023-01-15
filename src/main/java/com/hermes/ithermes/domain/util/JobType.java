@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum JobType {
     FRONT("FRONT"),
     BACKEND("BACKEND"),
-    MOBILE("MOBILE");
+    MOBILE("MOBILE"),
+    ENTIRE("ENTIRE");
 
     private String title;
 

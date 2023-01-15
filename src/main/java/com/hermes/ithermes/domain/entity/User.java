@@ -46,4 +46,5 @@ public class User extends BaseEntity {
     public void isDelete() {
         this.isDelete = true;
     }
+
 }
