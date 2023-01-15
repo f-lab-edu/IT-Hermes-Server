@@ -2,23 +2,37 @@ package com.hermes.ithermes.infrastructure;
 
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.util.CategoryType;
-import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import com.hermes.ithermes.domain.util.OrderType;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import org.springframework.data.domain.Pageable;
+import java.util.List;
 
 @Repository
-public interface JobRepository extends JpaRepository<Job,Long> {
+public class JobRepository {
 
-    @Query(value = "select j from Job j left join j.service where j.service.category=:category and j.isDelete=false")
-    Page<Job> findJobByCategory(Pageable pageable, CategoryType category);
+        @PersistenceContext
+        private EntityManager em;
 
-    @Query(value = "select j from Job j left join j.service where j.service.category=:category and j.isDelete=false order by j.viewCount desc")
-    Page<Job> findJobByCategoryorderByViewCount(Pageable pageable, CategoryType category);
+        public List<Job> findJobBySorting(Pageable pageable, CategoryType categoryType, OrderType orderType){
+            String jpql="select j from Job j left join j.service where j.service.category=:category and j.isDelete=false";
 
-    @Query(value = "select j from Job j left join j.service where j.service.category=:category and j.isDelete=false order by j.createdAt desc")
-    Page<Job> findJobByCategoryorderByCreatedAt(Pageable pageable, CategoryType category);
+            if(orderType.getName().equals("RECENT")){
+                jpql+=" order by j.createdAt desc";
+            }else if(orderType.getName().equals("POPULAR")){
+                jpql+=" order by j.viewCount desc";
+            }else{
+                jpql+="";
+            }
+            TypedQuery<Job> query=em.createQuery(jpql,Job.class);
+            List<Job> jobs=query.setFirstResult((int)pageable.getOffset())
+                    .setParameter("category",categoryType.JOB)
+                    .setMaxResults(pageable.getPageSize()+1)
+                    .getResultList();
+            return jobs;
+        };
 
 }

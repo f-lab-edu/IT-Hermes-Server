@@ -2,25 +2,42 @@ package com.hermes.ithermes.infrastructure;
 
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.CategoryType;
-import org.springframework.data.domain.Page;
+import com.hermes.ithermes.domain.util.OrderType;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface YoutubeAndNewsRepository extends JpaRepository<YoutubeAndNews,Long> {
+public class YoutubeAndNewsRepository {
 
-    @Query("select c from YoutubeAndNews c left join c.service where c.service.category=:category and c.isDelete=false")
-    Page<YoutubeAndNews> findYoutubeAndNewsByCategory(Pageable pageable,CategoryType category);
+    @PersistenceContext
+    private EntityManager em;
 
-    @Query("select c from YoutubeAndNews c left join c.service where c.service.category=:category and c.isDelete=false order by c.viewCount desc")
-    Page<YoutubeAndNews> findYoutubeAndNewsByCategoryOrderByViewCount(Pageable pageable, CategoryType category);
+    public List<YoutubeAndNews> findYoutubeAndNewsBySorting(Pageable pageable, CategoryType categoryType, OrderType orderType){
+        String jpql="select c from YoutubeAndNews c left join c.service where c.service.category=:category and c.isDelete=false";
 
-    @Query("select c from YoutubeAndNews c left join c.service where c.service.category=:category and c.isDelete=false order by c.createdAt desc")
-    Page<YoutubeAndNews> findYoutubeAndNewsByCategoryOrderByCreatedAt(Pageable pageable,CategoryType category);
+        if(orderType.getName().equals("RECENT")){
+            jpql+=" order by c.createdAt desc";
+        }else if(orderType.getName().equals("POPULAR")){
+            jpql+=" order by c.viewCount desc";
+        }else{
+            jpql+="";
+        }
+        TypedQuery<YoutubeAndNews> query= em.createQuery(jpql,YoutubeAndNews.class);
+        List<YoutubeAndNews> youtubeAndNews=query.setFirstResult((int)pageable.getOffset())
+                .setParameter("category",categoryType)
+                .setMaxResults(pageable.getPageSize()+1)
+                .getResultList();
+        return youtubeAndNews;
+    }
 
-    @Query("select c from YoutubeAndNews c left join c.service where c.isDelete=false order by c.viewCount desc")
-    Page<YoutubeAndNews> findTop10YoutubeAndNews(Pageable pageable);
+    public void save(YoutubeAndNews youtubeAndNews){
+        em.persist(youtubeAndNews);
+    }
+
 
 }

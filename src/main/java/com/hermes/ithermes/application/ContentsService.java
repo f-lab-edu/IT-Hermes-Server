@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +31,7 @@ public class ContentsService {
     public List<DtoInterface> getMainContents(CategoryType type){
         Pageable pageInfo = PageRequest.of(0,10);
         if(type.getName().equals("JOB")){
-            return pageJobConvertMainPageContentsDto(jobRepository.findJobByCategoryorderByViewCount(pageInfo,type));
+            return pageJobConvertMainPageContentsDto((Page<Job>) jobRepository.findJobBySorting(pageInfo,type,OrderType.RECENT));
         }else{
             return pageYoutubeAndNewsConvertMainPageContentsDto(pageInfo,type);
        }
@@ -48,12 +47,7 @@ public class ContentsService {
     }
 
     private List<DtoInterface> pageYoutubeAndNewsConvertMainPageContentsDto(Pageable page, CategoryType category){
-        List<YoutubeAndNews> youtubeAndNewsContents=new ArrayList<>();
-        if(category.getName().equals("YOUTUBE_AND_NEWS")){
-            youtubeAndNewsContents=youtubeAndNewsRepository.findTop10YoutubeAndNews(page).getContent();
-        }else{
-            youtubeAndNewsContents=youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByViewCount(page,category).getContent();
-        }
+        List<YoutubeAndNews> youtubeAndNewsContents=youtubeAndNewsRepository.findYoutubeAndNewsBySorting(page,category, OrderType.valueOf(""));
         return convertEntityToDtoList(youtubeAndNewsContents,new MainPageContentsDto());
     }
 
@@ -62,32 +56,17 @@ public class ContentsService {
     }
 
     private List<DtoInterface> pageJobToConvertContentsDto(Pageable page,OrderType order){
-        List<Job> jobContents=new ArrayList<>();
-        if(order.getName().equals("RECENT")){
-            jobContents=jobRepository.findJobByCategoryorderByCreatedAt(page,CategoryType.JOB).getContent();
-        }else if(order.getName().equals("POPULAR")){
-            jobContents=jobRepository.findJobByCategoryorderByViewCount(page, CategoryType.JOB).getContent();
-        }else{
-            jobContents= jobRepository.findJobByCategory(page,CategoryType.JOB).getContent();
-        }
+        List<Job> jobContents= jobRepository.findJobBySorting(page,CategoryType.JOB,order);
         return convertEntityToDtoList(jobContents,new ContentsDto());
     }
 
     private List<DtoInterface> pageYoutubeAndNewsConvertContentsDto(Pageable page, OrderType order, CategoryType type){
-        List<YoutubeAndNews> youtubeAndNewsContents=new ArrayList<>();
-        if(order.getName().equals("RECENT")) {
-            youtubeAndNewsContents=youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByCreatedAt(page,type).getContent();
-        }else if(order.getName().equals("POPULAR")){
-            youtubeAndNewsContents=youtubeAndNewsRepository.findYoutubeAndNewsByCategoryOrderByViewCount(page,type).getContent();
-        }else{
-            youtubeAndNewsContents=youtubeAndNewsRepository.findYoutubeAndNewsByCategory(page,type).getContent();
-        }
+        List<YoutubeAndNews> youtubeAndNewsContents= youtubeAndNewsRepository.findYoutubeAndNewsBySorting(page,type,order);
         return convertEntityToDtoList(youtubeAndNewsContents,new ContentsDto());
     }
 
     private <Y extends EntityInterface,T extends DtoInterface> List<DtoInterface> convertEntityToDtoList(List<Y> content, T t){
         return content.stream().map(x->t.convertEntity(x)).collect(Collectors.toList());
     }
-
 
 }

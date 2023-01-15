@@ -3,10 +3,10 @@ package com.hermes.ithermes.application;
 import com.hermes.ithermes.domain.entity.Service;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.CategoryType;
+import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.infrastructure.ServiceRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.contents.DtoInterface;
-import com.hermes.ithermes.presentation.dto.contents.MainPageContentsDto;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +57,7 @@ class ContentsServiceTest {
     void checkpaging() {
         PageRequest pageRequest = PageRequest.of(0,2);
 
-        Page<YoutubeAndNews> youtubeAndNewsResults = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageRequest,CategoryType.YOUTUBE);
+        Page<YoutubeAndNews> youtubeAndNewsResults = (Page<YoutubeAndNews>) youtubeAndNewsRepository.findYoutubeAndNewsBySorting(pageRequest,CategoryType.YOUTUBE, OrderType.valueOf(""));
 
         Assertions.assertEquals(2,youtubeAndNewsResults.getContent().size());
         Assertions.assertTrue(youtubeAndNewsResults.isFirst());
