@@ -30,7 +30,7 @@ public class UserService {
     private final UserKeywordRegistryFactory userKeywordRegistryFactory;
 
     @Transactional
-    public UserCreateUserResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
+    public CommonResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
 
         Optional.ofNullable(userLoginRequestDto.getPassword().equals(userLoginRequestDto.getPasswordConfirm()))
                 .filter(v -> v)
@@ -49,33 +49,33 @@ public class UserService {
                     userKeywordRegistryRepository.save(userKeywordRegistry);
                 });
 
-        return new UserCreateUserResponseDto("success");
+        return new CommonResponseDto();
     }
 
     @Transactional(readOnly = true)
-    public UserLoginResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) {
+    public CommonResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) {
         findLoginIdAndPassword(userLoginRequestDto.getId(), userLoginRequestDto.getPassword()).orElseThrow(() -> new WrongIdOrPasswordException());
-        return new UserLoginResponseDto("success");
+        return new CommonResponseDto();
     }
 
     @Transactional(readOnly = true)
-    public UserDuplicateNicknameResponseDto checkDuplicateNickname(UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {
+    public CommonResponseDto checkDuplicateNickname(UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {
         findNickname(userDuplicateNicknameRequestDto.getNickname()).ifPresent(a -> {
             throw new SameNicknameException();
         });
-        return new UserDuplicateNicknameResponseDto("success");
+        return new CommonResponseDto();
     }
 
     @Transactional(readOnly = true)
-    public UserDuplicateIdResponseDto checkDuplicateId(UserDuplicateIdRequestDto userDuplicateIdRequestDto) {
+    public CommonResponseDto checkDuplicateId(UserDuplicateIdRequestDto userDuplicateIdRequestDto) {
         findLoginId(userDuplicateIdRequestDto.getId()).ifPresent(a -> {
             throw new SameIdException();
         });
-        return new UserDuplicateIdResponseDto("success");
+        return new CommonResponseDto();
     }
 
     @Transactional
-    public UserUpdateNicknameResponseDto updateNickname(UserUpdateNicknameRequestDto userUpdateNicknameRequestDto) {
+    public CommonResponseDto updateNickname(UserUpdateNicknameRequestDto userUpdateNicknameRequestDto) {
         String newNickname = userUpdateNicknameRequestDto.getNickname();
         findNickname(newNickname).ifPresent(a -> {
             throw new SameNicknameException();
@@ -83,7 +83,7 @@ public class UserService {
 
         User user = findLoginId(userUpdateNicknameRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         user.changeNickname(newNickname);
-        return new UserUpdateNicknameResponseDto("success");
+        return new CommonResponseDto();
     }
 
     @Transactional
