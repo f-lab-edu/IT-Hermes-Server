@@ -16,7 +16,7 @@ public enum CategoryType {
         this.name = name;
     }
 
-    public static boolean categoryTypeContains(String type){
+    public static boolean isContainCategoryType(String type){
         for(CategoryType c: CategoryType.values()){
             if(c.getName().equals(type)){
                 return true;

@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum OrderType {
 
+    ID("ID"),
     RECENT("RECENT"),
     POPULAR("POPULAR");
 
@@ -14,7 +15,7 @@ public enum OrderType {
         this.name = name;
     }
 
-    public static boolean orderTypeContains(String type){
+    public static boolean isContainOrderType(String type){
         for(OrderType o: OrderType.values()){
             if(o.getName().equals(type)){
                 return true;

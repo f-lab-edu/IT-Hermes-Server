@@ -34,9 +34,9 @@ class ContentsControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("ContentsType에 존재하지 않는 enum값으로 요청시에 400 상태코드가 반환되어야 한다.")
-    void notExistsContentTypeTest() throws Exception {
-        String badContentsType= "ABCDE";
+    @DisplayName("CategoryType에 존재하지 않는 enum값으로 요청 파라미터에 요청시에 400 상태코드가 반환되어야 한다.")
+    void notExistsCategoryTypeTest() throws Exception {
+        String wrongCategoryType= "ABCDE";
 
         List<DtoInterface> mainPageContentsDtoList=new ArrayList<>();
         mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎ", LocalDateTime.now()));
@@ -44,14 +44,14 @@ class ContentsControllerTest {
         when(contentsService.getMainContents(any())).thenReturn(mainPageContentsDtoList);
 
         mockMvc.perform(get("/contents/main")
-                        .param("type", badContentsType))
+                        .param("type", wrongCategoryType))
                         .andExpect(status().isBadRequest());
     }
 
     @Test
-    @DisplayName("ContentType에 존재하는 enum값으로 요청시에 200 성공 상태코드가 반환되어야 한다.")
-    void existsContentTypeTest() throws Exception {
-        CategoryType categoryType = CategoryType.JOB;
+    @DisplayName("CategoryType에 존재하는 enum값으로 요청 파라미터에 요청시에 200 상태코드가 반환되어야 한다.")
+    void existsCategoryTypeTest() throws Exception {
+        CategoryType correctCategoryType = CategoryType.JOB;
 
         List<DtoInterface> mainPageContentsDtoList = new ArrayList<>();
         mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎ", LocalDateTime.now()));
@@ -59,15 +59,15 @@ class ContentsControllerTest {
         when(contentsService.getMainContents(any())).thenReturn(mainPageContentsDtoList);
 
         mockMvc.perform(get("/contents/main")
-                        .param("type", String.valueOf(categoryType)))
+                        .param("type", String.valueOf(correctCategoryType)))
                         .andExpect(status().isOk());
     }
 
     @Test
-    @DisplayName("존재하지 않는 enum값으로 contentType이나 orderType을 요청시 400 코드가 반환되어야 한다.")
-    void notExistContentTypeOrOrderType()throws Exception{
-        String badContentsType="FGH";
-        String badOrderType="ABCDE";
+    @DisplayName("categoryType이나 orderType에 존재하지 않는 enum값으로 요청 파라미터에 요청시 400 코드가 반환되어야 한다.")
+    void notExistCategoryTypeAndOrderTypeTest()throws Exception{
+        String wrongContentsType="FGH";
+        String wrongOrderType="ABCDE";
 
         List<DtoInterface> contentsDtoList=new ArrayList<>();
         contentsDtoList.add(new ContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ",LocalDateTime.now(),"ㅎㅎㅎㅎㅎ"));
@@ -75,17 +75,17 @@ class ContentsControllerTest {
         when(contentsService.getCategoryContents(any(),anyInt(),any())).thenReturn(contentsDtoList);
 
         mockMvc.perform(get("/contents/category")
-                        .param("type",badContentsType)
+                        .param("type",wrongContentsType)
                         .param("page", String.valueOf(0))
-                        .param("order",badOrderType))
+                        .param("order",wrongOrderType))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    @DisplayName("존재하는 contents,order 타입값으로 요청시 200 성공 코드가 반환되어야 한다.")
-    void existContentTypeOrOrderType()throws Exception{
-        CategoryType categoryType = CategoryType.JOB;
-        OrderType orderType=OrderType.RECENT;
+    @DisplayName("CategoryType나 orderType에 존재하는 enum값으로 요청 파라미터에 요청시에 200 상태코드가 반환되어야 한다.")
+    void existCategoryTypeAndOrderTypeTest()throws Exception{
+        CategoryType correctCategoryType = CategoryType.JOB;
+        OrderType correctOrderType=OrderType.RECENT;
 
         List<DtoInterface> contentsDtoList=new ArrayList<>();
         contentsDtoList.add(new ContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ",LocalDateTime.now(),"ㅎㅎㅎㅎㅎ"));
@@ -93,9 +93,9 @@ class ContentsControllerTest {
         when(contentsService.getCategoryContents(any(),anyInt(),any())).thenReturn(contentsDtoList);
 
         mockMvc.perform(get("/contents/category")
-                .param("type", String.valueOf(categoryType))
+                .param("type", String.valueOf(correctCategoryType))
                 .param("page",String.valueOf(0))
-                .param("order", String.valueOf(orderType)))
+                .param("order", String.valueOf(correctOrderType)))
                 .andExpect(status().isOk());
     }
 
