@@ -32,18 +32,16 @@ public class ContentsService {
         Pageable pageInfo = PageRequest.of(0,10);
         if(type.getName().equals("JOB")){
             return pageJobConvertMainPageContentsDto((Page<Job>) jobRepository.findJobBySorting(pageInfo,type,OrderType.RECENT));
-        }else{
-            return pageYoutubeAndNewsConvertMainPageContentsDto(pageInfo,type);
-       }
+        }
+        return pageYoutubeAndNewsConvertMainPageContentsDto(pageInfo,type);
     }
 
     public List<DtoInterface> getCategoryContents(CategoryType type, int page, OrderType order){
         Pageable pageInfo = PageRequest.of(page,12);
         if(type.getName().equals("JOB")) {
             return pageJobToConvertContentsDto(pageInfo,order);
-        }else{
-            return pageYoutubeAndNewsConvertContentsDto(pageInfo,order,type);
         }
+        return pageYoutubeAndNewsConvertContentsDto(pageInfo,order,type);
     }
 
     private List<DtoInterface> pageYoutubeAndNewsConvertMainPageContentsDto(Pageable page, CategoryType category){
