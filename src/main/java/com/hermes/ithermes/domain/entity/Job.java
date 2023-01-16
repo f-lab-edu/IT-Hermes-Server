@@ -1,7 +1,6 @@
 package com.hermes.ithermes.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.hermes.ithermes.presentation.dto.contents.EntityInterface;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -9,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Job extends BaseEntity implements EntityInterface {
+public class Job extends BaseEntity implements ContentsEntityInterface {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

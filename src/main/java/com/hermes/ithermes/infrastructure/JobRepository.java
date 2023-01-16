@@ -1,8 +1,8 @@
 package com.hermes.ithermes.infrastructure;
 
-import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.OrderType;
+import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -17,7 +17,7 @@ public class JobRepository {
         @PersistenceContext
         private EntityManager em;
 
-        public List<Job> findJobBySorting(Pageable pageable, CategoryType categoryType, OrderType orderType){
+        public List<ContentsEntityInterface> findJobBySorting(Pageable pageable, CategoryType categoryType, OrderType orderType){
             String jpql="select j from Job j left join j.service where j.service.category=:category and j.isDelete=false";
 
             if(orderType.getName().equals("RECENT")){
@@ -27,11 +27,13 @@ public class JobRepository {
             }else{
                 jpql+="";
             }
-            TypedQuery<Job> query=em.createQuery(jpql,Job.class);
-            List<Job> jobs=query.setFirstResult((int)pageable.getOffset())
+            TypedQuery<ContentsEntityInterface> query=em.createQuery(jpql, ContentsEntityInterface.class);
+
+            List<ContentsEntityInterface> jobs=query.setFirstResult((int)pageable.getOffset())
                     .setParameter("category",categoryType.JOB)
                     .setMaxResults(pageable.getPageSize()+1)
                     .getResultList();
+
             return jobs;
         };
 
