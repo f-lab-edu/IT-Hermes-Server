@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContentsDto implements DtoInterface<EntityInterface,ContentsDto>{
+public class ContentsDto implements DtoInterface{
 
     public String title;
 
@@ -31,6 +31,7 @@ public class ContentsDto implements DtoInterface<EntityInterface,ContentsDto>{
     public LocalDateTime contentsDate;
 
     private String description;
+    
 
     @Override
     public ContentsDto convertEntity(EntityInterface entityInterface) {

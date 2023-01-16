@@ -1,7 +1,7 @@
 package com.hermes.ithermes.presentation.dto.contents;
 
-public interface DtoInterface <E extends EntityInterface, D extends DtoInterface>{
+public interface DtoInterface{
 
-  D convertEntity(E entity);
+  DtoInterface convertEntity(EntityInterface entityInterface);
 
 }

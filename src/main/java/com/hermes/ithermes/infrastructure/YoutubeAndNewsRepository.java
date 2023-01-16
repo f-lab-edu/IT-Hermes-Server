@@ -17,6 +17,16 @@ public class YoutubeAndNewsRepository {
     @PersistenceContext
     private EntityManager em;
 
+    public List<YoutubeAndNews> findTop10YoutubeAndNews(Pageable pageable){
+        String jpql="select c from YoutubeAndNews c left join c.service where c.isDelete=false order by c.viewCount desc";
+
+        TypedQuery<YoutubeAndNews> query= em.createQuery(jpql,YoutubeAndNews.class);
+        List<YoutubeAndNews> youtubeAndNews=query.setFirstResult((int)pageable.getOffset())
+                .setMaxResults(pageable.getPageSize()+1)
+                .getResultList();
+        return youtubeAndNews;
+    }
+
     public List<YoutubeAndNews> findYoutubeAndNewsBySorting(Pageable pageable, CategoryType categoryType, OrderType orderType){
         String jpql="select c from YoutubeAndNews c left join c.service where c.service.category=:category and c.isDelete=false";
 

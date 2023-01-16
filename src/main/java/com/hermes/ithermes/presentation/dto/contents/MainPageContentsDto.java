@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class MainPageContentsDto implements DtoInterface<EntityInterface,MainPageContentsDto>{
+public class MainPageContentsDto implements DtoInterface{
 
     public String title;
 
