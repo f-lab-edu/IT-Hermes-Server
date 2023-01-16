@@ -4,6 +4,6 @@ import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 
 public interface ContentsDtoInterface {
 
-  ContentsDtoInterface convertEntity(ContentsEntityInterface contentsEntityInterface);
+  ContentsDtoInterface convertEntityToDto(ContentsEntityInterface contentsEntityInterface);
 
 }

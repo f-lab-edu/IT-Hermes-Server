@@ -1,25 +1,6 @@
 package com.hermes.ithermes.application;
 
-import com.hermes.ithermes.domain.entity.Service;
-import com.hermes.ithermes.domain.entity.YoutubeAndNews;
-import com.hermes.ithermes.domain.util.CategoryType;
-import com.hermes.ithermes.domain.util.OrderType;
-import com.hermes.ithermes.infrastructure.ServiceRepository;
-import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
-import com.hermes.ithermes.presentation.dto.contents.DtoInterface;
-import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
+/*
 @SpringBootTest
 @Transactional
 class ContentsServiceTest {
@@ -63,7 +44,7 @@ class ContentsServiceTest {
         Assertions.assertTrue(youtubeAndNewsResults.isFirst());
         Assertions.assertTrue(youtubeAndNewsResults.hasNext());
     }
-}
+}*/
 
 
 

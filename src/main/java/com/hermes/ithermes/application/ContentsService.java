@@ -53,7 +53,7 @@ public class ContentsService {
     }
 
     private List<ContentsDtoInterface> convertEntityToDtoList(List<ContentsEntityInterface> content, ContentsDtoInterface t){
-        return content.stream().map(x->t.convertEntity(x)).collect(Collectors.toList());
+        return content.stream().map(x->t.convertEntityToDto(x)).collect(Collectors.toList());
     }
 
 }

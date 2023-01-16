@@ -30,28 +30,30 @@ public class MainPageContentsContentsDto implements ContentsDtoInterface {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime contentsDate;
 
+    public MainPageContentsContentsDto(YoutubeAndNews youtubeAndNews) {
+        this.title = youtubeAndNews.getTitle();
+        this.image = youtubeAndNews.getImage();
+        this.url = youtubeAndNews.getUrl();
+        this.category = youtubeAndNews.getService().getCategory().getName();
+        this.service = youtubeAndNews.getService().getName();
+        this.contentsDate = youtubeAndNews.getContentsDate();
+    }
+
+    public MainPageContentsContentsDto(Job job) {
+        this.title = job.getTitle();
+        this.image = null;
+        this.url = job.getUrl();
+        this.category = job.getService().getCategory().getName();
+        this.service = job.getService().getName();
+        this.contentsDate = job.getEndDate();
+    }
+
     @Override
-    public MainPageContentsContentsDto convertEntity(ContentsEntityInterface contentsEntityInterface) {
+    public MainPageContentsContentsDto convertEntityToDto(ContentsEntityInterface contentsEntityInterface) {
         if(contentsEntityInterface instanceof YoutubeAndNews){
-            return MainPageContentsContentsDto.builder()
-                    .title(((YoutubeAndNews) contentsEntityInterface).getTitle())
-                    .image(((YoutubeAndNews) contentsEntityInterface).getImage())
-                    .url(((YoutubeAndNews) contentsEntityInterface).getUrl())
-                    .category(((YoutubeAndNews) contentsEntityInterface).getService().getCategory().getName())
-                    .service(((YoutubeAndNews) contentsEntityInterface).getService().getName())
-                    .contentsDate((((YoutubeAndNews) contentsEntityInterface).getContentsDate()))
-                    .build();
-        }if(contentsEntityInterface instanceof Job){
-            return MainPageContentsContentsDto.builder()
-                    .title(((Job) contentsEntityInterface).getTitle())
-                    .image(null)
-                    .url(((Job) contentsEntityInterface).getUrl())
-                    .category(((Job) contentsEntityInterface).getService().getCategory().getName())
-                    .service(((Job) contentsEntityInterface).getService().getName())
-                    .contentsDate(((Job) contentsEntityInterface).getEndDate())
-                    .build();
+            return new MainPageContentsContentsDto(new YoutubeAndNews());
         }
-        return null;
+        return new MainPageContentsContentsDto(new Job());
     }
 
 }
