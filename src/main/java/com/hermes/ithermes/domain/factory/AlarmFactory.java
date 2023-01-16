@@ -6,11 +6,8 @@ import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
 import com.hermes.ithermes.domain.util.ActiveType;
 import com.hermes.ithermes.domain.util.CategoryType;
-import com.hermes.ithermes.domain.util.JobType;
 import com.hermes.ithermes.domain.util.ServiceType;
 import com.hermes.ithermes.infrastructure.AlarmRepository;
-import com.hermes.ithermes.infrastructure.ServiceRepository;
-import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.presentation.dto.alarm.AlarmFindAlarmRequestDto;
 import com.hermes.ithermes.presentation.dto.alarm.AlarmPutAlarmRequestDto;
 import lombok.Builder;
@@ -26,17 +23,18 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class AlarmFactory {
-    private final ServiceRepository serviceRepository;
-    private final UserRepository userRepository;
     private final AlarmRepository alarmRepository;
+    private final ServiceFactory serviceFactory;
+    private final UserFactory userFactory;
 
     public List<Alarm> parsePutAlarmDtoToAlarms(AlarmPutAlarmRequestDto alarmPutAlarmRequestDto) {
-        List<Service> services = serviceRepository.findAll();
         List<Alarm> alarms = new ArrayList<>();
-        User user = userRepository.findByLoginId(alarmPutAlarmRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
+        List<Service> services = serviceFactory.findAllService();
+        String loginId = alarmPutAlarmRequestDto.getId();
+        User user = userFactory.findLoginId(loginId).orElseThrow(() -> new WrongIdOrPasswordException());
         String minYearOfExperience = alarmPutAlarmRequestDto.getMinYearOfExperience();
         String maxYearOfExperience = alarmPutAlarmRequestDto.getMaxYearOfExperience();
-        JobType jobType = parseJobType(alarmPutAlarmRequestDto.getJob());
+        String jobType = alarmPutAlarmRequestDto.getJob();
 
         int index = 0;
         for (String active : alarmPutAlarmRequestDto.getKeywordList()) {
@@ -45,7 +43,7 @@ public class AlarmFactory {
             Service service = services.get(index);
             Long serviceId = service.getId();
             CategoryType categoryType = CategoryType.findByServiceType(serviceType);
-            Optional<Alarm> alarmOptional = alarmRepository.findByServiceId(serviceId);
+            Optional<Alarm> alarmOptional = findByServiceId(serviceId);
 
             Alarm alarm = categoryType.getParseAlarm().parseAlarm(user, service, activeType, jobType, minYearOfExperience, maxYearOfExperience);
 
@@ -60,9 +58,9 @@ public class AlarmFactory {
 
     public List<Alarm> parseFindAlarmDtoToAlarms(AlarmFindAlarmRequestDto alarmFindAlarmRequestDto) {
         String loginId = alarmFindAlarmRequestDto.getId();
-        User user = userRepository.findByLoginId(loginId).orElseThrow(() -> new WrongIdOrPasswordException());
+        User user = userFactory.findLoginId(loginId).orElseThrow(() -> new WrongIdOrPasswordException());
         Long userId = user.getId();
-        List<Alarm> alarms = alarmRepository.findByUserId(userId).orElseThrow(() -> new WrongIdOrPasswordException());
+        List<Alarm> alarms = findByUserId(userId);
         return alarms;
     }
 
@@ -76,8 +74,12 @@ public class AlarmFactory {
                 .findAny().orElse(null);
     }
 
-    public JobType parseJobType(String job) {
-        return job == null ? null : JobType.valueOf(job);
+    public Optional<Alarm> findByServiceId(Long serviceId) {
+        return alarmRepository.findByServiceId(serviceId);
+    }
+
+    public List<Alarm> findByUserId(Long userId) {
+        return alarmRepository.findByUserId(userId).orElseThrow(() -> new WrongIdOrPasswordException());
     }
 }
 
