@@ -1,5 +1,6 @@
 package com.hermes.ithermes.presentation.dto.alarm;
 
+import com.hermes.ithermes.domain.util.JobType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ public class AlarmPutAlarmRequestDto {
     @NotEmpty(message = "서비스정보는 필수 입력사항 입니다.")
     private String[] keywordList;
     /** 취업 옵션 데이터 정보, 데이터가 없을 시, 배열에 null 삽입*/
-    private String job;
+    private JobType job;
     /** 취업 공고 시작 및 종료 옵션 데이터 정보, 데이터가 없을 시, 배열에 null 삽입*/
     private String minYearOfExperience;
     private String maxYearOfExperience;

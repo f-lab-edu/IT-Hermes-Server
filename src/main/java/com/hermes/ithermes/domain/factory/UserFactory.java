@@ -1,7 +1,6 @@
 package com.hermes.ithermes.domain.factory;
 
 import com.hermes.ithermes.domain.entity.User;
-import com.hermes.ithermes.domain.util.JobType;
 import com.hermes.ithermes.infrastructure.ServiceRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.presentation.dto.user.UserCreateUserRequestDto;
@@ -23,7 +22,7 @@ public class UserFactory {
                 .loginId(userLoginRequestDto.getId())
                 .password(userLoginRequestDto.getPassword())
                 .nickname(userLoginRequestDto.getNickname())
-                .job(JobType.valueOf(userLoginRequestDto.getJob()))
+                .job(userLoginRequestDto.getJob())
                 .yearOfExperience(Integer.parseInt(userLoginRequestDto.getYearOfExperience()))
                 .isDelete(false)
                 .build();

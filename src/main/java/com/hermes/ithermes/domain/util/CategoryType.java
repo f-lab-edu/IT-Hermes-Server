@@ -9,22 +9,23 @@ import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 public enum CategoryType {
     JOB("JOB", Arrays.asList(ServiceType.SARAMIN, ServiceType.WANTED),
-            (User user, Service service, ActiveType activeType, String jobType, String minYearOfExperience, String maxYearOfExperience) -> {
+            (User user, Service service, ActiveType activeType, JobType jobType, String minYearOfExperience, String maxYearOfExperience) -> {
         Alarm alarm = Alarm.builder()
                 .user(user)
                 .service(service)
                 .isActive(activeType)
                 .minYearOfExperience(parseToMinYearOfExperience(minYearOfExperience))
                 .maxYearOfExperience(parseToMaxYearOfExperience(maxYearOfExperience))
-                .job(parseToJobType(jobType))
+                .job(CategoryType.parseToJobType(jobType))
                 .build();
         return alarm;
     }), NEWS("NEWS", Arrays.asList(ServiceType.CODING_WORLD, ServiceType.NAVER, ServiceType.YOZM),
-            (User user, Service service, ActiveType activeType, String jobType, String minYearOfExperience, String maxYearOfExperience) -> {
+            (User user, Service service, ActiveType activeType, JobType jobType, String minYearOfExperience, String maxYearOfExperience) -> {
         Alarm alarm = Alarm.builder()
                 .user(user)
                 .service(service)
@@ -34,7 +35,7 @@ public enum CategoryType {
 
     }),
     YOUTUBE("YOUTUBE", Arrays.asList(ServiceType.NOMAD_CODERS, ServiceType.DREAM_CODING),
-            (User user, Service service, ActiveType activeType, String jobType, String minYearOfExperience, String maxYearOfExperience) -> {
+            (User user, Service service, ActiveType activeType, JobType jobType, String minYearOfExperience, String maxYearOfExperience) -> {
         Alarm alarm = Alarm.builder()
                 .user(user)
                 .service(service)
@@ -61,8 +62,8 @@ public enum CategoryType {
         return yearOfExperience == null ? 30 : Integer.valueOf(yearOfExperience);
     }
 
-    private static JobType parseToJobType(String jobType) {
-        return jobType == null ? JobType.ENTIRE : JobType.valueOf(jobType);
+    private static JobType parseToJobType(JobType jobType) {
+        return jobType == null ? JobType.ENTIRE : Optional.ofNullable(jobType).orElseThrow(()->new EnumTypeFormatException());
     }
 
     public static CategoryType findByServiceType(ServiceType serviceType) {

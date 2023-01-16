@@ -6,6 +6,7 @@ import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
 import com.hermes.ithermes.domain.util.ActiveType;
 import com.hermes.ithermes.domain.util.CategoryType;
+import com.hermes.ithermes.domain.util.JobType;
 import com.hermes.ithermes.domain.util.ServiceType;
 import com.hermes.ithermes.infrastructure.AlarmRepository;
 import com.hermes.ithermes.presentation.dto.alarm.AlarmFindAlarmRequestDto;
@@ -34,7 +35,7 @@ public class AlarmFactory {
         User user = userFactory.findLoginId(loginId).orElseThrow(() -> new WrongIdOrPasswordException());
         String minYearOfExperience = alarmPutAlarmRequestDto.getMinYearOfExperience();
         String maxYearOfExperience = alarmPutAlarmRequestDto.getMaxYearOfExperience();
-        String jobType = alarmPutAlarmRequestDto.getJob();
+        JobType jobType = alarmPutAlarmRequestDto.getJob();
 
         int index = 0;
         for (String active : alarmPutAlarmRequestDto.getKeywordList()) {
