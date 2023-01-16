@@ -1,6 +1,28 @@
 package com.hermes.ithermes.application;
 
-/*
+
+import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
+import com.hermes.ithermes.domain.entity.Service;
+import com.hermes.ithermes.domain.entity.YoutubeAndNews;
+import com.hermes.ithermes.domain.util.CategoryType;
+import com.hermes.ithermes.domain.util.OrderType;
+import com.hermes.ithermes.infrastructure.ServiceRepository;
+import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
+import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 @SpringBootTest
 @Transactional
 class ContentsServiceTest {
@@ -29,22 +51,21 @@ class ContentsServiceTest {
     @Test
     @DisplayName("main contents를 10개 반환하는지 테스트")
     void checkMainContentsCount(){
-        List<DtoInterface> results=contentsService.getMainContents(CategoryType.YOUTUBE_AND_NEWS);
+        List<ContentsDtoInterface> results=contentsService.getMainContents(CategoryType.YOUTUBE_AND_NEWS);
         Assertions.assertEquals(10,results.size());
     }
 
     @Test
     @DisplayName("category contents 페이징 처리 테스트")
     void checkpaging() {
-        PageRequest pageRequest = PageRequest.of(0,2);
+        Pageable pageInfo = PageRequest.of(0,2);
 
-        Page<YoutubeAndNews> youtubeAndNewsResults = (Page<YoutubeAndNews>) youtubeAndNewsRepository.findYoutubeAndNewsBySorting(pageRequest,CategoryType.YOUTUBE, OrderType.valueOf(""));
+        List<ContentsEntityInterface> youtubeContents=youtubeAndNewsRepository.findYoutubeAndNewsBySorting(pageInfo,CategoryType.YOUTUBE, OrderType.POPULAR);
 
-        Assertions.assertEquals(2,youtubeAndNewsResults.getContent().size());
-        Assertions.assertTrue(youtubeAndNewsResults.isFirst());
-        Assertions.assertTrue(youtubeAndNewsResults.hasNext());
+        Assertions.assertEquals(2,youtubeContents.size());
     }
-}*/
+
+}
 
 
 
