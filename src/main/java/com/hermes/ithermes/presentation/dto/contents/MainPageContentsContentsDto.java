@@ -51,9 +51,9 @@ public class MainPageContentsContentsDto implements ContentsDtoInterface {
     @Override
     public MainPageContentsContentsDto convertEntityToDto(ContentsEntityInterface contentsEntityInterface) {
         if(contentsEntityInterface instanceof YoutubeAndNews){
-            return new MainPageContentsContentsDto(new YoutubeAndNews());
+            return new MainPageContentsContentsDto((YoutubeAndNews) contentsEntityInterface);
         }
-        return new MainPageContentsContentsDto(new Job());
+        return new MainPageContentsContentsDto((Job) contentsEntityInterface);
     }
 
 }

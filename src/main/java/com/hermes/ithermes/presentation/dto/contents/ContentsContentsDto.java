@@ -55,9 +55,9 @@ public class ContentsContentsDto implements ContentsDtoInterface {
     @Override
     public ContentsContentsDto convertEntityToDto(ContentsEntityInterface contentsEntityInterface) {
         if(contentsEntityInterface instanceof YoutubeAndNews){
-            return new ContentsContentsDto(new YoutubeAndNews());
+            return new ContentsContentsDto((YoutubeAndNews) contentsEntityInterface);
         }
-        return new ContentsContentsDto(new Job());
+        return new ContentsContentsDto((Job) contentsEntityInterface);
     }
 
 }
