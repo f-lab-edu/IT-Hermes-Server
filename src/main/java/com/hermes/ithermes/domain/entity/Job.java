@@ -11,8 +11,8 @@ public class Job extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "serviceId")
-    Service service;
+    @JoinColumn(name = "contentsProviderId")
+    ContentsProvider contentsProvider;
 
     @Column(nullable = false)
     private String title;
@@ -42,8 +42,8 @@ public class Job extends BaseEntity {
     @Column(nullable = false)
     private Boolean isDelete;
 
-    public void setService(Service service) {
-        this.service = service;
+    public void setContentsProvider(ContentsProvider contentsProvider) {
+        this.contentsProvider = contentsProvider;
     }
 
     public void initDefaultData() {
