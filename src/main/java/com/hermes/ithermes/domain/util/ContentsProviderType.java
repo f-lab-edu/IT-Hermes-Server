@@ -3,7 +3,7 @@ package com.hermes.ithermes.domain.util;
 import lombok.Getter;
 
 @Getter
-public enum ServiceType {
+public enum ContentsProviderType {
     SARAMIN("SARAMIN"),
     WANTED("WANTED"),
     CODING_WORLD("CONING_WORLD"),
@@ -14,7 +14,7 @@ public enum ServiceType {
 
     private String title;
 
-    ServiceType(String title) {
+    ContentsProviderType(String title) {
         this.title = title;
     }
 }
