@@ -1,5 +1,6 @@
 package com.hermes.ithermes.application;
 
+import com.github.kshashov.telegram.config.TelegramBotGlobalProperties;
 import com.hermes.ithermes.domain.entity.Keyword;
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.entity.UserKeywordRegistry;
@@ -11,11 +12,16 @@ import com.hermes.ithermes.infrastructure.UserKeywordRegistryRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.user.*;
+import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -95,6 +101,30 @@ public class UserService {
     public UserFindMyDataResponseDto findMyData(UserFindMyDataRequestDto userFindMyDataRequestDto) {
         User user = findLoginId(userFindMyDataRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         return new UserFindMyDataResponseDto(user.getLoginId(), user.getNickname());
+    }
+
+    public void getTelegramId(String telegramKey){
+        TelegramBot bot=new TelegramBot(telegramKey);
+        bot.setUpdatesListener(new UpdatesListener() {
+            @Override
+            public int process(List<Update> updates) {
+                for(Update update:updates){
+                    String chatId=update.message().chat().id().toString();
+                    if(update.message().text().equals("/start")){
+                        bot.execute(new SendMessage(chatId,"IT-Hermes에서 사용하는 닉네임을 입력해주세요."));
+                    }else{
+                        String nickname=update.message().text();
+                        if(userRepository.existsUserByNicknameAndTelegramId(nickname,chatId)==true){
+                            bot.execute(new SendMessage(chatId,"이미 생성한 봇이 있는 유저입니다."));
+                        }else{
+                            userRepository.updateTelegramIdByNickname(nickname,chatId);
+                            bot.execute(new SendMessage(chatId,"유저로 등록되었습니다."));
+                        }
+                    }
+                }
+                return 0;
+            }
+        });
     }
 
     private Optional<User> findLoginId(String userId) {
