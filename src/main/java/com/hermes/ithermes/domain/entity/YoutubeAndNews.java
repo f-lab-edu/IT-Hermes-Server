@@ -49,7 +49,6 @@ public class YoutubeAndNews extends BaseEntity {
     public void setContentsProvider(ContentsProvider contentsProvider) {
         this.contentsProvider = contentsProvider;
     }
-
     public void initDefaultData() {
         viewCount=0L;
     }
