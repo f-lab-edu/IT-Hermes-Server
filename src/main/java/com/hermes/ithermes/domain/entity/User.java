@@ -1,17 +1,21 @@
 package com.hermes.ithermes.domain.entity;
 
+import com.hermes.ithermes.domain.util.JobType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userId")
     private Long id;
 
     @Column(nullable = false)
@@ -23,20 +27,24 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String job;
+    private JobType job;
 
     @Column(nullable = false)
-    private Integer experience;
+    private Integer yearOfExperience;
 
     private String telegramId;
 
     @Column(nullable = false)
-    private boolean isDelete;
+    private Boolean isDelete;
 
-    @OneToMany(mappedBy = "user")
-    private List<UserRegistry> userRegistries;
+    public void changeNickname(String nickname) {
+        this.nickname=nickname;
+    }
 
-    @OneToMany(mappedBy = "user")
-    private List<Alarm> alarms;
+    public void isDelete() {
+        this.isDelete = true;
+    }
+
 }

@@ -11,11 +11,14 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Keyword extends BaseEntity {
+public class ContentsViewMapping extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String url;
+
+    @Column(nullable = false)
+    private String pc;
 }

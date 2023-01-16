@@ -1,25 +1,28 @@
 package com.hermes.ithermes.domain.entity;
 
+import com.hermes.ithermes.domain.util.CategoryType;
+import com.hermes.ithermes.domain.util.ServiceType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter
-public class Service extends BaseEntity{
-
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
+public class Service extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "serviceId")
     private Long id;
 
-    private Boolean isDelete;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CategoryType category;
 
-    @ManyToOne
-    @JoinColumn(name = "categoryId")
-    private Category category;
-
-    @ManyToOne
-    @JoinColumn(name = "alarmId")
-    private Alarm alarm;
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ServiceType name;
 }
