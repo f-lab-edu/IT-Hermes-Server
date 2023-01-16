@@ -21,6 +21,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -52,13 +53,11 @@ public class UserService {
         return new CommonResponseDto();
     }
 
-    @Transactional(readOnly = true)
     public CommonResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) {
         findLoginIdAndPassword(userLoginRequestDto.getId(), userLoginRequestDto.getPassword()).orElseThrow(() -> new WrongIdOrPasswordException());
         return new CommonResponseDto();
     }
 
-    @Transactional(readOnly = true)
     public CommonResponseDto checkDuplicateNickname(UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {
         findNickname(userDuplicateNicknameRequestDto.getNickname()).ifPresent(a -> {
             throw new SameNicknameException();
@@ -66,7 +65,6 @@ public class UserService {
         return new CommonResponseDto();
     }
 
-    @Transactional(readOnly = true)
     public CommonResponseDto checkDuplicateId(UserDuplicateIdRequestDto userDuplicateIdRequestDto) {
         findLoginId(userDuplicateIdRequestDto.getId()).ifPresent(a -> {
             throw new SameIdException();
@@ -94,7 +92,6 @@ public class UserService {
         return new CommonResponseDto();
     }
 
-    @Transactional(readOnly = true)
     public UserFindMyDataResponseDto findMyData(UserFindMyDataRequestDto userFindMyDataRequestDto) {
         User user = findLoginId(userFindMyDataRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         return new UserFindMyDataResponseDto(user.getLoginId(), user.getNickname());

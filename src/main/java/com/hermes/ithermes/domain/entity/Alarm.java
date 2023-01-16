@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -31,14 +30,11 @@ public class Alarm extends BaseEntity {
     @JoinColumn(name = "serviceId")
     private Service service;
 
-    @ColumnDefault("0")
     private Integer minYearOfExperience;
 
-    @ColumnDefault("30")
     private Integer maxYearOfExperience;
 
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("'ENTIRE'")
     private JobType job;
 
     @Enumerated(EnumType.STRING)
@@ -53,7 +49,7 @@ public class Alarm extends BaseEntity {
         this.service = service;
     }
 
-    public void changeIsActive(ActiveType activeType) {
-        this.isActive = activeType;
+    public void changeUpdateAt() {
+        changeUpdateAt();
     }
 }

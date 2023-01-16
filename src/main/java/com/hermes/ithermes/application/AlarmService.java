@@ -1,8 +1,6 @@
 package com.hermes.ithermes.application;
 
 import com.hermes.ithermes.domain.entity.Alarm;
-import com.hermes.ithermes.domain.entity.User;
-import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
 import com.hermes.ithermes.domain.factory.AlarmFactory;
 import com.hermes.ithermes.infrastructure.AlarmRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
@@ -14,11 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AlarmService {
     private final AlarmRepository alarmRepository;
     private final AlarmFactory alarmFactory;
@@ -31,20 +28,14 @@ public class AlarmService {
     }
 
     public AlarmFindAlarmResponseDto findAlarm(AlarmFindAlarmRequestDto alarmFindSubScribeRequestDto) {
-        User user = alarmFactory.parseFindAlarmDtoToUser(alarmFindSubScribeRequestDto);
-        Long userId = user.getId();
-        List<Alarm> alarms = alarmRepository.findByUserId(userId).orElseThrow(() -> new WrongIdOrPasswordException());
+        List<Alarm> alarms = alarmFactory.parseFindAlarmDtoToAlarms(alarmFindSubScribeRequestDto);
+        List<String> serviceTypes = alarmFactory.findActiveServiceType(alarms);
+        Alarm jobCategoryData = alarmFactory.findJobCategoryData(alarms);
 
-        List<String> activeTypes = alarms.stream()
-                .map(v -> v.getIsActive().getTitle()).toList();
+        String job = String.valueOf(jobCategoryData.getJob().getTitle());
+        String startDateOfExperience = String.valueOf(jobCategoryData.getMinYearOfExperience());
+        String endDateOfExperience = String.valueOf(jobCategoryData.getMaxYearOfExperience());
 
-        Alarm alarmOptional = alarms.stream()
-                .filter(v -> Objects.nonNull(v.getJob()) || Objects.nonNull(v.getMinYearOfExperience()) || Objects.nonNull(v.getMaxYearOfExperience()))
-                .findFirst().orElse(null);
-
-        String job = Optional.ofNullable(alarmOptional.getJob().getTitle()).orElse(null);
-        String startDateOfExperience = Optional.ofNullable(String.valueOf(alarmOptional.getMinYearOfExperience())).orElse(null);
-        String endDateOfExperience = Optional.ofNullable(String.valueOf(alarmOptional.getMaxYearOfExperience())).orElse(null);
-        return new AlarmFindAlarmResponseDto(activeTypes, job, startDateOfExperience, endDateOfExperience);
+        return new AlarmFindAlarmResponseDto(serviceTypes, job, startDateOfExperience, endDateOfExperience);
     }
 }
