@@ -1,7 +1,7 @@
 package com.hermes.ithermes.domain.factory;
 
 import com.hermes.ithermes.domain.entity.User;
-import com.hermes.ithermes.infrastructure.ServiceRepository;
+import com.hermes.ithermes.infrastructure.ContentsProviderRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.presentation.dto.user.UserCreateUserRequestDto;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class UserFactory {
-    private final ServiceRepository serviceRepository;
+    private final ContentsProviderRepository contentsProviderRepository;
     private final UserRepository userRepository;
 
     public User parseLoginRequestDtoToUser(UserCreateUserRequestDto userLoginRequestDto) {

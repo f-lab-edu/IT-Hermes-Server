@@ -1,10 +1,10 @@
 package com.hermes.ithermes.domain.util;
 
-import com.hermes.ithermes.domain.entity.Alarm;
-import com.hermes.ithermes.domain.entity.Service;
+import com.hermes.ithermes.domain.entity.Subscribe;
+import com.hermes.ithermes.domain.entity.ContentsProvider;
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.exception.EnumTypeFormatException;
-import com.hermes.ithermes.domain.functional.ParseAlarmFunctional;
+import com.hermes.ithermes.domain.functional.ParseSubscribeFunctional;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -13,45 +13,45 @@ import java.util.Optional;
 
 @Getter
 public enum CategoryType {
-    JOB("JOB", Arrays.asList(ServiceType.SARAMIN, ServiceType.WANTED),
-            (User user, Service service, ActiveType activeType, JobType jobType, String minYearOfExperience, String maxYearOfExperience) -> {
-        Alarm alarm = Alarm.builder()
+    JOB("JOB", Arrays.asList(ContentsProviderType.SARAMIN, ContentsProviderType.WANTED),
+            (User user, ContentsProvider contentsProvider, ActiveType activeType, JobType jobType, String minYearOfExperience, String maxYearOfExperience) -> {
+        Subscribe subscribe = Subscribe.builder()
                 .user(user)
-                .service(service)
+                .contentsProvider(contentsProvider)
                 .isActive(activeType)
                 .minYearOfExperience(parseToMinYearOfExperience(minYearOfExperience))
                 .maxYearOfExperience(parseToMaxYearOfExperience(maxYearOfExperience))
                 .job(CategoryType.parseToJobType(jobType))
                 .build();
-        return alarm;
-    }), NEWS("NEWS", Arrays.asList(ServiceType.CODING_WORLD, ServiceType.NAVER, ServiceType.YOZM),
-            (User user, Service service, ActiveType activeType, JobType jobType, String minYearOfExperience, String maxYearOfExperience) -> {
-        Alarm alarm = Alarm.builder()
+        return subscribe;
+    }), NEWS("NEWS", Arrays.asList(ContentsProviderType.CODING_WORLD, ContentsProviderType.NAVER, ContentsProviderType.YOZM),
+            (User user, ContentsProvider contentsProvider, ActiveType activeType, JobType jobType, String minYearOfExperience, String maxYearOfExperience) -> {
+        Subscribe subscribe = Subscribe.builder()
                 .user(user)
-                .service(service)
+                .contentsProvider(contentsProvider)
                 .isActive(activeType)
                 .build();
-        return alarm;
+        return subscribe;
 
     }),
-    YOUTUBE("YOUTUBE", Arrays.asList(ServiceType.NOMAD_CODERS, ServiceType.DREAM_CODING),
-            (User user, Service service, ActiveType activeType, JobType jobType, String minYearOfExperience, String maxYearOfExperience) -> {
-        Alarm alarm = Alarm.builder()
+    YOUTUBE("YOUTUBE", Arrays.asList(ContentsProviderType.NOMAD_CODERS, ContentsProviderType.DREAM_CODING),
+            (User user, ContentsProvider contentsProvider, ActiveType activeType, JobType jobType, String minYearOfExperience, String maxYearOfExperience) -> {
+        Subscribe subscribe = Subscribe.builder()
                 .user(user)
-                .service(service)
+                .contentsProvider(contentsProvider)
                 .isActive(activeType)
                 .build();
-        return alarm;
+        return subscribe;
     });
 
     private String title;
-    private List<ServiceType> serviceTypes;
-    private ParseAlarmFunctional parseAlarm;
+    private List<ContentsProviderType> contentsProviderTypes;
+    private ParseSubscribeFunctional parseSubscribe;
 
-    CategoryType(String title, List<ServiceType> serviceTypes, ParseAlarmFunctional parseAlarm) {
+    CategoryType(String title, List<ContentsProviderType> contentsProviderTypes, ParseSubscribeFunctional parseSubscribe) {
         this.title = title;
-        this.serviceTypes = serviceTypes;
-        this.parseAlarm = parseAlarm;
+        this.contentsProviderTypes = contentsProviderTypes;
+        this.parseSubscribe = parseSubscribe;
     }
 
     private static Integer parseToMinYearOfExperience(String yearOfExperience) {
@@ -66,15 +66,15 @@ public enum CategoryType {
         return jobType == null ? JobType.ENTIRE : Optional.ofNullable(jobType).orElseThrow(()->new EnumTypeFormatException());
     }
 
-    public static CategoryType findByServiceType(ServiceType serviceType) {
+    public static CategoryType findByContentsProviderType(ContentsProviderType contentsProviderType) {
         return Arrays.stream(CategoryType.values())
-                .filter(categoryType -> categoryType.matchServiceType(serviceType))
+                .filter(categoryType -> categoryType.matchContentsProviderType(contentsProviderType))
                 .findAny()
                 .orElseThrow(() -> new EnumTypeFormatException());
     }
 
-    public boolean matchServiceType(ServiceType serviceType) {
-        return serviceTypes.stream()
-                .anyMatch(serviceTypeList -> serviceTypeList.equals(serviceType));
+    public boolean matchContentsProviderType(ContentsProviderType contentsProviderType) {
+        return contentsProviderTypes.stream()
+                .anyMatch(contentsProviderTypeList -> contentsProviderTypeList.equals(contentsProviderType));
     }
 }

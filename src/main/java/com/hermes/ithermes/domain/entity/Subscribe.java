@@ -17,7 +17,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @AllArgsConstructor
 @DynamicInsert
 @DynamicUpdate
-public class Alarm extends BaseEntity {
+public class Subscribe extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,8 +27,8 @@ public class Alarm extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "serviceId")
-    private Service service;
+    @JoinColumn(name = "contentsProviderId")
+    private ContentsProvider contentsProvider;
 
     private Integer minYearOfExperience;
 
@@ -45,8 +45,8 @@ public class Alarm extends BaseEntity {
         this.user = user;
     }
 
-    public void setService(Service service) {
-        this.service = service;
+    public void setContentsProvider(ContentsProvider contentsProvider) {
+        this.contentsProvider = contentsProvider;
     }
 
     public void changeUpdateAt() {

@@ -1,6 +1,6 @@
 INSERT
 INTO
-    Service (createdAt, updatedAt, category, name)
+    ContentsProvider (createdAt, updatedAt, category, name)
 VALUES
     (NOW(), NOW(),"JOB", "SARAMIN"),
     (NOW(), NOW(),"JOB", "WANTED"),
