@@ -1,4 +1,4 @@
-package com.hermes.ithermes.presentation.dto.alarm;
+package com.hermes.ithermes.presentation.dto.subscribe;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class AlarmPutAlarmRequestDto {
+public class SubscribePutSubscribeRequestDto {
     @NotBlank(message = "아이디는 필수 입력사항 입니다.")
     private String id;
 

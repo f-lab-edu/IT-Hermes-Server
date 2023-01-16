@@ -1,7 +1,7 @@
 package com.hermes.ithermes.domain.entity;
 
 import com.hermes.ithermes.domain.util.CategoryType;
-import com.hermes.ithermes.domain.util.ServiceType;
+import com.hermes.ithermes.domain.util.ContentsProviderType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Service extends BaseEntity {
+public class ContentsProvider extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,5 +24,5 @@ public class Service extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ServiceType name;
+    private ContentsProviderType name;
 }
