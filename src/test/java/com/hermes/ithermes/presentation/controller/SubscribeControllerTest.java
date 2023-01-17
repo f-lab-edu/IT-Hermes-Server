@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hermes.ithermes.application.SubscribeService;
 import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
 import com.hermes.ithermes.domain.util.JobType;
+import com.hermes.ithermes.presentation.dto.subscribe.SubscribeFindSubscribeRequestDto;
 import com.hermes.ithermes.presentation.dto.subscribe.SubscribePutSubscribeRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,6 +61,30 @@ class SubscribeControllerTest {
         mockMvc.perform(put("/subscribe/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(subscribePutSubscribeRequestDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("구독조회_성공처리")
+    void 구독조회_성공처리() throws Exception {
+        SubscribeFindSubscribeRequestDto subscribeFindSubscribeRequestDto = new SubscribeFindSubscribeRequestDto("test");
+
+        mockMvc.perform(post("/subscribe/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(subscribeFindSubscribeRequestDto)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("구독조회_실패처리")
+    void 구독조회_실패처리() throws Exception {
+        SubscribeFindSubscribeRequestDto subscribeFindSubscribeRequestDto = new SubscribeFindSubscribeRequestDto("test");
+
+        when(subscribeService.findSubscribe(any())).thenThrow(new WrongIdOrPasswordException());
+
+        mockMvc.perform(post("/subscribe/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(subscribeFindSubscribeRequestDto)))
                 .andExpect(status().isBadRequest());
     }
 }
