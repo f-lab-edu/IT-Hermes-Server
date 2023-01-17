@@ -9,8 +9,6 @@ import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.JobType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.infrastructure.SubscribeRepository;
-import com.hermes.ithermes.infrastructure.ContentsProviderRepository;
-import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.presentation.dto.subscribe.SubscribeFindSubscribeRequestDto;
 import com.hermes.ithermes.presentation.dto.subscribe.SubscribePutSubscribeRequestDto;
 import lombok.Builder;
@@ -26,17 +24,18 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class SubscribeFactory {
-    private final ContentsProviderRepository contentsProviderRepository;
-    private final UserRepository userRepository;
     private final SubscribeRepository subscribeRepository;
+    private final ContentsProviderFactory contentsProviderFactory;
+    private final UserFactory userFactory;
 
     public List<Subscribe> parsePutSubscribeDtoToSubscribes(SubscribePutSubscribeRequestDto subscribePutSubscribeRequestDto) {
-        List<ContentsProvider> contentsProviders = contentsProviderRepository.findAll();
         List<Subscribe> subscribes = new ArrayList<>();
-        User user = userRepository.findByLoginId(subscribePutSubscribeRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
+        List<ContentsProvider> contentsProviders = contentsProviderFactory.findAllContentsProvider();
+        String loginId = subscribePutSubscribeRequestDto.getId();
+        User user = userFactory.findLoginId(loginId).orElseThrow(() -> new WrongIdOrPasswordException());
         String minYearOfExperience = subscribePutSubscribeRequestDto.getMinYearOfExperience();
         String maxYearOfExperience = subscribePutSubscribeRequestDto.getMaxYearOfExperience();
-        JobType jobType = parseJobType(subscribePutSubscribeRequestDto.getJob());
+        JobType jobType = subscribePutSubscribeRequestDto.getJob();
 
         int index = 0;
         for (String active : subscribePutSubscribeRequestDto.getKeywordList()) {
@@ -45,7 +44,7 @@ public class SubscribeFactory {
             ContentsProvider contentsProvider = contentsProviders.get(index);
             Long contentsProviderId = contentsProvider.getId();
             CategoryType categoryType = CategoryType.findByContentsProviderType(contentsProviderType);
-            Optional<Subscribe> subscribeOptional = subscribeRepository.findByContentsProviderId(contentsProviderId);
+            Optional<Subscribe> subscribeOptional = findByContentsProviderId(contentsProviderId);
 
             Subscribe subscribe = categoryType.getParseSubscribe().parseSubscribe(user, contentsProvider, activeType, jobType, minYearOfExperience, maxYearOfExperience);
 
@@ -60,9 +59,9 @@ public class SubscribeFactory {
 
     public List<Subscribe> parseFindSubscribeDtoToSubscribes(SubscribeFindSubscribeRequestDto subscribeFindSubscribeRequestDto) {
         String loginId = subscribeFindSubscribeRequestDto.getId();
-        User user = userRepository.findByLoginId(loginId).orElseThrow(() -> new WrongIdOrPasswordException());
+        User user = userFactory.findLoginId(loginId).orElseThrow(() -> new WrongIdOrPasswordException());
         Long userId = user.getId();
-        List<Subscribe> subscribes = subscribeRepository.findByUserId(userId).orElseThrow(() -> new WrongIdOrPasswordException());
+        List<Subscribe> subscribes = findByUserId(userId);
         return subscribes;
     }
 
@@ -76,8 +75,12 @@ public class SubscribeFactory {
                 .findAny().orElse(null);
     }
 
-    public JobType parseJobType(String job) {
-        return job == null ? null : JobType.valueOf(job);
+    public Optional<Subscribe> findByContentsProviderId(Long contentsProviderId) {
+        return subscribeRepository.findByContentsProviderId(contentsProviderId);
+    }
+
+    public List<Subscribe> findByUserId(Long userId) {
+        return subscribeRepository.findByUserId(userId).orElseThrow(() -> new WrongIdOrPasswordException());
     }
 }
 
