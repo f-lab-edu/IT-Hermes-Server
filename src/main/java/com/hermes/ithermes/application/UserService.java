@@ -110,6 +110,7 @@ public class UserService {
             public int process(List<Update> updates) {
                 for(Update update:updates){
                     String chatId=update.message().chat().id().toString();
+                    System.out.println(chatId);
                     if(update.message().text().equals("/start")){
                         bot.execute(new SendMessage(chatId,"IT-Hermes에서 사용하는 닉네임을 입력해주세요."));
                     }else{
@@ -122,7 +123,7 @@ public class UserService {
                         }
                     }
                 }
-                return 0;
+                return UpdatesListener.CONFIRMED_UPDATES_ALL;
             }
         });
     }
