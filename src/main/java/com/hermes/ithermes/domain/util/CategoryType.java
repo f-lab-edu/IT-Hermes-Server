@@ -4,7 +4,7 @@ import com.hermes.ithermes.domain.entity.Subscribe;
 import com.hermes.ithermes.domain.entity.ContentsProvider;
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.exception.EnumTypeFormatException;
-import com.hermes.ithermes.domain.factory.ParseSubscribeFunctionalFactory;
+import com.hermes.ithermes.domain.functional.ParseSubscribeFunctional;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -46,9 +46,9 @@ public enum CategoryType {
     private String title;
     private List<ContentsProviderType> contentsProviderTypes;
     // custom 함수형 인터페이스
-    private ParseSubscribeFunctionalFactory parseSubscribe;
+    private ParseSubscribeFunctional parseSubscribe;
 
-    CategoryType(String title, List<ContentsProviderType> contentsProviderTypes, ParseSubscribeFunctionalFactory parseSubscribe) {
+    CategoryType(String title, List<ContentsProviderType> contentsProviderTypes, ParseSubscribeFunctional parseSubscribe) {
         this.title = title;
         this.contentsProviderTypes = contentsProviderTypes;
         this.parseSubscribe = parseSubscribe;
