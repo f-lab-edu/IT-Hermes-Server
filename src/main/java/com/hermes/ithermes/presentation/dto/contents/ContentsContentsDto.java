@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
+import com.hermes.ithermes.domain.util.ContentsProviderType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public class ContentsContentsDto implements ContentsDtoInterface {
 
     public String category;
 
-    public String service;
+    public ContentsProviderType contentProvider;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime contentsDate;
@@ -36,9 +37,9 @@ public class ContentsContentsDto implements ContentsDtoInterface {
         this.title = youtubeAndNews.getTitle();
         this.image = youtubeAndNews.getImage();
         this.url = youtubeAndNews.getUrl();
-        this.category = youtubeAndNews.getService().getCategory().getName();
-        this.service = youtubeAndNews.getService().getName();
-        this.contentsDate = youtubeAndNews.getContentsDate();
+        this.category = youtubeAndNews.getContentsProvider().getCategory().getTitle();
+        this.contentProvider = youtubeAndNews.getContentsProvider().getName();
+        this.contentsDate = youtubeAndNews.getContentsStartAt();
         this.description = youtubeAndNews.getDescription();
     }
 
@@ -46,9 +47,9 @@ public class ContentsContentsDto implements ContentsDtoInterface {
         this.title = job.getTitle();
         this.image = null;
         this.url = job.getUrl();
-        this.category = job.getService().getCategory().getName();
-        this.service = job.getService().getName();
-        this.contentsDate = job.getEndDate();
+        this.category = job.getContentsProvider().getCategory().getTitle();
+        this.contentProvider = job.getContentsProvider().getName();
+        this.contentsDate = job.getContentsEndAt();
         this.description = job.getCompany();
     }
 

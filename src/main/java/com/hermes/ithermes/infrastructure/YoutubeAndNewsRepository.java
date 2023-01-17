@@ -2,6 +2,7 @@ package com.hermes.ithermes.infrastructure;
 
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.CategoryType;
+import com.hermes.ithermes.domain.util.ContentsType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import jakarta.persistence.EntityManager;
@@ -19,7 +20,7 @@ public class YoutubeAndNewsRepository {
     private EntityManager em;
 
     public List<ContentsEntityInterface> findTop10YoutubeAndNews(Pageable pageable){
-        String jpql="select c from YoutubeAndNews c left join c.service where c.isDelete=false order by c.viewCount desc";
+        String jpql="select c from YoutubeAndNews c left join c.contentsProvider where c.isDelete=false order by c.viewCount desc";
 
         TypedQuery<ContentsEntityInterface> query= em.createQuery(jpql, ContentsEntityInterface.class);
         List<ContentsEntityInterface> youtubeAndNews=query.setFirstResult((int)pageable.getOffset())
@@ -28,8 +29,8 @@ public class YoutubeAndNewsRepository {
         return youtubeAndNews;
     }
 
-    public List<ContentsEntityInterface> findYoutubeAndNewsBySorting(Pageable pageable, CategoryType categoryType, OrderType orderType){
-        String jpql="select c from YoutubeAndNews c left join c.service where c.service.category=:category and c.isDelete=false";
+    public List<ContentsEntityInterface> findYoutubeAndNewsBySorting(Pageable pageable, ContentsType contentsType, OrderType orderType){
+        String jpql="select c from YoutubeAndNews c left join c.contentsProvider where c.contentsProvider.category=:contentsType and c.isDelete=false";
 
         if(orderType.getName().equals("RECENT")){
             jpql+=" order by c.createdAt desc";
@@ -41,7 +42,7 @@ public class YoutubeAndNewsRepository {
         TypedQuery<ContentsEntityInterface> query= em.createQuery(jpql, ContentsEntityInterface.class);
 
         List<ContentsEntityInterface> youtubeAndNews=query.setFirstResult((int)pageable.getOffset())
-                .setParameter("category",categoryType)
+                .setParameter("category",contentsType)
                 .setMaxResults(pageable.getPageSize()+1)
                 .getResultList();
 

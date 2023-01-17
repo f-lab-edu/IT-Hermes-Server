@@ -41,8 +41,7 @@ public enum CategoryType {
                 .isActive(activeType)
                 .build();
         return subscribe;
-    }),
-    YOUTUBE_AND_NEWS("YOUTUBE_AND_NEWS");
+    });
 
     private String title;
     private List<ContentsProviderType> contentsProviderTypes;
@@ -79,12 +78,4 @@ public enum CategoryType {
                 .anyMatch(contentsProviderTypeList -> contentsProviderTypeList.equals(contentsProviderType));
     }
 
-    public static boolean isContainCategoryType(String type){
-        for(CategoryType c: CategoryType.values()){
-            if(c.getName().equals(type)){
-                return true;
-            }
-        }
-        return false;
-    }
 }

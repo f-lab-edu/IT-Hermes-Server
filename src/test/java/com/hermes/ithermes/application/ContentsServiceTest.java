@@ -2,11 +2,13 @@ package com.hermes.ithermes.application;
 
 
 import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
-import com.hermes.ithermes.domain.entity.Service;
+import com.hermes.ithermes.domain.entity.ContentsProvider;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.CategoryType;
+import com.hermes.ithermes.domain.util.ContentsProviderType;
+import com.hermes.ithermes.domain.util.ContentsType;
 import com.hermes.ithermes.domain.util.OrderType;
-import com.hermes.ithermes.infrastructure.ServiceRepository;
+import com.hermes.ithermes.infrastructure.ContentsProviderRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import jakarta.transaction.Transactional;
@@ -16,7 +18,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
@@ -31,19 +32,19 @@ class ContentsServiceTest {
     private ContentsService contentsService;
 
     @Autowired
-    private ServiceRepository serviceRepository;
+    private ContentsProviderRepository contentsProviderRepository;
 
     @Autowired
     private YoutubeAndNewsRepository youtubeAndNewsRepository;
 
     @BeforeEach
     void setUp() {
-        Service service1=new Service(1L,false,"노마드", CategoryType.YOUTUBE);
-        Service s1=serviceRepository.save(service1);
+        ContentsProvider contentsProvider=new ContentsProvider(1L, CategoryType.YOUTUBE, ContentsProviderType.NOMAD_CODERS);
+        ContentsProvider s1=contentsProviderRepository.save(contentsProvider);
 
         for(int i=0; i<12; i++){
-            YoutubeAndNews youtubeAndNews=new YoutubeAndNews((long) i,"이 파이썬 모듈은","이 파이썬 모듈은 시간을 아껴줍니다.","https://asdfs","https://asdfs",
-                    false, LocalDateTime.now(),100L,s1);
+            YoutubeAndNews youtubeAndNews=new YoutubeAndNews((long) i,s1,"이 파이썬 모듈은 시간을 아껴줍니다.","ㅎㅎㅎㅎㅎㅎ","https://asdfs",
+                    "https://naver.com", LocalDateTime.now(),100L,false);
             youtubeAndNewsRepository.save(youtubeAndNews);
         }
     }
@@ -51,7 +52,7 @@ class ContentsServiceTest {
     @Test
     @DisplayName("main contents를 10개 반환하는지 테스트")
     void checkMainContentsCount(){
-        List<ContentsDtoInterface> results=contentsService.getMainContents(CategoryType.YOUTUBE_AND_NEWS);
+        List<ContentsDtoInterface> results=contentsService.getMainContents(ContentsType.YOUTUBE_AND_NEWS);
         Assertions.assertEquals(10,results.size());
     }
 
@@ -59,8 +60,7 @@ class ContentsServiceTest {
     @DisplayName("category contents 페이징 처리 테스트")
     void checkpaging() {
         Pageable pageInfo = PageRequest.of(0,2);
-
-        List<ContentsEntityInterface> youtubeContents=youtubeAndNewsRepository.findYoutubeAndNewsBySorting(pageInfo,CategoryType.YOUTUBE, OrderType.POPULAR);
+        List<ContentsEntityInterface> youtubeContents=youtubeAndNewsRepository.findYoutubeAndNewsBySorting(pageInfo,ContentsType.YOUTUBE, OrderType.POPULAR);
 
         Assertions.assertEquals(2,youtubeContents.size());
     }
