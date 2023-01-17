@@ -77,4 +77,5 @@ public enum CategoryType {
         return contentsProviderTypes.stream()
                 .anyMatch(contentsProviderTypeList -> contentsProviderTypeList.equals(contentsProviderType));
     }
+
 }
