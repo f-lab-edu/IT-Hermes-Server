@@ -7,10 +7,12 @@ import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
+import com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -54,13 +56,12 @@ public class YoutubeAndNewsRepository {
     }
 
     public List<YoutubeAndNewsAlarmDto> getYoutubeAndNewsAlarm(Long userId){
-        String jqpl="SELECT category,name,description,image,title,url FROM Subscribe as s"+
-            "LEFT JOIN s.ContentsProvider con on con.id=s.contentsProviderId"+
-            "LEFT JOIN con.YoutubeAndNews yn on yn.contentsProviderId=s.contentsProviderId"+
-            "where s.userId=:userId";
+        String jqpl="SELECT new com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto(yn.title,yn.contentsProvider.category,yn.title,yn.description,yn.image,yn.url) FROM Subscribe s "+
+            "INNER JOIN s.contentsProvider con on con.id=s.contentsProvider.id "+
+            "INNER JOIN YoutubeAndNews yn on yn.contentsProvider.id=con.id "+
+                "where s.user.id=:userId";
 
         TypedQuery<YoutubeAndNewsAlarmDto> query=em.createQuery(jqpl,YoutubeAndNewsAlarmDto.class);
-
         List<YoutubeAndNewsAlarmDto> youtubeAndNewsAlarmDtoList=query
                 .setParameter("userId",userId)
                 .getResultList();

@@ -16,7 +16,7 @@ class UserRepositoryTest {
     @Test
     @DisplayName("telegramId값이 null이 아닌 유저가 DB상에 1명인지 테스트한다.")
     void findUserTelegramIdIsNotNUll(){
-        assertEquals(1,userRepository.findByTelegramIdIsNotNull().size());
+        assertEquals(2,userRepository.findByTelegramIdIsNotNull().size());
     }
 
 

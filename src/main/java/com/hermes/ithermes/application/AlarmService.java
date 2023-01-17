@@ -1,7 +1,6 @@
 package com.hermes.ithermes.application;
 
 import com.hermes.ithermes.infrastructure.JobRepository;
-import com.hermes.ithermes.infrastructure.SubscribeRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
