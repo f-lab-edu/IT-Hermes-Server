@@ -1,10 +1,7 @@
 package com.hermes.ithermes.domain.entity;
 
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -14,10 +11,20 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
 
-    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
 
+    @PrePersist
+    public void prePersist() {
+        var nowTime = LocalDateTime.now();
+        this.createdAt = nowTime;
+        this.updatedAt = nowTime;
+    }
+
+    public void changeUpdateAt() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

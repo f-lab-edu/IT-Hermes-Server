@@ -8,33 +8,48 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Job extends BaseEntity implements ContentsEntityInterface {
-
+public class Job extends BaseEntity implements ContentsEntityInterface{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "jobId")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contentsProviderId")
+    ContentsProvider contentsProvider;
+
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String url;
 
+    @Column(nullable = false)
     private String location;
 
+    @Column(nullable = false)
     private String company;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime startDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(nullable = false)
+    private LocalDateTime contentsStartAt;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime endDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(nullable = false)
+    private LocalDateTime contentsEndAt;
 
-    private Boolean isDelete;
-
+    @Column(nullable = false)
     private Long viewCount;
 
-    @ManyToOne
-    @JoinColumn(name = "serviceId")
-    private Service service;
+    @Column(nullable = false)
+    private Boolean isDelete;
 
+    public void setContentsProvider(ContentsProvider contentsProvider) {
+        this.contentsProvider = contentsProvider;
+    }
+
+    public void initDefaultData() {
+        viewCount=0L;
+    }
 }

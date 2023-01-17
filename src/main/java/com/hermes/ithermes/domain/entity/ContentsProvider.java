@@ -1,5 +1,7 @@
 package com.hermes.ithermes.domain.entity;
 
+import com.hermes.ithermes.domain.util.CategoryType;
+import com.hermes.ithermes.domain.util.ContentsProviderType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,11 +13,16 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Keyword extends BaseEntity {
+public class ContentsProvider extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String name;
+    private CategoryType category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ContentsProviderType name;
 }
