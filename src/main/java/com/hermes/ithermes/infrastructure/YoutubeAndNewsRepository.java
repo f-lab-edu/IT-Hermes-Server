@@ -1,10 +1,10 @@
 package com.hermes.ithermes.infrastructure;
 
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
-import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
+import com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -51,6 +51,21 @@ public class YoutubeAndNewsRepository {
 
     public void save(YoutubeAndNews youtubeAndNews){
         em.persist(youtubeAndNews);
+    }
+
+    public List<YoutubeAndNewsAlarmDto> getYoutubeAndNewsAlarm(Long userId){
+        String jqpl="select category,name,description,image,title,url from Subscribe as s"+
+            "left join ContentsProvider con on con.id=s.contentsProviderId"+
+            "left join YoutubeAndNews yn on yn.contentsProviderId=s.contentsProviderId"+
+            "where s.userId=:userId";
+
+        TypedQuery<YoutubeAndNewsAlarmDto> query=em.createQuery(jqpl,YoutubeAndNewsAlarmDto.class);
+
+        List<YoutubeAndNewsAlarmDto> youtubeAndNewsAlarmDtoList=query
+                .setParameter("userId",userId)
+                .getResultList();
+
+        return youtubeAndNewsAlarmDtoList;
     }
 
 
