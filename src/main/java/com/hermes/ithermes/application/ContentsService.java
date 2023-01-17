@@ -1,14 +1,13 @@
 package com.hermes.ithermes.application;
 
-import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
-import com.hermes.ithermes.presentation.dto.contents.ContentsContentsDto;
+import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
-import com.hermes.ithermes.presentation.dto.contents.MainPageContentsContentsDto;
+import com.hermes.ithermes.presentation.dto.contents.MainPageContentsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +29,7 @@ public class ContentsService {
     public List<ContentsDtoInterface> getMainContents(ContentsType type){
         Pageable pageInfo = PageRequest.of(0,10);
         if(type.getName().equals("JOB")){
-            return convertEntityToDtoList(jobRepository.findJobBySorting(pageInfo,type,OrderType.POPULAR),new MainPageContentsContentsDto());
+            return convertEntityToDtoList(jobRepository.findJobBySorting(pageInfo,type,OrderType.POPULAR),new MainPageContentsDto());
         }
         return pageYoutubeAndNewsConvertMainPageContentsDto(pageInfo,type);
     }
@@ -38,19 +37,19 @@ public class ContentsService {
     public List<ContentsDtoInterface> getCategoryContents(ContentsType type, int page, OrderType order){
         Pageable pageInfo = PageRequest.of(page,12);
         if(type.getName().equals("JOB")) {
-            return convertEntityToDtoList(jobRepository.findJobBySorting(pageInfo,ContentsType.JOB,order),new ContentsContentsDto());
+            return convertEntityToDtoList(jobRepository.findJobBySorting(pageInfo,ContentsType.JOB,order),new ContentsDto());
         }
-        return convertEntityToDtoList(youtubeAndNewsRepository.findYoutubeAndNewsBySorting(pageInfo,type,order),new ContentsContentsDto());
+        return convertEntityToDtoList(youtubeAndNewsRepository.findYoutubeAndNewsBySorting(pageInfo,type,order),new ContentsDto());
     }
 
-    private List<ContentsDtoInterface> pageYoutubeAndNewsConvertMainPageContentsDto(Pageable page, ContentsType category){
+    private List<ContentsDtoInterface> pageYoutubeAndNewsConvertMainPageContentsDto(Pageable page, ContentsType type){
         List<ContentsEntityInterface> youtubeAndNewsContents=new ArrayList<>();
-        if(category.equals(ContentsType.YOUTUBE_AND_NEWS)){
+        if(type.equals(ContentsType.YOUTUBE_AND_NEWS)){
             youtubeAndNewsContents=youtubeAndNewsRepository.findTop10YoutubeAndNews(page);
         }else{
-            youtubeAndNewsContents=youtubeAndNewsRepository.findYoutubeAndNewsBySorting(page,category,OrderType.POPULAR);
+            youtubeAndNewsContents=youtubeAndNewsRepository.findYoutubeAndNewsBySorting(page,type,OrderType.POPULAR);
         }
-        return convertEntityToDtoList(youtubeAndNewsContents,new MainPageContentsContentsDto());
+        return convertEntityToDtoList(youtubeAndNewsContents,new MainPageContentsDto());
     }
 
     private List<ContentsDtoInterface> convertEntityToDtoList(List<ContentsEntityInterface> content, ContentsDtoInterface t){

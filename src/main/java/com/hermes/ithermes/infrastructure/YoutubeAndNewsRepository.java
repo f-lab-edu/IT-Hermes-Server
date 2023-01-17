@@ -29,8 +29,8 @@ public class YoutubeAndNewsRepository {
         return youtubeAndNews;
     }
 
-    public List<ContentsEntityInterface> findYoutubeAndNewsBySorting(Pageable pageable, ContentsType contentsType, OrderType orderType){
-        String jpql="select c from YoutubeAndNews c left join c.contentsProvider where c.contentsProvider.category=:contentsType and c.isDelete=false";
+    public List<ContentsEntityInterface> findYoutubeAndNewsBySorting(Pageable pageable, ContentsType type, OrderType orderType){
+        String jpql="select c from YoutubeAndNews c left join c.contentsProvider where c.contentsProvider.category=:type and c.isDelete=false";
 
         if(orderType.getName().equals("RECENT")){
             jpql+=" order by c.createdAt desc";
@@ -42,7 +42,7 @@ public class YoutubeAndNewsRepository {
         TypedQuery<ContentsEntityInterface> query= em.createQuery(jpql, ContentsEntityInterface.class);
 
         List<ContentsEntityInterface> youtubeAndNews=query.setFirstResult((int)pageable.getOffset())
-                .setParameter("category",contentsType)
+                .setParameter("category",type)
                 .setMaxResults(pageable.getPageSize()+1)
                 .getResultList();
 

@@ -2,11 +2,12 @@ package com.hermes.ithermes.presentation;
 
 import com.hermes.ithermes.application.ContentsService;
 import com.hermes.ithermes.domain.util.CategoryType;
+import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.presentation.controller.ContentsController;
-import com.hermes.ithermes.presentation.dto.contents.ContentsContentsDto;
+import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
-import com.hermes.ithermes.presentation.dto.contents.MainPageContentsContentsDto;
+import com.hermes.ithermes.presentation.dto.contents.MainPageContentsDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ class ContentsControllerTest {
         String wrongCategoryType= "ABCDE";
 
         List<ContentsDtoInterface> mainPageContentsDtoList=new ArrayList<>();
-        mainPageContentsDtoList.add(new MainPageContentsContentsDto("안녕하세요.","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎ", LocalDateTime.now()));
+        mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ", ContentsProviderType.NAVER, LocalDateTime.now()));
 
         when(contentsService.getMainContents(any())).thenReturn(mainPageContentsDtoList);
 
@@ -54,7 +55,7 @@ class ContentsControllerTest {
         CategoryType correctCategoryType = CategoryType.JOB;
 
         List<ContentsDtoInterface> mainPageContentsDtoList = new ArrayList<>();
-        mainPageContentsDtoList.add(new MainPageContentsContentsDto("안녕하세요.", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎ", LocalDateTime.now()));
+        mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎㅎ", ContentsProviderType.NAVER, LocalDateTime.now()));
 
         when(contentsService.getMainContents(any())).thenReturn(mainPageContentsDtoList);
 
@@ -70,7 +71,7 @@ class ContentsControllerTest {
         String wrongOrderType="ABCDE";
 
         List<ContentsDtoInterface> contentsDtoList=new ArrayList<>();
-        contentsDtoList.add(new ContentsContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ",LocalDateTime.now(),"ㅎㅎㅎㅎㅎ"));
+        contentsDtoList.add(new ContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ",ContentsProviderType.NAVER,LocalDateTime.now(),"ㅎㅎㅎㅎㅎ"));
 
         when(contentsService.getCategoryContents(any(),anyInt(),any())).thenReturn(contentsDtoList);
 
@@ -88,7 +89,7 @@ class ContentsControllerTest {
         OrderType correctOrderType=OrderType.RECENT;
 
         List<ContentsDtoInterface> contentsDtoList=new ArrayList<>();
-        contentsDtoList.add(new ContentsContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ",LocalDateTime.now(),"ㅎㅎㅎㅎㅎ"));
+        contentsDtoList.add(new ContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ",ContentsProviderType.NAVER,LocalDateTime.now(),"ㅎㅎㅎㅎㅎ"));
 
         when(contentsService.getCategoryContents(any(),anyInt(),any())).thenReturn(contentsDtoList);
 

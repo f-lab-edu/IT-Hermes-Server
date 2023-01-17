@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContentsContentsDto implements ContentsDtoInterface {
+public class ContentsDto implements ContentsDtoInterface {
 
     public String title;
 
@@ -33,7 +33,7 @@ public class ContentsContentsDto implements ContentsDtoInterface {
 
     public String description;
 
-    public ContentsContentsDto(YoutubeAndNews youtubeAndNews) {
+    public ContentsDto(YoutubeAndNews youtubeAndNews) {
         this.title = youtubeAndNews.getTitle();
         this.image = youtubeAndNews.getImage();
         this.url = youtubeAndNews.getUrl();
@@ -43,7 +43,7 @@ public class ContentsContentsDto implements ContentsDtoInterface {
         this.description = youtubeAndNews.getDescription();
     }
 
-    public ContentsContentsDto(Job job) {
+    public ContentsDto(Job job) {
         this.title = job.getTitle();
         this.image = null;
         this.url = job.getUrl();
@@ -54,11 +54,11 @@ public class ContentsContentsDto implements ContentsDtoInterface {
     }
 
     @Override
-    public ContentsContentsDto convertEntityToDto(ContentsEntityInterface contentsEntityInterface) {
+    public ContentsDto convertEntityToDto(ContentsEntityInterface contentsEntityInterface) {
         if(contentsEntityInterface instanceof YoutubeAndNews){
-            return new ContentsContentsDto((YoutubeAndNews) contentsEntityInterface);
+            return new ContentsDto((YoutubeAndNews) contentsEntityInterface);
         }
-        return new ContentsContentsDto((Job) contentsEntityInterface);
+        return new ContentsDto((Job) contentsEntityInterface);
     }
 
 }

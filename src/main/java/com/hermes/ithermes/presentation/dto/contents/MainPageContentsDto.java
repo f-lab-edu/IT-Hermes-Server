@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class MainPageContentsContentsDto implements ContentsDtoInterface {
+public class MainPageContentsDto implements ContentsDtoInterface {
 
     public String title;
 
@@ -31,7 +31,7 @@ public class MainPageContentsContentsDto implements ContentsDtoInterface {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime contentsDate;
 
-    public MainPageContentsContentsDto(YoutubeAndNews youtubeAndNews) {
+    public MainPageContentsDto(YoutubeAndNews youtubeAndNews) {
         this.title = youtubeAndNews.getTitle();
         this.image = youtubeAndNews.getImage();
         this.url = youtubeAndNews.getUrl();
@@ -40,7 +40,7 @@ public class MainPageContentsContentsDto implements ContentsDtoInterface {
         this.contentsDate = youtubeAndNews.getContentsStartAt();
     }
 
-    public MainPageContentsContentsDto(Job job) {
+    public MainPageContentsDto(Job job) {
         this.title = job.getTitle();
         this.image = null;
         this.url = job.getUrl();
@@ -50,11 +50,11 @@ public class MainPageContentsContentsDto implements ContentsDtoInterface {
     }
 
     @Override
-    public MainPageContentsContentsDto convertEntityToDto(ContentsEntityInterface contentsEntityInterface) {
+    public MainPageContentsDto convertEntityToDto(ContentsEntityInterface contentsEntityInterface) {
         if(contentsEntityInterface instanceof YoutubeAndNews){
-            return new MainPageContentsContentsDto((YoutubeAndNews) contentsEntityInterface);
+            return new MainPageContentsDto((YoutubeAndNews) contentsEntityInterface);
         }
-        return new MainPageContentsContentsDto((Job) contentsEntityInterface);
+        return new MainPageContentsDto((Job) contentsEntityInterface);
     }
 
 }

@@ -16,9 +16,9 @@ public enum ContentsType {
         this.name = name;
     }
 
-    public static boolean isContainContentsType(String type){
+    public static boolean isContainContentsType(String name){
         for(ContentsType c: ContentsType.values()){
-            if(c.equals(type)){
+            if(c.getName().equals(name)){
                 return true;
             }
         }
