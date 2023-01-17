@@ -63,7 +63,6 @@ public class AlarmService {
                 jobAlarmMessage+=jobAlarmDtoList.get(i).getCategoryType().getTitle();
                 jobAlarmMessage+=jobAlarmDtoList.get(i).getLocation();
                 jobAlarmMessage+=jobAlarmDtoList.get(i).getUrl();
-                jobAlarmMessage+=jobAlarmDtoList.get(i).getImage();
                 jobAlarmMessage+=jobAlarmDtoList.get(i).getContentsEndAt();
                 bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdArr.get(i)),jobAlarmMessage));
             }
