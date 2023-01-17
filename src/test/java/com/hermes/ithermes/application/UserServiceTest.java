@@ -9,7 +9,6 @@ import com.hermes.ithermes.domain.exception.UnMatchedPasswordException;
 import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
 import com.hermes.ithermes.domain.factory.KeywordFactory;
 import com.hermes.ithermes.domain.factory.UserFactory;
-import com.hermes.ithermes.domain.factory.UserKeywordRegistryFactory;
 import com.hermes.ithermes.domain.util.JobType;
 import com.hermes.ithermes.infrastructure.UserKeywordRegistryRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
@@ -43,8 +42,6 @@ class UserServiceTest {
     private UserFactory userFactory;
     @Mock
     private KeywordFactory keywordFactory;
-    @Mock
-    private UserKeywordRegistryFactory userKeywordRegistryFactory;
 
     private UserCreateUserRequestDto userCreateUserRequestDto;
     private User user;
