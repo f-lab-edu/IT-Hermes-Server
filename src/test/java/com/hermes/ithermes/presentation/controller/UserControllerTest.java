@@ -2,8 +2,6 @@ package com.hermes.ithermes.presentation.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hermes.ithermes.application.UserService;
-import com.hermes.ithermes.domain.entity.User;
-import com.hermes.ithermes.domain.entity.UserKeywordRegistry;
 import com.hermes.ithermes.domain.exception.SameIdException;
 import com.hermes.ithermes.domain.exception.SameNicknameException;
 import com.hermes.ithermes.domain.exception.UnMatchedPasswordException;
@@ -34,12 +32,11 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private UserCreateUserRequestDto userCreateUserRequestDto;
-    private User user;
-    private UserKeywordRegistry userKeywordRegistry;
-
     @Autowired
     ObjectMapper objectMapper;
+
+    private UserCreateUserRequestDto userCreateUserRequestDto;
+
 
     @Test
     @DisplayName("회원가입_정상처리")

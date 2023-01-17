@@ -3,13 +3,15 @@ package com.hermes.ithermes.application;
 import com.hermes.ithermes.domain.entity.Keyword;
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.entity.UserKeywordRegistry;
-import com.hermes.ithermes.domain.exception.*;
+import com.hermes.ithermes.domain.exception.SameNicknameException;
+import com.hermes.ithermes.domain.exception.SameUserException;
+import com.hermes.ithermes.domain.exception.UnMatchedPasswordException;
+import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
 import com.hermes.ithermes.domain.factory.KeywordFactory;
 import com.hermes.ithermes.domain.factory.UserFactory;
 import com.hermes.ithermes.domain.factory.UserKeywordRegistryFactory;
 import com.hermes.ithermes.domain.util.JobType;
 import com.hermes.ithermes.infrastructure.UserKeywordRegistryRepository;
-import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.user.UserCreateUserRequestDto;
 import com.hermes.ithermes.presentation.dto.user.UserFindMyDataRequestDto;
@@ -43,12 +45,10 @@ class UserServiceTest {
     private KeywordFactory keywordFactory;
     @Mock
     private UserKeywordRegistryFactory userKeywordRegistryFactory;
-    @Mock
-    private UserRepository userRepository;
 
     private UserCreateUserRequestDto userCreateUserRequestDto;
     private User user;
-    private UserKeywordRegistry userKeywordRegistry;
+
     @BeforeEach
     void setUp() {
         userCreateUserRequestDto = new UserCreateUserRequestDto("test", "test1234",
