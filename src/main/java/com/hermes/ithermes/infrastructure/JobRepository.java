@@ -3,6 +3,7 @@ package com.hermes.ithermes.infrastructure;
 import com.hermes.ithermes.domain.util.ContentsType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
+import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -36,5 +37,22 @@ public class JobRepository {
 
             return jobs;
         };
+
+        public List<JobAlarmDto> getJobAlarm(Long userId){
+            String jpql="SELECT job,category,name,company,location,title,url,contentsEndAt FROM Subscribe s" +
+                    "LEFT JOIN s.ContentsProvider con on con.id=s.contentsProviderId" +
+                    "LEFT JOIN con.Job j on j.contentsProviderId=s.contentsProviderId" +
+                    "where s.userId=:userId";
+
+            TypedQuery<JobAlarmDto> query=em.createQuery(jpql,JobAlarmDto.class);
+
+            List<JobAlarmDto> jobAlarmDtoList=query
+                    .setParameter("userId",userId)
+                    .getResultList();
+
+            return jobAlarmDtoList;
+        }
+
+
 
 }

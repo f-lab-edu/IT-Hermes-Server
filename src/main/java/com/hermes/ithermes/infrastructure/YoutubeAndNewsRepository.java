@@ -54,9 +54,9 @@ public class YoutubeAndNewsRepository {
     }
 
     public List<YoutubeAndNewsAlarmDto> getYoutubeAndNewsAlarm(Long userId){
-        String jqpl="select category,name,description,image,title,url from Subscribe as s"+
-            "left join ContentsProvider con on con.id=s.contentsProviderId"+
-            "left join YoutubeAndNews yn on yn.contentsProviderId=s.contentsProviderId"+
+        String jqpl="SELECT category,name,description,image,title,url FROM Subscribe as s"+
+            "LEFT JOIN s.ContentsProvider con on con.id=s.contentsProviderId"+
+            "LEFT JOIN con.YoutubeAndNews yn on yn.contentsProviderId=s.contentsProviderId"+
             "where s.userId=:userId";
 
         TypedQuery<YoutubeAndNewsAlarmDto> query=em.createQuery(jqpl,YoutubeAndNewsAlarmDto.class);

@@ -1,8 +1,10 @@
 package com.hermes.ithermes.application;
 
+import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.SubscribeRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
+import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
 import com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -24,6 +26,9 @@ public class AlarmService {
     @Autowired
     private YoutubeAndNewsRepository youtubeAndNewsRepository;
 
+    @Autowired
+    private JobRepository jobRepository;
+
     public void alarm(String telegramKey){
         List<String> keywords=new ArrayList<>();
         keywords.add("오픈소스");
@@ -39,15 +44,29 @@ public class AlarmService {
 
         for(int i=0; i<userIdArr.size(); i++){
             List<YoutubeAndNewsAlarmDto> youtubeAndNewsUserAlarmList=youtubeAndNewsRepository.getYoutubeAndNewsAlarm((long) i);
-            String alarmMessage="";
+            List<JobAlarmDto> jobAlarmDtoList=jobRepository.getJobAlarm((long)i);
+
             for(int j=0; j<youtubeAndNewsUserAlarmList.size(); j++){
-                alarmMessage+=youtubeAndNewsUserAlarmList.get(j).getTitle();
-                alarmMessage+=youtubeAndNewsUserAlarmList.get(j).getName();
-                alarmMessage+=youtubeAndNewsUserAlarmList.get(j).getImage();
-                alarmMessage+=youtubeAndNewsUserAlarmList.get(i).getDescription();
-                alarmMessage+=youtubeAndNewsUserAlarmList.get(i).getUrl();
-                alarmMessage+=youtubeAndNewsUserAlarmList.get(i).getCategoryType().getTitle();
-                bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdArr.get(i)),alarmMessage));
+                String youtubeAndNewsAlarmMessage="";
+                youtubeAndNewsAlarmMessage+=youtubeAndNewsUserAlarmList.get(j).getTitle();
+                youtubeAndNewsAlarmMessage+=youtubeAndNewsUserAlarmList.get(j).getName();
+                youtubeAndNewsAlarmMessage+=youtubeAndNewsUserAlarmList.get(j).getImage();
+                youtubeAndNewsAlarmMessage+=youtubeAndNewsUserAlarmList.get(i).getDescription();
+                youtubeAndNewsAlarmMessage+=youtubeAndNewsUserAlarmList.get(i).getUrl();
+                youtubeAndNewsAlarmMessage+=youtubeAndNewsUserAlarmList.get(i).getCategoryType().getTitle();
+                bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdArr.get(i)),youtubeAndNewsAlarmMessage));
+            }
+
+            for(int j=0; j<jobAlarmDtoList.size(); j++){
+                String jobAlarmMessage="";
+                jobAlarmMessage+=jobAlarmDtoList.get(i).getTitle();
+                jobAlarmMessage+=jobAlarmDtoList.get(i).getCompany();
+                jobAlarmMessage+=jobAlarmDtoList.get(i).getCategoryType().getTitle();
+                jobAlarmMessage+=jobAlarmDtoList.get(i).getLocation();
+                jobAlarmMessage+=jobAlarmDtoList.get(i).getUrl();
+                jobAlarmMessage+=jobAlarmDtoList.get(i).getImage();
+                jobAlarmMessage+=jobAlarmDtoList.get(i).getContentsEndAt();
+                bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdArr.get(i)),jobAlarmMessage));
             }
         }
 
