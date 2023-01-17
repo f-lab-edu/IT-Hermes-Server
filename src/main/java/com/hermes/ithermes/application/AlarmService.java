@@ -48,38 +48,54 @@ public class AlarmService {
     public void sendYoutubeAndNewsMessage(List<YoutubeAndNewsAlarmDto> youtubeAndNewsAlarmDtoList,long userIdx){
         TelegramBot bot=new TelegramBot(telegramKey);
         for(int j=0; j<youtubeAndNewsAlarmDtoList.size(); j++){
-            String youtubeAndNewsAlarmMessage="";
-            youtubeAndNewsAlarmMessage+=youtubeAndNewsAlarmDtoList.get(j).getTitle();
-            youtubeAndNewsAlarmMessage+="\n";
-            youtubeAndNewsAlarmMessage+=youtubeAndNewsAlarmDtoList.get(j).getName();
-            youtubeAndNewsAlarmMessage+="\n";
-            youtubeAndNewsAlarmMessage+=youtubeAndNewsAlarmDtoList.get(j).getImage();
-            youtubeAndNewsAlarmMessage+="\n";
-            youtubeAndNewsAlarmMessage+=youtubeAndNewsAlarmDtoList.get(j).getDescription();
-            youtubeAndNewsAlarmMessage+="\n";
-            youtubeAndNewsAlarmMessage+=youtubeAndNewsAlarmDtoList.get(j).getUrl();
-            youtubeAndNewsAlarmMessage+="\n";
-            youtubeAndNewsAlarmMessage+=youtubeAndNewsAlarmDtoList.get(j).getCategoryType().getTitle();
-            bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),youtubeAndNewsAlarmMessage));
+            StringBuilder youtubeAndNewsAlarmMessage=new StringBuilder();
+            youtubeAndNewsAlarmMessage.append("[유투브 및 뉴스 정보]")
+                    .append("\n")
+                    .append("[title]")
+                    .append(youtubeAndNewsAlarmDtoList.get(j).getTitle())
+                    .append("\n")
+                    .append("[name]")
+                    .append(youtubeAndNewsAlarmDtoList.get(j).getName())
+                    .append("\n")
+                    .append("[image]")
+                    .append(youtubeAndNewsAlarmDtoList.get(j).getImage())
+                    .append("\n")
+                    .append("[description]")
+                    .append(youtubeAndNewsAlarmDtoList.get(j).getDescription())
+                    .append("\n")
+                    .append("[url]")
+                    .append(youtubeAndNewsAlarmDtoList.get(j).getUrl())
+                    .append("\n")
+                    .append("[category]")
+                    .append(youtubeAndNewsAlarmDtoList.get(j).getCategoryType().getTitle());
+            bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),youtubeAndNewsAlarmMessage.toString()));
         }
     }
 
     public void sendJobAlarmMessage(List<JobAlarmDto> jobAlarmDtoList,long userIdx){
         TelegramBot bot=new TelegramBot(telegramKey);
         for(int i=0; i<jobAlarmDtoList.size(); i++){
-            String jobAlarmMessage="";
-            jobAlarmMessage+=jobAlarmDtoList.get(i).getTitle();
-            jobAlarmMessage+="\n";
-            jobAlarmMessage+=jobAlarmDtoList.get(i).getCompany();
-            jobAlarmMessage+="\n";
-            jobAlarmMessage+=jobAlarmDtoList.get(i).getCategoryType().getTitle();
-            jobAlarmMessage+="\n";
-            jobAlarmMessage+=jobAlarmDtoList.get(i).getLocation();
-            jobAlarmMessage+="\n";
-            jobAlarmMessage+=jobAlarmDtoList.get(i).getUrl();
-            jobAlarmMessage+="\n";
-            jobAlarmMessage+=jobAlarmDtoList.get(i).getContentsEndAt();
-            bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),jobAlarmMessage));
+            StringBuilder jobAlarmMessage=new StringBuilder();
+            jobAlarmMessage.append("[채용 정보]")
+                    .append("\n")
+                    .append("[title]")
+                    .append(jobAlarmDtoList.get(i).getTitle())
+                    .append("\n")
+                    .append("[company]")
+                    .append(jobAlarmDtoList.get(i).getCompany())
+                    .append("\n")
+                    .append("[category]")
+                    .append(jobAlarmDtoList.get(i).getCategoryType().getTitle())
+                    .append("\n")
+                    .append("[location]")
+                    .append(jobAlarmDtoList.get(i).getLocation())
+                    .append("\n")
+                    .append("[url]")
+                    .append(jobAlarmDtoList.get(i).getUrl())
+                    .append("\n")
+                    .append("[마감일]")
+                    .append(jobAlarmDtoList.get(i).getContentsEndAt());
+            bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),jobAlarmMessage.toString()));
         }
     }
 
