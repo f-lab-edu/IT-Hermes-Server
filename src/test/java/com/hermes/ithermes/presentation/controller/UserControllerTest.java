@@ -11,7 +11,6 @@ import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
 import com.hermes.ithermes.domain.util.JobType;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.user.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -45,16 +40,6 @@ class UserControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
-
-    @BeforeEach
-    public void setup(WebApplicationContext webApplicationContext) {
-        user = User.builder()
-                .loginId("test").nickname("김승기")
-                .password("test1234").job(JobType.BACKEND)
-                .yearOfExperience(1)
-                .build();
-        List<UserKeywordRegistry> userKeywordRegistries = new ArrayList<>();
-    }
 
     @Test
     @DisplayName("회원가입_정상처리")
