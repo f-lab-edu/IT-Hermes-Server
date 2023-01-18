@@ -56,7 +56,7 @@ public class YoutubeAndNewsRepository {
     }
 
     public List<YoutubeAndNewsAlarmDto> getYoutubeAndNewsAlarm(Long userId){
-        String jqpl="SELECT new com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto(yn.title,yn.contentsProvider.category,yn.title,yn.description,yn.image,yn.url) FROM Subscribe s "+
+        String jqpl="SELECT new com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto(yn.title,yn.description,yn.image,yn.url,yn.contentsStartAt,yn.contentsProvider.name) FROM Subscribe s "+
             "INNER JOIN s.contentsProvider con on con.id=s.contentsProvider.id "+
             "INNER JOIN YoutubeAndNews yn on yn.contentsProvider.id=con.id "+
                 "where s.user.id=:userId";

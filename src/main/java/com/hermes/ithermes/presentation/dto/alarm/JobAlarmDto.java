@@ -1,6 +1,6 @@
 package com.hermes.ithermes.presentation.dto.alarm;
 
-import com.hermes.ithermes.domain.util.CategoryType;
+import com.hermes.ithermes.domain.util.ContentsProviderType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,8 +12,6 @@ public class JobAlarmDto {
 
     private String title;
 
-    private CategoryType categoryType;
-
     private String location;
 
     private String company;
@@ -21,5 +19,7 @@ public class JobAlarmDto {
     private String url;
 
     private LocalDateTime contentsEndAt;
+
+    private ContentsProviderType contentsProviderType;
 
 }

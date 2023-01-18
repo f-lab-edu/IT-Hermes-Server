@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +31,7 @@ public class AlarmService {
     @Autowired
     private JobRepository jobRepository;
 
-    public void alarm(String telegramKey){
+    public void alarm(){
         List<Long> userIdArr=userRepository.findByTelegramIdIsNotNull().stream()
                 .map(m->m.getId())
                 .collect(Collectors.toList());
@@ -51,23 +50,23 @@ public class AlarmService {
             StringBuilder youtubeAndNewsAlarmMessage=new StringBuilder();
             youtubeAndNewsAlarmMessage.append("[유투브 및 뉴스 정보]")
                     .append("\n")
-                    .append("[title]")
+                    .append("[제목]")
                     .append(youtubeAndNewsAlarmDtoList.get(j).getTitle())
                     .append("\n")
-                    .append("[name]")
-                    .append(youtubeAndNewsAlarmDtoList.get(j).getName())
-                    .append("\n")
-                    .append("[image]")
-                    .append(youtubeAndNewsAlarmDtoList.get(j).getImage())
-                    .append("\n")
-                    .append("[description]")
+                    .append("[본문]")
                     .append(youtubeAndNewsAlarmDtoList.get(j).getDescription())
+                    .append("\n")
+                    .append("[이미지]")
+                    .append(youtubeAndNewsAlarmDtoList.get(j).getImage())
                     .append("\n")
                     .append("[url]")
                     .append(youtubeAndNewsAlarmDtoList.get(j).getUrl())
                     .append("\n")
-                    .append("[category]")
-                    .append(youtubeAndNewsAlarmDtoList.get(j).getCategoryType().getTitle());
+                    .append("[일자]")
+                    .append(youtubeAndNewsAlarmDtoList.get(j).getContentsStartAt())
+                    .append("\n")
+                    .append("[서비스]")
+                    .append(youtubeAndNewsAlarmDtoList.get(j).getContentsProviderType().getTitle());
             bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),youtubeAndNewsAlarmMessage.toString()));
         }
     }
@@ -78,20 +77,20 @@ public class AlarmService {
             StringBuilder jobAlarmMessage=new StringBuilder();
             jobAlarmMessage.append("[채용 정보]")
                     .append("\n")
-                    .append("[title]")
+                    .append("[제목]")
                     .append(jobAlarmDtoList.get(i).getTitle())
                     .append("\n")
-                    .append("[company]")
+                    .append("[회사]")
                     .append(jobAlarmDtoList.get(i).getCompany())
                     .append("\n")
-                    .append("[category]")
-                    .append(jobAlarmDtoList.get(i).getCategoryType().getTitle())
-                    .append("\n")
-                    .append("[location]")
+                    .append("[위치]")
                     .append(jobAlarmDtoList.get(i).getLocation())
                     .append("\n")
                     .append("[url]")
                     .append(jobAlarmDtoList.get(i).getUrl())
+                    .append("\n")
+                    .append("[서비스]")
+                    .append(jobAlarmDtoList.get(i).getContentsProviderType().getTitle())
                     .append("\n")
                     .append("[마감일]")
                     .append(jobAlarmDtoList.get(i).getContentsEndAt());
