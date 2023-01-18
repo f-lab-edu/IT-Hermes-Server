@@ -11,9 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class AlarmServiceTest {
 
     private final JobRepository jobRepository;
-
     private final YoutubeAndNewsRepository youtubeAndNewsRepository;
-
     private final AlarmService alarmService;
 
     @Autowired
@@ -26,13 +24,13 @@ class AlarmServiceTest {
     @Test
     @DisplayName("유저 id값 1을 가진 유저에게 채용정보 알림을 전송가는지 테스트")
     public void telegramJobAlarmTest(){
-        alarmService.sendJobAlarmMessage(jobRepository.getJobAlarm(1L),1L);
+        alarmService.sendJobAlarmMessage(jobRepository.getJobAlarmContents(1L),1L);
     }
 
     @Test
     @DisplayName("유저 id값 1을 가진 유저에게 유투브,뉴스 알림을 전송가는지 테스트")
     public void telegramYoutubeAndNewsTest(){
-        alarmService.sendYoutubeAndNewsMessage(youtubeAndNewsRepository.getYoutubeAndNewsAlarm(1L),1L);
+        alarmService.sendYoutubeAndNewsMessage(youtubeAndNewsRepository.getYoutubeAndNewsAlarmContents(1L),1L);
     }
 
 }

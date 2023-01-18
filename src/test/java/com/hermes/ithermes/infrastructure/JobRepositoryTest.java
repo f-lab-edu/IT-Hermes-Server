@@ -17,9 +17,9 @@ class JobRepositoryTest {
     }
 
     @Test
-    @DisplayName("유저아이디 번호 1번인 유저가 구독한 job의 구독정보는 3개인지 테스트")
+    @DisplayName("DB상에 유저아이디 번호 1번인 유저가 구독한 job의 구독정보는 3개인지 테스트")
     public void JobContentsAlarmTest(){
-        Assertions.assertEquals(3,jobRepository.getJobAlarm(1L).size());
+        Assertions.assertEquals(3,jobRepository.getJobAlarmContents(1L).size());
     }
 
 }

@@ -17,9 +17,9 @@ class YoutubeAndNewsRepositoryTest {
     }
 
     @Test
-    @DisplayName("유저아이디 번호 1번인 유저가 구독한 youtubeandnews의 구독정보는 4개인지 테스트")
+    @DisplayName("DB상에 유저아이디 번호 1번인 유저가 구독한 youtubeandnews의 구독정보는 4개인지 테스트")
     public void YoutubeAndNewsContentsAlarmTest(){
-        Assertions.assertEquals(4,youtubeAndNewsRepository.getYoutubeAndNewsAlarm(1L).size());
+        Assertions.assertEquals(4,youtubeAndNewsRepository.getYoutubeAndNewsAlarmContents(1L).size());
     }
 
 

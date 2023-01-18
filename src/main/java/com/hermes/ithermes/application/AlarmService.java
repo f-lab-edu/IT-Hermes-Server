@@ -3,45 +3,41 @@ package com.hermes.ithermes.application;
 import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
+import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
 import com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AlarmService {
 
     @Value("${telegram-key}")
     private String telegramKey;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final YoutubeAndNewsRepository youtubeAndNewsRepository;
+    private final JobRepository jobRepository;
 
-    @Autowired
-    private YoutubeAndNewsRepository youtubeAndNewsRepository;
-
-    @Autowired
-    private JobRepository jobRepository;
-
-    public void alarm(){
+    public CommonResponseDto alarm(){
         List<Long> userIdArr=userRepository.findByTelegramIdIsNotNull().stream()
                 .map(m->m.getId())
                 .collect(Collectors.toList());
 
         for(int i=0; i<userIdArr.size(); i++){
-            List<YoutubeAndNewsAlarmDto> youtubeAndNewsUserAlarmList=youtubeAndNewsRepository.getYoutubeAndNewsAlarm((long) i);
-            List<JobAlarmDto> jobAlarmDtoList=jobRepository.getJobAlarm((long)i);
-            sendYoutubeAndNewsMessage(youtubeAndNewsUserAlarmList,i);
-            sendJobAlarmMessage(jobAlarmDtoList,i);
+            sendYoutubeAndNewsMessage(youtubeAndNewsRepository.getYoutubeAndNewsAlarmContents(userIdArr.get(i)), userIdArr.get(i));
+            sendJobAlarmMessage(jobRepository.getJobAlarmContents(userIdArr.get(i)),userIdArr.get(i));
         }
+        return new CommonResponseDto();
     }
 
     public void sendYoutubeAndNewsMessage(List<YoutubeAndNewsAlarmDto> youtubeAndNewsAlarmDtoList,long userIdx){
@@ -97,8 +93,5 @@ public class AlarmService {
             bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),jobAlarmMessage.toString()));
         }
     }
-
-
-
 
 }
