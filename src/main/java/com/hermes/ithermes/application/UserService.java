@@ -1,6 +1,5 @@
 package com.hermes.ithermes.application;
 
-import com.github.kshashov.telegram.config.TelegramBotGlobalProperties;
 import com.hermes.ithermes.domain.entity.Keyword;
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.entity.UserKeywordRegistry;
@@ -103,29 +102,34 @@ public class UserService{
         return new UserFindMyDataResponseDto(user.getLoginId(), user.getNickname());
     }
 
-    public void getTelegramId(String telegramKey){
+    public CommonResponseDto updateTelegramId(String telegramKey){
         TelegramBot bot=new TelegramBot(telegramKey);
         bot.setUpdatesListener(new UpdatesListener() {
             @Override
             public int process(List<Update> updates) {
                 for(Update update:updates){
                     String chatId=update.message().chat().id().toString();
-                    System.out.println(chatId);
                     if(update.message().text().equals("/start")){
                         bot.execute(new SendMessage(chatId,"IT-Hermes에서 사용하는 닉네임을 입력해주세요."));
                     }else{
                         String nickname=update.message().text();
-                        if(userRepository.existsUserByNicknameAndTelegramId(nickname,chatId)==true){
-                            bot.execute(new SendMessage(chatId,"이미 생성한 봇이 있는 유저입니다."));
+                        if(userRepository.existsUserByNickname(nickname)==false){
+                            bot.execute(new SendMessage(chatId,"먼저 회원가입을 진행해주세요."));
                         }else{
-                            userRepository.updateTelegramIdByNickname(nickname,chatId);
-                            bot.execute(new SendMessage(chatId,"유저로 등록되었습니다."));
+                            if(userRepository.existsUserByNicknameAndTelegramId(chatId,nickname)==true){
+                                bot.execute(new SendMessage(chatId,"이미 생성한 봇이 있는 유저입니다."));
+                            }else{
+                                userRepository.updateTelegramIdByNickname(chatId,nickname);
+                                bot.execute(new SendMessage(chatId,"유저로 등록되었습니다."));
+                            }
                         }
                     }
+                    return UpdatesListener.CONFIRMED_UPDATES_ALL;
                 }
                 return UpdatesListener.CONFIRMED_UPDATES_ALL;
             }
         });
+        return new CommonResponseDto();
     }
 
     private Optional<User> findLoginId(String userId) {

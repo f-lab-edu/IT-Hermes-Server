@@ -5,12 +5,10 @@ import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.net.ssl.HttpsURLConnection;
 import javax.validation.Valid;
 
 @RestController()
@@ -71,12 +69,9 @@ public class UserController {
         return ResponseEntity.ok(userFindMyDataResponseDto);
     }
 
-    @RequestMapping(value = "/telegramId",method = RequestMethod.GET)
-    public ResponseEntity<?> getTelegramId(){
-        userService.getTelegramId(telegramKey);
-        return ResponseEntity.ok(HttpStatus.OK);
+    @RequestMapping(value = "/telegramId",method = RequestMethod.PUT)
+    public ResponseEntity<CommonResponseDto> updateTelegramId(){
+        return ResponseEntity.ok(userService.updateTelegramId(telegramKey));
     }
-
-
 
 }
