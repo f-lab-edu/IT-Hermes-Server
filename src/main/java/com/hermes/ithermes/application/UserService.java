@@ -8,7 +8,6 @@ import com.hermes.ithermes.domain.factory.KeywordFactory;
 import com.hermes.ithermes.domain.factory.UserFactory;
 import com.hermes.ithermes.domain.factory.UserKeywordRegistryFactory;
 import com.hermes.ithermes.infrastructure.UserKeywordRegistryRepository;
-import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.user.*;
 import com.pengrad.telegrambot.TelegramBot;
@@ -29,7 +28,6 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class UserService{
 
-    private final UserRepository userRepository;
     private final UserKeywordRegistryRepository userKeywordRegistryRepository;
     private final UserFactory userFactory;
     private final KeywordFactory keywordFactory;
@@ -37,14 +35,16 @@ public class UserService{
 
     @Transactional
     public CommonResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
+        String loginId = userLoginRequestDto.getId();
 
         Optional.ofNullable(userLoginRequestDto.getPassword().equals(userLoginRequestDto.getPasswordConfirm()))
                 .filter(v -> v)
                 .orElseThrow(() -> new UnMatchedPasswordException());
 
-        findLoginId(userLoginRequestDto.getId()).ifPresent(a -> {
+        userFactory.findLoginId(loginId).ifPresent(a -> {
             throw new SameUserException();
         });
+
         User user = userFactory.parseLoginRequestDtoToUser(userLoginRequestDto);
 
         Arrays.stream(userLoginRequestDto.getKeywordList())
@@ -59,19 +59,19 @@ public class UserService{
     }
 
     public CommonResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) {
-        findLoginIdAndPassword(userLoginRequestDto.getId(), userLoginRequestDto.getPassword()).orElseThrow(() -> new WrongIdOrPasswordException());
+        userFactory.findLoginIdAndPassword(userLoginRequestDto.getId(), userLoginRequestDto.getPassword()).orElseThrow(() -> new WrongIdOrPasswordException());
         return new CommonResponseDto();
     }
 
     public CommonResponseDto checkDuplicateNickname(UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {
-        findNickname(userDuplicateNicknameRequestDto.getNickname()).ifPresent(a -> {
+        userFactory.findNickname(userDuplicateNicknameRequestDto.getNickname()).ifPresent(a -> {
             throw new SameNicknameException();
         });
         return new CommonResponseDto();
     }
 
     public CommonResponseDto checkDuplicateId(UserDuplicateIdRequestDto userDuplicateIdRequestDto) {
-        findLoginId(userDuplicateIdRequestDto.getId()).ifPresent(a -> {
+        userFactory.findLoginId(userDuplicateIdRequestDto.getId()).ifPresent(a -> {
             throw new SameIdException();
         });
         return new CommonResponseDto();
@@ -80,28 +80,27 @@ public class UserService{
     @Transactional
     public CommonResponseDto updateNickname(UserUpdateNicknameRequestDto userUpdateNicknameRequestDto) {
         String newNickname = userUpdateNicknameRequestDto.getNickname();
-        findNickname(newNickname).ifPresent(a -> {
+        userFactory.findNickname(newNickname).ifPresent(a -> {
             throw new SameNicknameException();
         });
 
-        User user = findLoginId(userUpdateNicknameRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
+        User user = userFactory.findLoginId(userUpdateNicknameRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         user.changeNickname(newNickname);
         return new CommonResponseDto();
     }
 
     @Transactional
     public CommonResponseDto deleteUser(UserDeleteUserRequestDto userDeleteUserRequestDto) {
-        User user = findLoginId(userDeleteUserRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
+        User user = userFactory.findLoginId(userDeleteUserRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
 
         user.isDelete();
         return new CommonResponseDto();
     }
 
     public UserFindMyDataResponseDto findMyData(UserFindMyDataRequestDto userFindMyDataRequestDto) {
-        User user = findLoginId(userFindMyDataRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
+        User user = userFactory.findLoginId(userFindMyDataRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         return new UserFindMyDataResponseDto(user.getLoginId(), user.getNickname());
     }
-
     public CommonResponseDto updateTelegramId(String telegramKey){
         TelegramBot bot=new TelegramBot(telegramKey);
         bot.setUpdatesListener(new UpdatesListener() {
@@ -130,17 +129,5 @@ public class UserService{
             }
         });
         return new CommonResponseDto();
-    }
-
-    private Optional<User> findLoginId(String userId) {
-        return userRepository.findByLoginId(userId);
-    }
-
-    private Optional<User> findNickname(String nickname) {
-        return userRepository.findByNickname(nickname);
-    }
-
-    private Optional<User> findLoginIdAndPassword(String id, String password) {
-        return userRepository.findByLoginIdAndPasswordAndIsDelete(id, password, false);
     }
 }

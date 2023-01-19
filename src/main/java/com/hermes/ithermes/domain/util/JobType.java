@@ -1,5 +1,6 @@
 package com.hermes.ithermes.domain.util;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 
 @Getter
@@ -13,5 +14,10 @@ public enum JobType {
 
     JobType(String title) {
         this.title = title;
+    }
+
+    @JsonCreator
+    public static JobType fromValue(String job) {
+        return JobType.valueOf(job.toUpperCase());
     }
 }

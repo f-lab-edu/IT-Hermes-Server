@@ -1,5 +1,6 @@
 package com.hermes.ithermes.presentation.dto.user;
 
+import com.hermes.ithermes.domain.util.JobType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -28,8 +29,7 @@ public class UserCreateUserRequestDto {
     @Size(min = 2, max = 10, message = "닉네임은 2~10자만 가능 합니다.")
     private String nickname;
     @NonNull
-    @NotBlank(message = "직무는 필수 입력사항 입니다.")
-    private String job;
+    private JobType job;
     @NonNull
     @NotBlank(message = "경력은 필수 입력사항 입니다.")
     private String yearOfExperience;
