@@ -1,3 +1,4 @@
+
 package com.hermes.ithermes.application;
 
 import com.hermes.ithermes.domain.entity.Keyword;
@@ -32,8 +33,8 @@ public class UserService{
     private final UserKeywordRegistryRepository userKeywordRegistryRepository;
     private final UserFactory userFactory;
     private final KeywordFactory keywordFactory;
-    private final UserKeywordRegistryFactory userKeywordRegistryFactory;
     private final UserRepository userRepository;
+    private final UserKeywordRegistryFactory userKeywordRegistryFactory;
 
     @Transactional
     public CommonResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
