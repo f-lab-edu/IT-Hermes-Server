@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(NotExistsRequestParamException.class)
+    public ResponseEntity<String> NotExistsRequestValue(){
+        return new ResponseEntity("잘못된 요청 파라미터 값입니다.", HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(SameIdException.class)
     public ResponseEntity<String> handleLSameIdException() {
         return new ResponseEntity<>("이미 존재하는 아이디", HttpStatus.BAD_REQUEST);
@@ -37,4 +42,5 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> enumTypeFormatException() {
         return new ResponseEntity<>("서버에 존재하지 않는 유효하지 않는 데이터", HttpStatus.BAD_REQUEST);
     }
+
 }
