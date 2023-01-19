@@ -8,6 +8,7 @@ import com.hermes.ithermes.domain.factory.KeywordFactory;
 import com.hermes.ithermes.domain.factory.UserFactory;
 import com.hermes.ithermes.domain.factory.UserKeywordRegistryFactory;
 import com.hermes.ithermes.infrastructure.UserKeywordRegistryRepository;
+import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.user.*;
 import com.pengrad.telegrambot.TelegramBot;
@@ -32,6 +33,7 @@ public class UserService{
     private final UserFactory userFactory;
     private final KeywordFactory keywordFactory;
     private final UserKeywordRegistryFactory userKeywordRegistryFactory;
+    private final UserRepository userRepository;
 
     @Transactional
     public CommonResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
