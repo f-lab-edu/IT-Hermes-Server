@@ -162,7 +162,7 @@ class UserServiceTest {
         UserFindMyDataRequestDto userFindMyDataRequestDto = new UserFindMyDataRequestDto(loginId);
 
         //When
-        when(userFactory.findLoginId(loginId)).thenReturn(Optional.of(user));
+        when(userFactory.findLoginId(any())).thenReturn(Optional.of(user));
 
         //Then
         assertEquals(loginId, userService.findMyData(userFindMyDataRequestDto).getId());
