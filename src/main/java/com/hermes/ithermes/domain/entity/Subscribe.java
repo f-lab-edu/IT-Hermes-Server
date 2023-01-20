@@ -49,7 +49,12 @@ public class Subscribe extends BaseEntity {
         this.contentsProvider = contentsProvider;
     }
 
-    public void changeUpdateAt() {
+    public void changeUpdateAt(Subscribe subscribe) {
+        this.isActive=subscribe.getIsActive();
+        if(subscribe.getJob()!=null) this.job=subscribe.getJob();
+        if(subscribe.getMinYearOfExperience()!=null) this.minYearOfExperience=subscribe.getMinYearOfExperience();
+        if(subscribe.getMaxYearOfExperience()!=null) this.maxYearOfExperience=subscribe.getMaxYearOfExperience();
+
         changeUpdateAt();
     }
 }

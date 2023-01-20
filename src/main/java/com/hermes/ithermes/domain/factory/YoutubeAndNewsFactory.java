@@ -30,7 +30,7 @@ public class YoutubeAndNewsFactory {
             String description = v.getDescription();
             String thumbnail = v.getThumbnail();
             String url = v.getUrl();
-            LocalDateTime date = LocalDateTime.of(2022, Month.AUGUST,21,13,45,20);
+            LocalDateTime date = LocalDateTime.of(2022, Month.of(1),21,13,45,20);
             YoutubeAndNews youtubeAndNews = YoutubeAndNews.builder()
                     .contentsProvider(provider)
                     .description(description)

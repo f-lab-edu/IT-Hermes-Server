@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,13 +29,13 @@ public class SubscribeService {
     }
 
     public SubscribeFindSubscribeResponseDto findSubscribe(SubscribeFindSubscribeRequestDto subscribeFindSubScribeRequestDto) {
+
         List<Subscribe> subscribes = subscribeFactory.parseFindSubscribeDtoToSubscribes(subscribeFindSubScribeRequestDto);
         List<String> contentsProviderTypes = subscribeFactory.findActiveContentsProviderType(subscribes);
-        Subscribe jobCategoryData = subscribeFactory.findJobCategoryData(subscribes);
-
-        String job = String.valueOf(jobCategoryData.getJob().getTitle());
-        String startDateOfExperience = String.valueOf(jobCategoryData.getMinYearOfExperience());
-        String endDateOfExperience = String.valueOf(jobCategoryData.getMaxYearOfExperience());
+        Optional<Subscribe> jobCategoryData = subscribeFactory.findJobCategoryData(subscribes);
+        String job = String.valueOf(jobCategoryData.flatMap(v -> Optional.ofNullable(v.getJob())).orElse(null));
+        String startDateOfExperience = String.valueOf(jobCategoryData.flatMap(v -> Optional.ofNullable(v.getMinYearOfExperience())).orElse(null));
+        String endDateOfExperience = String.valueOf(jobCategoryData.flatMap(v -> Optional.ofNullable(v.getMaxYearOfExperience())).orElse(null));
 
         return new SubscribeFindSubscribeResponseDto(contentsProviderTypes, job, startDateOfExperience, endDateOfExperience);
     }

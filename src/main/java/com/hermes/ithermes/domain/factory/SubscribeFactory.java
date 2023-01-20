@@ -49,7 +49,7 @@ public class SubscribeFactory {
             Subscribe subscribe = categoryType.getParseSubscribe().parseSubscribe(user, contentsProvider, activeType, jobType, minYearOfExperience, maxYearOfExperience);
 
             subscribeOptional.ifPresent(v -> {
-                subscribe.changeUpdateAt();
+                subscribe.changeUpdateAt(v);
             });
             subscribes.add(subscribe);
             index++;
@@ -61,26 +61,25 @@ public class SubscribeFactory {
         String loginId = subscribeFindSubscribeRequestDto.getId();
         User user = userFactory.findLoginId(loginId).orElseThrow(() -> new WrongIdOrPasswordException());
         Long userId = user.getId();
-        List<Subscribe> subscribes = findByUserId(userId);
-        return subscribes;
+        return findSubscribeByUserId(userId).orElseThrow(null);
     }
 
     public List<String> findActiveContentsProviderType(List<Subscribe> subscribes) {
         return subscribes.stream().map(v -> v.getIsActive().getTitle()).toList();
     }
 
-    public Subscribe findJobCategoryData(List<Subscribe> subscribes) {
+    public Optional<Subscribe> findJobCategoryData(List<Subscribe> subscribes) {
         return subscribes.stream()
                 .filter(v -> Objects.nonNull(v.getJob()) || Objects.nonNull(v.getMinYearOfExperience()) || Objects.nonNull(v.getMaxYearOfExperience()))
-                .findAny().orElse(null);
+                .findAny();
     }
 
     public Optional<Subscribe> findByContentsProviderId(Long contentsProviderId) {
         return subscribeRepository.findByContentsProviderId(contentsProviderId);
     }
 
-    public List<Subscribe> findByUserId(Long userId) {
-        return subscribeRepository.findByUserId(userId).orElseThrow(() -> new WrongIdOrPasswordException());
+    public Optional<List<Subscribe>> findSubscribeByUserId(Long userId) {
+        return subscribeRepository.findByUserId(userId);
     }
 }
 

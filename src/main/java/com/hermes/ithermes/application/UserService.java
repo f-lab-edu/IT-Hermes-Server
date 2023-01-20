@@ -28,7 +28,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserService{
+public class UserService {
 
     private final UserKeywordRegistryRepository userKeywordRegistryRepository;
     private final UserFactory userFactory;
@@ -39,14 +39,13 @@ public class UserService{
     @Transactional
     public CommonResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
         String loginId = userLoginRequestDto.getId();
+        String password = userLoginRequestDto.getPassword();
 
-        Optional.ofNullable(userLoginRequestDto.getPassword().equals(userLoginRequestDto.getPasswordConfirm()))
+        Optional.ofNullable(password.equals(userLoginRequestDto.getPasswordConfirm()))
                 .filter(v -> v)
                 .orElseThrow(() -> new UnMatchedPasswordException());
 
-        userFactory.findLoginId(loginId).ifPresent(a -> {
-            throw new SameUserException();
-        });
+        if (userFactory.existsByLoginId(loginId)) throw new SameIdException();
 
         User user = userFactory.parseLoginRequestDtoToUser(userLoginRequestDto);
 
@@ -62,30 +61,28 @@ public class UserService{
     }
 
     public CommonResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) {
-        userFactory.findLoginIdAndPassword(userLoginRequestDto.getId(), userLoginRequestDto.getPassword()).orElseThrow(() -> new WrongIdOrPasswordException());
+        String loginId = userLoginRequestDto.getId();
+        String password = userLoginRequestDto.getPassword();
+        if (!userFactory.existsByLoginIdAndPasswordAndIsDelete(loginId, password)) throw new WrongIdOrPasswordException();
         return new CommonResponseDto();
     }
 
     public CommonResponseDto checkDuplicateNickname(UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {
-        userFactory.findNickname(userDuplicateNicknameRequestDto.getNickname()).ifPresent(a -> {
-            throw new SameNicknameException();
-        });
+        String nickname = userDuplicateNicknameRequestDto.getNickname();
+        if (userRepository.existsByNickname(nickname)) throw new SameNicknameException();
         return new CommonResponseDto();
     }
 
     public CommonResponseDto checkDuplicateId(UserDuplicateIdRequestDto userDuplicateIdRequestDto) {
-        userFactory.findLoginId(userDuplicateIdRequestDto.getId()).ifPresent(a -> {
-            throw new SameIdException();
-        });
+        String loginId = userDuplicateIdRequestDto.getId();
+        if (userFactory.existsByLoginId(loginId)) throw new SameIdException();
         return new CommonResponseDto();
     }
 
     @Transactional
     public CommonResponseDto updateNickname(UserUpdateNicknameRequestDto userUpdateNicknameRequestDto) {
         String newNickname = userUpdateNicknameRequestDto.getNickname();
-        userFactory.findNickname(newNickname).ifPresent(a -> {
-            throw new SameNicknameException();
-        });
+        if (userFactory.existsByNickname(newNickname)) throw new SameNicknameException();
 
         User user = userFactory.findLoginId(userUpdateNicknameRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         user.changeNickname(newNickname);
@@ -104,25 +101,26 @@ public class UserService{
         User user = userFactory.findLoginId(userFindMyDataRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         return new UserFindMyDataResponseDto(user.getLoginId(), user.getNickname());
     }
-    public CommonResponseDto updateTelegramId(String telegramKey){
-        TelegramBot bot=new TelegramBot(telegramKey);
+
+    public CommonResponseDto updateTelegramId(String telegramKey) {
+        TelegramBot bot = new TelegramBot(telegramKey);
         bot.setUpdatesListener(new UpdatesListener() {
             @Override
             public int process(List<Update> updates) {
-                for(Update update:updates){
-                    String chatId=update.message().chat().id().toString();
-                    if(update.message().text().equals("/start")){
-                        bot.execute(new SendMessage(chatId,"IT-Hermes에서 사용하는 닉네임을 입력해주세요."));
-                    }else{
-                        String nickname=update.message().text();
-                        if(userRepository.existsUserByNickname(nickname)==false){
-                            bot.execute(new SendMessage(chatId,"먼저 회원가입을 진행해주세요."));
-                        }else{
-                            if(userRepository.existsUserByNicknameAndTelegramId(chatId,nickname)==true){
-                                bot.execute(new SendMessage(chatId,"이미 생성한 봇이 있는 유저입니다."));
-                            }else{
-                                userRepository.updateTelegramIdByNickname(chatId,nickname);
-                                bot.execute(new SendMessage(chatId,"유저로 등록되었습니다."));
+                for (Update update : updates) {
+                    String chatId = update.message().chat().id().toString();
+                    if (update.message().text().equals("/start")) {
+                        bot.execute(new SendMessage(chatId, "IT-Hermes에서 사용하는 닉네임을 입력해주세요."));
+                    } else {
+                        String nickname = update.message().text();
+                        if (userRepository.existsUserByNickname(nickname) == false) {
+                            bot.execute(new SendMessage(chatId, "먼저 회원가입을 진행해주세요."));
+                        } else {
+                            if (userRepository.existsUserByNicknameAndTelegramId(chatId, nickname) == true) {
+                                bot.execute(new SendMessage(chatId, "이미 생성한 봇이 있는 유저입니다."));
+                            } else {
+                                userRepository.updateTelegramIdByNickname(chatId, nickname);
+                                bot.execute(new SendMessage(chatId, "유저로 등록되었습니다."));
                             }
                         }
                     }
