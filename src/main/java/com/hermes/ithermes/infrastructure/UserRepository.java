@@ -13,9 +13,11 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByLoginId(@Param("loginId") String loginId);
 
-    Optional<User> findByLoginIdAndPasswordAndIsDelete(@Param("loginId") String loginId, @Param("password") String password, @Param("isDelete") boolean isDelete);
+    boolean existsByLoginIdAndPassword(@Param("loginId") String loginId, @Param("password") String password);
 
-    Optional<User> findByNickname(@Param("nickname") String nickname);
+    boolean existsByNickname(@Param("nickname") String nickname);
+
+    boolean existsByLoginId(@Param("userId") String userId);
 
     Boolean existsUserByNicknameAndTelegramId(String nickname,String telegramId);
 

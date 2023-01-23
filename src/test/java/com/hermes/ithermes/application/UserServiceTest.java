@@ -3,12 +3,10 @@ package com.hermes.ithermes.application;
 import com.hermes.ithermes.domain.entity.Keyword;
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.entity.UserKeywordRegistry;
-import com.hermes.ithermes.domain.exception.SameNicknameException;
-import com.hermes.ithermes.domain.exception.SameUserException;
-import com.hermes.ithermes.domain.exception.UnMatchedPasswordException;
-import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
+import com.hermes.ithermes.domain.exception.*;
 import com.hermes.ithermes.domain.factory.KeywordFactory;
 import com.hermes.ithermes.domain.factory.UserFactory;
+import com.hermes.ithermes.domain.factory.UserKeywordRegistryFactory;
 import com.hermes.ithermes.domain.util.JobType;
 import com.hermes.ithermes.infrastructure.UserKeywordRegistryRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
@@ -39,126 +37,134 @@ class UserServiceTest {
     @Mock
     private UserKeywordRegistryRepository userKeywordRegistryRepository;
     @Mock
+    private UserKeywordRegistryFactory userKeywordRegistryFactory;
+    @Mock
     private UserFactory userFactory;
     @Mock
     private KeywordFactory keywordFactory;
 
     private UserCreateUserRequestDto userCreateUserRequestDto;
     private User user;
+    private UserKeywordRegistry userKeywordRegistry;
+    private Keyword keyword;
 
     @BeforeEach
     void setUp() {
-        userCreateUserRequestDto = new UserCreateUserRequestDto("test", "test1234",
-                "test1234", "김승기", JobType.BACKEND, "1", new String[]{"프론트", "백엔드", "인공지능", null, null});
         user = User.builder()
                 .loginId("test").nickname("김승기")
-                .password("test1234").job(JobType.BACKEND)
+                .password("test1234!").job(JobType.BACKEND)
                 .yearOfExperience(1)
                 .build();
-        List<UserKeywordRegistry> userKeywordRegistries = new ArrayList<>();
 
-        Arrays.stream(userCreateUserRequestDto.getKeywordList()).filter(v -> Objects.nonNull(v))
-                .forEach(v-> {
-                    Keyword keyword = keywordFactory.parseKeywordNameToKeyword(v);
-                    UserKeywordRegistry userKeywordRegistry = UserKeywordRegistry.builder()
-                            .keyword(keyword).user(user).build();
-                    userKeywordRegistries.add(userKeywordRegistry);
-        });
+        keyword = Keyword.builder().name("머신러닝").build();
+
+        userKeywordRegistry = UserKeywordRegistry.builder()
+                .user(user)
+                .keyword(keyword)
+                .build();
     }
 
     @Test
-    @DisplayName("회원가입_정상처리")
+    @DisplayName("회원가입 시 회원정보, 키워드가 테이블에 저장되어 회원가입 성공")
     void 회원가입_정상처리() {
+        userCreateUserRequestDto = new UserCreateUserRequestDto("test", "test1234!",
+                "test1234!", "김승기", JobType.BACKEND, "1", new String[]{"프론트", "백엔드", "인공지능", null, null});
+
+        when(userFactory.existsByLoginId(any())).thenReturn(false);
+        when(userFactory.parseLoginRequestDtoToUser(any())).thenReturn(user);
+        when(userKeywordRegistryFactory.parseUserAndKeyword(any(),any())).thenReturn(userKeywordRegistry);
+
         assertEquals(new CommonResponseDto().getMessage(), userService.joinUser(userCreateUserRequestDto).getMessage());
     }
 
     @Test
-    @DisplayName("회원가입_이미존재하는회원")
+    @DisplayName("회원가입 시 아이디가 유저테이블에 저장 된 데이터와 일치 할 시 SameIdException 던지며 회원가입 실패")
     void 회원가입_이미존재하는회원() {
         UserCreateUserRequestDto userCreateUserRequestDtoTest = new UserCreateUserRequestDto("test", "1q2w3e4r",
                 "1q2w3e4r", "김승기", JobType.BACKEND, "1"
                 , new String[]{"프론트", "백엔드", "인공지능", "빅데이터", "머신러닝"});
 
-        when(userFactory.findLoginId(userCreateUserRequestDto.getId())).thenReturn(Optional.of(user));
+        when(userFactory.existsByLoginId(any())).thenReturn(true);
 
-        assertThrows(SameUserException.class, ()->userService.joinUser(userCreateUserRequestDtoTest));
+        assertThrows(SameIdException.class, () -> userService.joinUser(userCreateUserRequestDtoTest));
+
     }
 
     @Test
-    @DisplayName("회원가입_비밀번호불일치")
+    @DisplayName("회원가입 시 입력한 비밀번호와 비밀번호확인 데이터가 다를 경우 UnMatchedPasswordException 던지며 회원가입 실패")
     void 회원가입_비밀번호불일치() {
         UserCreateUserRequestDto userCreateUserRequestDtoTest = new UserCreateUserRequestDto("test", "1q2w3e4r",
                 "1q2w3e4r!!", "김승기", JobType.BACKEND, "1"
                 , new String[]{"프론트", "백엔드", "인공지능", "빅데이터", "머신러닝"});
 
-        assertThrows(UnMatchedPasswordException.class, ()->userService.joinUser(userCreateUserRequestDtoTest));
+        assertThrows(UnMatchedPasswordException.class, () -> userService.joinUser(userCreateUserRequestDtoTest));
     }
 
     @Test
-    @DisplayName("로그인_정상처리")
+    @DisplayName("유저 테이블에 존재하지 하는 아이디 패스워드를 입력하는 경우 로그인 성공")
     void 로그인_정상처리() {
         //Given
         String id = "kimsk";
         String password = "kimsk1234";
-        UserLoginRequestDto userLoginRequestDto = new UserLoginRequestDto(id,password);
+        UserLoginRequestDto userLoginRequestDto = new UserLoginRequestDto(id, password);
 
         //When
-        when(userFactory.findLoginIdAndPassword(any(),any())).thenReturn(Optional.of(user));
+        when(userFactory.existsByLoginIdAndPassword(any(), any())).thenReturn(true);
 
         //Then
         assertEquals(new CommonResponseDto().getMessage(), userService.loginUser(userLoginRequestDto).getMessage());
     }
 
     @Test
-    @DisplayName("로그인_회원정보불일치")
+    @DisplayName("유저 테이블에 존재하지 않은 아이디 패스워드를 입력하는 경우 WrongIdOrPasswordException 던지며 로그인 실패")
     void 로그인_회원정보불일치() {
         //Given
         String id = "kimsk";
         String password = "kimsk1234";
-        UserLoginRequestDto userLoginRequestDto = new UserLoginRequestDto(id,password);
+        UserLoginRequestDto userLoginRequestDto = new UserLoginRequestDto(id, password);
 
         //When
-        when(userFactory.findLoginIdAndPassword(any(),any())).thenReturn(Optional.ofNullable(null));
+        when(userFactory.existsByLoginIdAndPassword(any(), any())).thenReturn(false);
 
         //Then
-        assertThrows(WrongIdOrPasswordException.class, ()->userService.loginUser(userLoginRequestDto));
+        assertThrows(WrongIdOrPasswordException.class, () -> userService.loginUser(userLoginRequestDto));
     }
 
     @Test
-    @DisplayName("닉네임수정_정상처리")
+    @DisplayName("유저테이블에 입력한 닉네임이 존재하지 않을 경우 닉네임 수정 성공")
     void 닉네임수정_정상처리() {
         //Given
-        String loginId="test";
-        String nickname = "aaaaa";
+        String loginId = "kimsk";
+        String nickname = "kimsk123";
+
         UserUpdateNicknameRequestDto userUpdateNicknameRequestDto = new UserUpdateNicknameRequestDto(loginId, nickname);
 
-        when(userFactory.findLoginId(userCreateUserRequestDto.getId())).thenReturn(Optional.of(user));
-
+        when(userFactory.existsByNickname(any())).thenReturn(false);
+        when(userFactory.findLoginId(any())).thenReturn(Optional.of(user));
         //Then
         assertEquals(new CommonResponseDto().getMessage(), userService.updateNickname(userUpdateNicknameRequestDto).getMessage());
     }
 
     @Test
-    @DisplayName("닉네임수정_닉네임중복")
+    @DisplayName("유저테이블에 입력한 닉네임이 존재할 경우 SameNicknameException 던지며 닉네임 수정 실패")
     void 닉네임수정_닉네임중복() {
         //Given
-        String loginId="test";
+        String loginId = "test";
         String nickname = "김승기";
 
         //When
         UserUpdateNicknameRequestDto userUpdateNicknameRequestDto = new UserUpdateNicknameRequestDto(loginId, nickname);
-        when(userFactory.findNickname(nickname)).thenReturn(Optional.of(user));
+        when(userFactory.existsByNickname(nickname)).thenReturn(true);
 
         //Then
-        assertThrows(SameNicknameException.class, ()->userService.updateNickname(userUpdateNicknameRequestDto));
+        assertThrows(SameNicknameException.class, () -> userService.updateNickname(userUpdateNicknameRequestDto));
     }
 
     @Test
-    @DisplayName("마이페이지_정상처리")
+    @DisplayName("유저 테이블에 존재하는 아이디를 입력했을 경우 유저 데이터 조회 성공")
     void 마이페이지_정상처리() {
         //Given
-        String loginId="test";
-        String nickname="김승기";
+        String loginId = "test";
         UserFindMyDataRequestDto userFindMyDataRequestDto = new UserFindMyDataRequestDto(loginId);
 
         //When
@@ -166,21 +172,21 @@ class UserServiceTest {
 
         //Then
         assertEquals(loginId, userService.findMyData(userFindMyDataRequestDto).getId());
-        assertEquals(nickname, userService.findMyData(userFindMyDataRequestDto).getNickname());
+        assertEquals("김승기", userService.findMyData(userFindMyDataRequestDto).getNickname());
 
     }
 
     @Test
-    @DisplayName("마이페이지_존재하지않는회원")
+    @DisplayName("유저 테이블에 존재하지 않는 아이디를 입력했을 경우 WrongIdOrPasswordException 던지며 유저 데이터 조회 실패")
     void 마이페이지_존재하지않는회원() {
         //Given
-        String loginId="dfjerioghjeruiojgheruih";
+        String loginId = "dfjerioghjeruiojgheruih";
         UserFindMyDataRequestDto userFindMyDataRequestDto = new UserFindMyDataRequestDto(loginId);
 
         //When
-        when(userFactory.findLoginId(loginId)).thenReturn(Optional.ofNullable(null));
+        when(userFactory.findLoginId(any())).thenReturn(Optional.ofNullable(null));
 
         //Then
-        assertThrows(WrongIdOrPasswordException.class, ()->userService.findMyData(userFindMyDataRequestDto));
+        assertThrows(WrongIdOrPasswordException.class, () -> userService.findMyData(userFindMyDataRequestDto));
     }
 }

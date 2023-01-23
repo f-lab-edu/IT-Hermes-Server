@@ -1,10 +1,8 @@
 package com.hermes.ithermes.domain.util;
 
 import com.hermes.ithermes.domain.entity.Subscribe;
-import com.hermes.ithermes.domain.entity.ContentsProvider;
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.exception.EnumTypeFormatException;
-import com.hermes.ithermes.domain.functional.ParseSubscribeFunctional;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -12,58 +10,16 @@ import java.util.List;
 
 @Getter
 public enum CategoryType {
-    JOB("JOB", Arrays.asList(ContentsProviderType.SARAMIN, ContentsProviderType.WANTED), (User user, ContentsProvider contentsProvider, ActiveType activeType,
-                                                                                          JobType jobType, String minYearOfExperience, String maxYearOfExperience) -> {
-        Subscribe subscribe = Subscribe.builder()
-                .user(user)
-                .contentsProvider(contentsProvider)
-                .isActive(activeType)
-                .job(parseStringToMaxYearOfExperience(jobType))
-                .minYearOfExperience(parseStringToMinYearOfExperience(minYearOfExperience))
-                .maxYearOfExperience(parseStringToMaxYearOfExperience(maxYearOfExperience))
-                .build();
-        return subscribe;
-    }), NEWS("NEWS", Arrays.asList(ContentsProviderType.CODING_WORLD, ContentsProviderType.NAVER, ContentsProviderType.YOZM), (User user, ContentsProvider contentsProvider, ActiveType activeType,
-                                                                                                                               JobType jobType, String minYearOfExperience, String maxYearOfExperience) -> {
-        Subscribe subscribe = Subscribe.builder()
-                .user(user)
-                .contentsProvider(contentsProvider)
-                .isActive(activeType)
-                .build();
-        return subscribe;
-
-    }),
-    YOUTUBE("YOUTUBE", Arrays.asList(ContentsProviderType.NOMAD_CODERS, ContentsProviderType.DREAM_CODING), (User user, ContentsProvider contentsProvider, ActiveType activeType,
-                                                                                                             JobType jobType, String minYearOfExperience, String maxYearOfExperience) -> {
-        Subscribe subscribe = Subscribe.builder()
-                .user(user)
-                .contentsProvider(contentsProvider)
-                .isActive(activeType)
-                .build();
-        return subscribe;
-    });
+    JOB("JOB", Arrays.asList(ContentsProviderType.SARAMIN, ContentsProviderType.WANTED)),
+    NEWS("NEWS", Arrays.asList(ContentsProviderType.CODING_WORLD, ContentsProviderType.NAVER, ContentsProviderType.YOZM)),
+    YOUTUBE("YOUTUBE", Arrays.asList(ContentsProviderType.NOMAD_CODERS, ContentsProviderType.DREAM_CODING));
 
     private String title;
     private List<ContentsProviderType> contentsProviderTypes;
-    // custom 함수형 인터페이스
-    private ParseSubscribeFunctional parseSubscribe;
 
-    CategoryType(String title, List<ContentsProviderType> contentsProviderTypes, ParseSubscribeFunctional parseSubscribe) {
+    CategoryType(String title, List<ContentsProviderType> contentsProviderTypes) {
         this.title = title;
         this.contentsProviderTypes = contentsProviderTypes;
-        this.parseSubscribe = parseSubscribe;
-    }
-
-    private static Integer parseStringToMinYearOfExperience(String yearOfExperience) {
-        return yearOfExperience == null ? 0 : Integer.valueOf(yearOfExperience);
-    }
-
-    private static Integer parseStringToMaxYearOfExperience(String yearOfExperience) {
-        return yearOfExperience == null ? 30 : Integer.valueOf(yearOfExperience);
-    }
-
-    private static JobType parseStringToMaxYearOfExperience(JobType jobType) {
-        return jobType == null ? JobType.ENTIRE : jobType;
     }
 
     public static CategoryType findByContentsProviderType(ContentsProviderType contentsProviderType) {
@@ -78,4 +34,12 @@ public enum CategoryType {
                 .anyMatch(contentsProviderTypeList -> contentsProviderTypeList.equals(contentsProviderType));
     }
 
+    public static Subscribe parseSubscribe(User user, CategoryType categoryType, ContentsProviderType contentsProviderType, ActiveType activeType) {
+        return Subscribe.builder()
+                .user(user)
+                .category(categoryType)
+                .contentsProvider(contentsProviderType)
+                .isActive(activeType)
+                .build();
+    }
 }

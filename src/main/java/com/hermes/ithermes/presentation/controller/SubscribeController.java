@@ -2,8 +2,8 @@ package com.hermes.ithermes.presentation.controller;
 
 import com.hermes.ithermes.application.SubscribeService;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
+import com.hermes.ithermes.presentation.dto.subscribe.SubscribeContentsDto;
 import com.hermes.ithermes.presentation.dto.subscribe.SubscribeFindSubscribeRequestDto;
-import com.hermes.ithermes.presentation.dto.subscribe.SubscribeFindSubscribeResponseDto;
 import com.hermes.ithermes.presentation.dto.subscribe.SubscribePutSubscribeRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/subscribe")
@@ -32,9 +33,9 @@ public class SubscribeController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ResponseEntity<SubscribeFindSubscribeResponseDto> findSubscribe(@Valid @RequestBody SubscribeFindSubscribeRequestDto subscribeFindSubscribeRequestDto) {
+    public ResponseEntity<List<SubscribeContentsDto>> findSubscribe(@Valid @RequestBody SubscribeFindSubscribeRequestDto subscribeFindSubscribeRequestDto) {
 
-        SubscribeFindSubscribeResponseDto subscribeFindSubscribeResponseDto = subscribeService.findSubscribe(subscribeFindSubscribeRequestDto);
-        return ResponseEntity.ok(subscribeFindSubscribeResponseDto);
+        List<SubscribeContentsDto> subscribe = subscribeService.findSubscribe(subscribeFindSubscribeRequestDto);
+        return ResponseEntity.ok(subscribe);
     }
 }

@@ -16,4 +16,6 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
 
     @Query("select s.contentsProvider from Subscribe s where s.isActive = :activeType and s.user.id = :userId")
     List<ContentsProvider> findContentsProvider(@Param("active")ActiveType activeType, @Param("userId") Long userId);
+    boolean existsByUserId(@Param("userId") Long userId);
+
 }

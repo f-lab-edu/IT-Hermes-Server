@@ -22,7 +22,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserService{
+public class UserService {
 
     private final UserKeywordRegistryRepository userKeywordRegistryRepository;
     private final UserFactory userFactory;
@@ -32,14 +32,13 @@ public class UserService{
     @Transactional
     public CommonResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
         String loginId = userLoginRequestDto.getId();
+        String password = userLoginRequestDto.getPassword();
 
-        Optional.ofNullable(userLoginRequestDto.getPassword().equals(userLoginRequestDto.getPasswordConfirm()))
+        Optional.ofNullable(password.equals(userLoginRequestDto.getPasswordConfirm()))
                 .filter(v -> v)
                 .orElseThrow(() -> new UnMatchedPasswordException());
 
-        userFactory.findLoginId(loginId).ifPresent(a -> {
-            throw new SameUserException();
-        });
+        if (userFactory.existsByLoginId(loginId)) throw new SameIdException();
 
         User user = userFactory.parseLoginRequestDtoToUser(userLoginRequestDto);
 
@@ -55,30 +54,28 @@ public class UserService{
     }
 
     public CommonResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) {
-        userFactory.findLoginIdAndPassword(userLoginRequestDto.getId(), userLoginRequestDto.getPassword()).orElseThrow(() -> new WrongIdOrPasswordException());
+        String loginId = userLoginRequestDto.getId();
+        String password = userLoginRequestDto.getPassword();
+        if (!userFactory.existsByLoginIdAndPassword(loginId, password)) throw new WrongIdOrPasswordException();
         return new CommonResponseDto();
     }
 
     public CommonResponseDto checkDuplicateNickname(UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {
-        userFactory.findNickname(userDuplicateNicknameRequestDto.getNickname()).ifPresent(a -> {
-            throw new SameNicknameException();
-        });
+        String nickname = userDuplicateNicknameRequestDto.getNickname();
+        if (userRepository.existsByNickname(nickname)) throw new SameNicknameException();
         return new CommonResponseDto();
     }
 
     public CommonResponseDto checkDuplicateId(UserDuplicateIdRequestDto userDuplicateIdRequestDto) {
-        userFactory.findLoginId(userDuplicateIdRequestDto.getId()).ifPresent(a -> {
-            throw new SameIdException();
-        });
+        String loginId = userDuplicateIdRequestDto.getId();
+        if (userFactory.existsByLoginId(loginId)) throw new SameIdException();
         return new CommonResponseDto();
     }
 
     @Transactional
     public CommonResponseDto updateNickname(UserUpdateNicknameRequestDto userUpdateNicknameRequestDto) {
         String newNickname = userUpdateNicknameRequestDto.getNickname();
-        userFactory.findNickname(newNickname).ifPresent(a -> {
-            throw new SameNicknameException();
-        });
+        if (userFactory.existsByNickname(newNickname)) throw new SameNicknameException();
 
         User user = userFactory.findLoginId(userUpdateNicknameRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         user.changeNickname(newNickname);

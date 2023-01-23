@@ -37,8 +37,8 @@ public class ContentsDto implements ContentsDtoInterface {
         this.title = youtubeAndNews.getTitle();
         this.image = youtubeAndNews.getImage();
         this.url = youtubeAndNews.getUrl();
-        this.category = youtubeAndNews.getContentsProvider().getCategory().getTitle();
-        this.contentProvider = youtubeAndNews.getContentsProvider().getName();
+        //this.category = youtubeAndNews.getContentsProvider().getCategory().getTitle();
+        //this.contentProvider = youtubeAndNews.getContentsProvider().getName();
         this.contentsDate = youtubeAndNews.getContentsStartAt();
         this.description = youtubeAndNews.getDescription();
     }
@@ -47,8 +47,8 @@ public class ContentsDto implements ContentsDtoInterface {
         this.title = job.getTitle();
         this.image = null;
         this.url = job.getUrl();
-        this.category = job.getContentsProvider().getCategory().getTitle();
-        this.contentProvider = job.getContentsProvider().getName();
+        //this.category = job.getContentsProvider().getCategory().getTitle();
+        //this.contentProvider = job.getContentsProvider().getName();
         this.contentsDate = job.getContentsEndAt();
         this.description = job.getCompany();
     }
