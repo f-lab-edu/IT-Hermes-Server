@@ -32,7 +32,6 @@ public class YoutubeAndNewsAlarmDto {
                 .image(youtubeAndNews.getImage())
                 .url(youtubeAndNews.getUrl())
                 .contentsStartAt(youtubeAndNews.getContentsStartAt())
-                .contentsProviderType(youtubeAndNews.getContentsProvider().getName())
                 .build();
     }
 

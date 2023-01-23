@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Entity
 @Getter
 @Builder
 @RequiredArgsConstructor
@@ -25,4 +24,5 @@ public class ContentsProvider extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ContentsProviderType name;
+
 }

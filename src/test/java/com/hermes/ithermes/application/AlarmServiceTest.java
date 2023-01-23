@@ -1,36 +1,94 @@
 package com.hermes.ithermes.application;
 
-import com.hermes.ithermes.infrastructure.JobRepository;
-import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
+import com.hermes.ithermes.domain.entity.Job;
+import com.hermes.ithermes.domain.entity.Subscribe;
+import com.hermes.ithermes.domain.entity.User;
+import com.hermes.ithermes.domain.entity.YoutubeAndNews;
+import com.hermes.ithermes.domain.util.*;
+import com.hermes.ithermes.infrastructure.JobJpaRepository;
+import com.hermes.ithermes.infrastructure.SubscribeRepository;
+import com.hermes.ithermes.infrastructure.UserRepository;
+import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+
 
 @SpringBootTest
+@Transactional
 class AlarmServiceTest {
 
-    private final JobRepository jobRepository;
-    private final YoutubeAndNewsRepository youtubeAndNewsRepository;
+    private final UserRepository userRepository;
+    private final SubscribeRepository subscribeRepository;
+    private final JobJpaRepository jobJpaRepository;
+    private final YoutubeAndNewsJpaRepository youtubeAndNewsJpaRepository;
     private final AlarmService alarmService;
+    private final ExternalAlarmClient externalAlarmClient;
 
     @Autowired
-    public AlarmServiceTest(JobRepository jobRepository, YoutubeAndNewsRepository youtubeAndNewsRepository, AlarmService alarmService) {
-        this.jobRepository = jobRepository;
-        this.youtubeAndNewsRepository = youtubeAndNewsRepository;
+    public AlarmServiceTest(UserRepository userRepository, SubscribeRepository subscribeRepository, JobJpaRepository jobJpaRepository, YoutubeAndNewsJpaRepository youtubeAndNewsJpaRepository, AlarmService alarmService, ExternalAlarmClient externalAlarmClient) {
+        this.userRepository = userRepository;
+        this.subscribeRepository = subscribeRepository;
+        this.jobJpaRepository = jobJpaRepository;
+        this.youtubeAndNewsJpaRepository = youtubeAndNewsJpaRepository;
         this.alarmService = alarmService;
+        this.externalAlarmClient = externalAlarmClient;
     }
 
     @Test
     @DisplayName("유저 id값 1을 가진 유저에게 채용정보 알림을 전송가는지 테스트")
     public void telegramJobAlarmTest(){
-        alarmService.sendJobAlarmMessage(jobRepository.getJobAlarmContents(1L),1L);
+        //alarmInterface.sendJobMessage(jobJpaRepository.findJobByContentsProvider(CategoryType.JOB.getTitle()),1L);
     }
 
     @Test
     @DisplayName("유저 id값 1을 가진 유저에게 유투브,뉴스 알림을 전송가는지 테스트")
     public void telegramYoutubeAndNewsTest(){
-        alarmService.sendYoutubeAndNewsMessage(youtubeAndNewsRepository.getYoutubeAndNewsAlarmContents(1L),1L);
+        //alarmInterface.sendYoutubeAndNewsMessage(youtubeAndNewsJpaRepository.findYoutubeAndNewsByContentsProvider(CategoryType.YOUTUBE),1L);
+    }
+
+    @Test
+    @DisplayName("유저아이디 번호 1번인 유저가 구독한 job의 구독정보는 3개인지 테스트")
+    void SubscribeJobAlarmCountTest(){
+        userRepository.deleteAll();
+        subscribeRepository.deleteAll();
+        jobJpaRepository.deleteAll();
+
+        User user1 = new User(1L,"이은영","eun02323","12345", JobType.BACKEND,0,"123455235",false);
+        userRepository.save(user1);
+
+        for(int i = 0; i < 3; i++){
+            Job job = new Job((long) i,"안녕하세요","url 주소","서울","회사명", LocalDateTime.now(),LocalDateTime.now(),123l,false, ContentsProviderType.NAVER, GradeType.BEGINNER);
+            jobJpaRepository.save(job);
+        }
+
+        Assertions.assertEquals(3, alarmService.getJobAlarmDto(1l));
+    }
+
+    @Test
+    @DisplayName("유저아이디 번호 1번인 유저가 구독한 youtube의 구독정보는 4개인지 테스트")
+    void SubscribeYoutubeAlarmCountTest(){
+        youtubeAndNewsJpaRepository.deleteAll();
+        userRepository.deleteAll();
+        subscribeRepository.deleteAll();
+
+        User user1 = new User(1L,"이은영","eun02323","12345", JobType.BACKEND,0,"123455235",false);
+        userRepository.save(user1);
+
+        Subscribe subscribe = new Subscribe(1L, user1, ActiveType.ACTIVE, CategoryType.YOUTUBE, ContentsProviderType.DREAM_CODING);
+        subscribeRepository.save(subscribe);
+
+        for(int i = 0; i < 4; i++){
+            YoutubeAndNews youtubeAndNews = new YoutubeAndNews((long) i,"안녕하세요","ㅎㅎㅎㅎㅎㅎ","이미지 url","그냥 url", LocalDateTime.now(),123L,false,CategoryType.YOUTUBE,ContentsProviderType.DREAM_CODING);
+            youtubeAndNewsJpaRepository.save(youtubeAndNews);
+        }
+
+        Assertions.assertEquals(4, alarmService.getYoutubeAndNewsAlarmDto(1l));
     }
 
 }

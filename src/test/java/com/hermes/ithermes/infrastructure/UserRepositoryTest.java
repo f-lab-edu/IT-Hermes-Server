@@ -18,8 +18,8 @@ class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Test
-    @DisplayName("telegramId값이 null이 아닌 유저가 DB상에 1명인지 테스트")
-    void findUserTelegramIdIsNotNUll(){
+    @DisplayName("telegramId값이 null이 아닌 유저가 1명인지 테스트")
+    void notExistsTelegramIdUserTest(){
         userRepository.deleteAll();
 
         User user1 = new User(1l,"회원1","login1","1234", JobType.BACKEND,1,"telegram아이디",false);
@@ -28,7 +28,7 @@ class UserRepositoryTest {
         userRepository.save(user1);
         userRepository.save(user2);
 
-        assertEquals(1,userRepository.findByTelegramIdIsNotNull().size());
+        assertEquals(1, userRepository.findByTelegramIdIsNotNull().size());
     }
 
 }

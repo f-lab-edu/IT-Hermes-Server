@@ -32,7 +32,6 @@ public class JobAlarmDto {
                 .company(job.getCompany())
                 .url(job.getUrl())
                 .contentsEndAt(job.getContentsEndAt())
-                .contentsProviderType(job.getContentsProvider().getName())
                 .build();
     }
 
