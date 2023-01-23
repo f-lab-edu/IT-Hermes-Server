@@ -2,12 +2,14 @@ package com.hermes.ithermes.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@AllArgsConstructor
 public class Job extends BaseEntity implements ContentsEntityInterface{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

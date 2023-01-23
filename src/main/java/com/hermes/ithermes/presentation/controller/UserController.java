@@ -65,8 +65,4 @@ public class UserController {
         return ResponseEntity.ok(userFindMyDataResponseDto);
     }
 
-    @RequestMapping(value = "/telegramChatId",method = RequestMethod.PUT)
-    public ResponseEntity<CommonResponseDto> updateUserChatId(){
-        return ResponseEntity.ok(userService.updateUserChatId());
-    }
 }
