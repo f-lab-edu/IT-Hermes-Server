@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
     Optional<List<Subscribe>> findByUserId(@Param("userId") Long userId);
-    Optional<Subscribe> findByContentsProviderId(@Param("contentsProviderId") Long contentsProviderId);
+    boolean existsByUserId(@Param("userId") Long userId);
 }

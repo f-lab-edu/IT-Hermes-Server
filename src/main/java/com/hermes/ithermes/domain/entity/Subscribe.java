@@ -1,7 +1,8 @@
 package com.hermes.ithermes.domain.entity;
 
 import com.hermes.ithermes.domain.util.ActiveType;
-import com.hermes.ithermes.domain.util.JobType;
+import com.hermes.ithermes.domain.util.CategoryType;
+import com.hermes.ithermes.domain.util.ContentsProviderType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,30 +27,24 @@ public class Subscribe extends BaseEntity {
     @JoinColumn(name = "userId")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "contentsProviderId")
-    private ContentsProvider contentsProvider;
-
-    private Integer minYearOfExperience;
-
-    private Integer maxYearOfExperience;
-
-    @Enumerated(EnumType.STRING)
-    private JobType job;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ActiveType isActive;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CategoryType category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ContentsProviderType contentsProvider;
 
     public void setUser(User user) {
         this.user = user;
     }
 
-    public void setContentsProvider(ContentsProvider contentsProvider) {
-        this.contentsProvider = contentsProvider;
-    }
-
-    public void changeUpdateAt() {
+    public void changeUpdateAt(Subscribe subscribe) {
+        this.isActive=subscribe.getIsActive();
         changeUpdateAt();
     }
 }

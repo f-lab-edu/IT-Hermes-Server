@@ -4,8 +4,8 @@ import com.hermes.ithermes.domain.entity.Subscribe;
 import com.hermes.ithermes.domain.factory.SubscribeFactory;
 import com.hermes.ithermes.infrastructure.SubscribeRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
+import com.hermes.ithermes.presentation.dto.subscribe.SubscribeContentsDto;
 import com.hermes.ithermes.presentation.dto.subscribe.SubscribeFindSubscribeRequestDto;
-import com.hermes.ithermes.presentation.dto.subscribe.SubscribeFindSubscribeResponseDto;
 import com.hermes.ithermes.presentation.dto.subscribe.SubscribePutSubscribeRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,15 +27,10 @@ public class SubscribeService {
         return new CommonResponseDto();
     }
 
-    public SubscribeFindSubscribeResponseDto findSubscribe(SubscribeFindSubscribeRequestDto subscribeFindSubScribeRequestDto) {
+    public List<SubscribeContentsDto> findSubscribe(SubscribeFindSubscribeRequestDto subscribeFindSubScribeRequestDto) {
         List<Subscribe> subscribes = subscribeFactory.parseFindSubscribeDtoToSubscribes(subscribeFindSubScribeRequestDto);
-        List<String> contentsProviderTypes = subscribeFactory.findActiveContentsProviderType(subscribes);
-        Subscribe jobCategoryData = subscribeFactory.findJobCategoryData(subscribes);
+        List<SubscribeContentsDto> contentsProviderTypes = subscribeFactory.findActiveContentsProviderType(subscribes);
 
-        String job = String.valueOf(jobCategoryData.getJob().getTitle());
-        String startDateOfExperience = String.valueOf(jobCategoryData.getMinYearOfExperience());
-        String endDateOfExperience = String.valueOf(jobCategoryData.getMaxYearOfExperience());
-
-        return new SubscribeFindSubscribeResponseDto(contentsProviderTypes, job, startDateOfExperience, endDateOfExperience);
+        return contentsProviderTypes;
     }
 }

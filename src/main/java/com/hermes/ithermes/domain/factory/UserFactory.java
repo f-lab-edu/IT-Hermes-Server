@@ -31,11 +31,15 @@ public class UserFactory {
         return userRepository.findByLoginId(userId);
     }
 
-    public Optional<User> findNickname(String nickname) {
-        return userRepository.findByNickname(nickname);
+    public boolean existsByLoginId(String userId) {
+        return userRepository.existsByLoginId(userId);
     }
 
-    public Optional<User> findLoginIdAndPassword(String id, String password) {
-        return userRepository.findByLoginIdAndPasswordAndIsDelete(id, password, false);
+    public boolean existsByNickname(String nickname) {
+        return userRepository.existsByNickname(nickname);
+    }
+
+    public boolean existsByLoginIdAndPassword(String id, String password) {
+        return userRepository.existsByLoginIdAndPassword(id, password);
     }
 }

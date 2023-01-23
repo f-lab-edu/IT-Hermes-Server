@@ -6,12 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Where(clause = "isDelete = false")
 public class User extends BaseEntity {
 
     @Id
@@ -40,7 +42,7 @@ public class User extends BaseEntity {
     private Boolean isDelete;
 
     public void changeNickname(String nickname) {
-        this.nickname=nickname;
+        this.nickname = nickname;
     }
 
     public void isDelete() {

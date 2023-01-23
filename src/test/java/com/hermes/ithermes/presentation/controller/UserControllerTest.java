@@ -41,13 +41,13 @@ class UserControllerTest {
     @Test
     @DisplayName("회원가입_정상처리")
     void 회원가입_정상처리() throws Exception {
-        userCreateUserRequestDto = new UserCreateUserRequestDto("test", "test1234",
-                "test1234", "김승기", JobType.BACKEND, "1", new String[]{"프론트", "백엔드", "인공지능", null, null});
+        userCreateUserRequestDto = new UserCreateUserRequestDto("test", "test1234!",
+                "test1234!", "김승기", JobType.BACKEND, "1", new String[]{"프론트", "백엔드", "인공지능", null, null});
 
         mockMvc.perform(post("/user/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userCreateUserRequestDto)))
-                        .andExpect(status().isOk()); // 추후 201로 수정필요!
+                        .andExpect(status().isCreated());
     }
 
     @Test
