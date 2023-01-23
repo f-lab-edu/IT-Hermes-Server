@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class YoutubeAndNewsCreateRequestDto {
+public class YoutubeAndNewsCrawlingDto {
     private String title;
     private String url;
     private String description;

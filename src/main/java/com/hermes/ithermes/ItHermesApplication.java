@@ -9,5 +9,4 @@ public class ItHermesApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ItHermesApplication.class, args);
 	}
-
 }

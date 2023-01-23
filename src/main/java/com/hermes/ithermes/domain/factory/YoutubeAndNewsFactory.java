@@ -1,36 +1,39 @@
 package com.hermes.ithermes.domain.factory;
 
-import com.hermes.ithermes.domain.entity.ContentsProvider;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
+import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
-import com.hermes.ithermes.infrastructure.ContentsProviderRepository;
-import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsCreateRequestDto;
-import lombok.Builder;
+import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
+import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsCrawlingDto;
+import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsInsertDto;
+import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsLastUrlRequestDto;
+import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsLastUrlResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-@Builder
 @Component
 @RequiredArgsConstructor
 public class YoutubeAndNewsFactory {
-    private final ContentsProviderRepository contentsProviderRepository;
+    private final YoutubeAndNewsJpaRepository youtubeAndNewsJpaRepository;
 
-    public List<YoutubeAndNews> parseLoginRequestDtoToUser(List<YoutubeAndNewsCreateRequestDto> youtubeAndNewsCreateRequestDtoList) {
+    public List<YoutubeAndNews> insertYoutubeAndNews(YoutubeAndNewsInsertDto youtubeAndNewsCrawlingDtoList) {
         List<YoutubeAndNews> youtubeAndNewsList = new ArrayList<>();
-        Optional<ContentsProvider> contentsProvider = contentsProviderRepository.findByName(ContentsProviderType.YOZM); // 인자로 요즘 IT 데이터도 전달 필요!
-        ContentsProvider provider = contentsProvider.get();
-        youtubeAndNewsCreateRequestDtoList.stream().forEach(v-> {
+        ArrayList<YoutubeAndNewsCrawlingDto> crawlingList = youtubeAndNewsCrawlingDtoList.getYoutubeAndNewsCrawlingDtoList();
+        CategoryType category = youtubeAndNewsCrawlingDtoList.getCategory();
+        ContentsProviderType contentsProvider = youtubeAndNewsCrawlingDtoList.getContentsProvider();
+        crawlingList.stream().forEach(v-> {
             String title = v.getTitle();
             String description = v.getDescription();
             String thumbnail = v.getThumbnail();
             String url = v.getUrl();
-            LocalDateTime date = LocalDateTime.of(2022, Month.of(1),21,13,45,20);
+            String[] dateArray = v.getDate().split("-");
+            LocalDateTime date = LocalDateTime.of(Integer.parseInt(dateArray[0]), Integer.parseInt(dateArray[1]),Integer.parseInt(dateArray[2])
+                    ,Integer.parseInt(dateArray[3]),Integer.parseInt(dateArray[4]),Integer.parseInt(dateArray[5]));
+
             YoutubeAndNews youtubeAndNews = YoutubeAndNews.builder()
                     .description(description)
                     .title(title)
@@ -39,9 +42,19 @@ public class YoutubeAndNewsFactory {
                     .contentsStartAt(date)
                     .isDelete(false)
                     .viewCount(0L)
+                    .category(category)
+                    .contentsProvider(contentsProvider)
                     .build();
             youtubeAndNewsList.add(youtubeAndNews);
         });
         return youtubeAndNewsList;
+    }
+
+    public YoutubeAndNewsLastUrlResponseDto findYoutubeAndNewsLastUrl(YoutubeAndNewsLastUrlRequestDto youtubeAndNewsLastUrlRequestDto) {
+        List<YoutubeAndNews> lastYoutubeAndNews = youtubeAndNewsJpaRepository.findFirst1ByContentsProviderOrderByUrlDesc(youtubeAndNewsLastUrlRequestDto.getContentsProvider());
+        if(!lastYoutubeAndNews.isEmpty()) {
+            return YoutubeAndNewsLastUrlResponseDto.builder().lastUrl(lastYoutubeAndNews.get(0).getUrl()).contentsProvider(youtubeAndNewsLastUrlRequestDto.getContentsProvider()).build();
+        }
+        return YoutubeAndNewsLastUrlResponseDto.builder().contentsProvider(youtubeAndNewsLastUrlRequestDto.getContentsProvider()).build();
     }
 }
