@@ -1,6 +1,5 @@
 package com.hermes.ithermes.application;
 
-import com.hermes.ithermes.domain.entity.ContentsProvider;
 import com.hermes.ithermes.domain.entity.Subscribe;
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
@@ -11,10 +10,9 @@ import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.domain.util.JobType;
 import com.hermes.ithermes.infrastructure.SubscribeRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
+import com.hermes.ithermes.presentation.dto.subscribe.SubscribeContentsDto;
 import com.hermes.ithermes.presentation.dto.subscribe.SubscribeFindSubscribeRequestDto;
-import com.hermes.ithermes.presentation.dto.subscribe.SubscribeFindSubscribeResponseDto;
 import com.hermes.ithermes.presentation.dto.subscribe.SubscribePutSubscribeRequestDto;
-import com.hermes.ithermes.presentation.dto.user.UserCreateUserRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,9 +21,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -41,10 +38,9 @@ class SubscribeServiceTest {
     @Mock
     private SubscribeFactory subscribeFactory;
 
-    private UserCreateUserRequestDto userCreateUserRequestDto;
     private Subscribe subscribe;
     private User user;
-    private ContentsProvider contentsProvider;
+    ArrayList<SubscribeContentsDto> subscribeContentsList;
 
     @BeforeEach
     void setUp() {
@@ -53,40 +49,36 @@ class SubscribeServiceTest {
                 .password("test1234").job(JobType.BACKEND)
                 .yearOfExperience(1)
                 .build();
-        contentsProvider = ContentsProvider.builder()
-                .category(CategoryType.JOB)
-                .name(ContentsProviderType.SARAMIN)
-                .build();
 
         subscribe = Subscribe.builder()
                 .user(user)
-                .contentsProvider(contentsProvider)
-                .minYearOfExperience(3)
-                .maxYearOfExperience(5)
-                .job(JobType.BACKEND)
+                .category(CategoryType.JOB)
+                .contentsProvider(ContentsProviderType.SARAMIN)
                 .isActive(ActiveType.ACTIVE)
                 .build();
+
+        subscribeContentsList = new ArrayList<>();
+        subscribeContentsList.add(new SubscribeContentsDto("SARAMIN","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("WANTED","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("CODING_WORLD","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("NAVER","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("YOZM","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("NOMAD_CODERS","NON_ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("DREAM_CODING","ACTIVE"));
+
     }
 
     @Test
     @DisplayName("구독 데이터를 입력 시, 구독 테이블에 요청 된 정보 등록 혹은 수정 성공")
     void 구독_PUT_정상처리() {
-        SubscribePutSubscribeRequestDto subscribePutSubscribeRequestDto = new SubscribePutSubscribeRequestDto("test",
-                new String[]{"ACTIVE", "ACTIVE", "NOT_ACTIVE", "NOT_ACTIVE", "NOT_ACTIVE", "NOT_ACTIVE", "NOT_ACTIVE"},
-                JobType.BACKEND,
-                "3",
-                "5");
-
-
+        SubscribePutSubscribeRequestDto subscribePutSubscribeRequestDto = new SubscribePutSubscribeRequestDto("test", subscribeContentsList);
         assertEquals(new CommonResponseDto().getMessage(), subscribeService.putSubscribe(subscribePutSubscribeRequestDto).getMessage());
     }
 
     @Test
     @DisplayName("구독 데이터 중 로그인 아이디를 잘못 입력할 시, WrongIdOrPasswordException 던지며 구독 정보 등록 혹은 수정 실패")
     void 구독_PUT_실패처리() {
-        SubscribePutSubscribeRequestDto subscribePutSubscribeRequestDto = new SubscribePutSubscribeRequestDto("test",
-                new String[]{"ACTIVE", "ACTIVE", "NOT_ACTIVE", "NOT_ACTIVE", "NOT_ACTIVE", "NOT_ACTIVE", "NOT_ACTIVE"},
-                JobType.BACKEND, "3", "5");
+        SubscribePutSubscribeRequestDto subscribePutSubscribeRequestDto = new SubscribePutSubscribeRequestDto("test", subscribeContentsList);
 
         when(subscribeFactory.parsePutSubscribeDtoToSubscribes(any())).thenThrow(new WrongIdOrPasswordException());
 
@@ -97,30 +89,25 @@ class SubscribeServiceTest {
     @DisplayName("유저의 아이디를 요청할 시, 유저 정보와 일치하는 구독 테이블 정보가 있다면 조회 성공")
     void 구독조회_존재하는_구독데이터_조회() {
         SubscribeFindSubscribeRequestDto subscribeFindSubscribeRequestDto = new SubscribeFindSubscribeRequestDto("test");
-        when(subscribeFactory.findJobCategoryData(any())).thenReturn(Optional.ofNullable(subscribe));
-        List<String> list = Arrays.asList("ACTIVE", "ACTIVE", "NOT_ACTIVE", "NOT_ACTIVE", "NOT_ACTIVE", "NOT_ACTIVE", "NOT_ACTIVE");
-        when(subscribeFactory.findActiveContentsProviderType(any()))
-                .thenReturn(list);
+        List<Subscribe> list = new ArrayList<>();
+        list.add(subscribe);
+        when(subscribeFactory.parseFindSubscribeDtoToSubscribes(any())).thenReturn(list);
 
-        SubscribeFindSubscribeResponseDto subscribe = subscribeService.findSubscribe(subscribeFindSubscribeRequestDto);
-        assertEquals(JobType.BACKEND.name(), subscribe.getJob());
-        assertEquals("3", subscribe.getMinYearOfExperience());
-        assertEquals("5", subscribe.getMaxYearOfExperience());
-        for (int i = 0; i < list.size(); i++) {
-            assertEquals(list.get(i), subscribe.getKeywordList().get(i));
+        List<SubscribeContentsDto> responseSubscribe = subscribeService.findSubscribe(subscribeFindSubscribeRequestDto);
+        for (int i = 0; i < responseSubscribe.size(); i++) {
+            assertEquals(subscribeContentsList.get(i).getIsActive(), responseSubscribe.get(i).getIsActive());
         }
     }
 
     @Test
-    @DisplayName("유저의 아이디를 요청할 시, 유저 정보와 일치하는 구독 테이블 정보가 있다면 null과 비활성화 데이터를 보내며 조회 성공")
+    @DisplayName("유저의 아이디를 요청할 시, 유저 정보와 일치하는 구독 테이블 정보가 있다면 비활성화 데이터를 보내며 조회 성공")
     void 구독조회_존재하지않는_구독데이터_조회() {
         SubscribeFindSubscribeRequestDto subscribeFindSubscribeRequestDto = new SubscribeFindSubscribeRequestDto("test");
-        when(subscribeFactory.findActiveContentsProviderType(any())).thenReturn(null);
+        List<Subscribe> list = new ArrayList<>();
+        when(subscribeFactory.parseFindSubscribeDtoToSubscribes(any())).thenReturn(list);
 
-        SubscribeFindSubscribeResponseDto subscribe = subscribeService.findSubscribe(subscribeFindSubscribeRequestDto);
-        assertEquals("null", subscribe.getJob());
-        assertEquals("null", subscribe.getMinYearOfExperience());
-        assertEquals("null", subscribe.getMaxYearOfExperience());
+        List<SubscribeContentsDto> responseSubscribe = subscribeService.findSubscribe(subscribeFindSubscribeRequestDto);
+        assertEquals(list.size(), responseSubscribe.size());
     }
 
     @Test

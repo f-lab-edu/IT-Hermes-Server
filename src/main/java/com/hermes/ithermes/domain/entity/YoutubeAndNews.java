@@ -1,6 +1,8 @@
 package com.hermes.ithermes.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hermes.ithermes.domain.util.CategoryType;
+import com.hermes.ithermes.domain.util.ContentsProviderType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,10 +20,6 @@ public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterfac
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contentsProviderId")
-    ContentsProvider contentsProvider;
 
     @Column(nullable = false)
     private String title;
@@ -46,9 +44,14 @@ public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterfac
     @Column(nullable = false)
     private Boolean isDelete;
 
-    public void setContentsProvider(ContentsProvider contentsProvider) {
-        this.contentsProvider = contentsProvider;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CategoryType category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ContentsProviderType contentsProvider;
+
     public void initDefaultData() {
         viewCount=0L;
     }

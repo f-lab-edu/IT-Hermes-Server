@@ -3,7 +3,7 @@ package com.hermes.ithermes.presentation.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hermes.ithermes.application.SubscribeService;
 import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
-import com.hermes.ithermes.domain.util.JobType;
+import com.hermes.ithermes.presentation.dto.subscribe.SubscribeContentsDto;
 import com.hermes.ithermes.presentation.dto.subscribe.SubscribeFindSubscribeRequestDto;
 import com.hermes.ithermes.presentation.dto.subscribe.SubscribePutSubscribeRequestDto;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +13,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -35,11 +37,16 @@ class SubscribeControllerTest {
     @Test
     @DisplayName("구독_PUT_정상처리")
     void 구독_PUT_정상처리() throws Exception {
-        SubscribePutSubscribeRequestDto subscribePutSubscribeRequestDto = new SubscribePutSubscribeRequestDto("test",
-                        new String[]{"ACTIVE","ACTIVE","NOT_ACTIVE","NOT_ACTIVE","NOT_ACTIVE","NOT_ACTIVE","NOT_ACTIVE"},
-                        JobType.BACKEND,
-                        "3",
-                        "5");
+        ArrayList<SubscribeContentsDto> subscribeContentsList = new ArrayList<>();
+        subscribeContentsList.add(new SubscribeContentsDto("SARAMIN","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("WANTED","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("CODING_WORLD","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("NAVER","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("YOZM","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("NOMAD_CODERS","NON_ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("DREAM_CODING","ACTIVE"));
+
+        SubscribePutSubscribeRequestDto subscribePutSubscribeRequestDto = new SubscribePutSubscribeRequestDto("test",subscribeContentsList);
 
         mockMvc.perform(put("/subscribe/")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -50,11 +57,16 @@ class SubscribeControllerTest {
     @Test
     @DisplayName("구독_PUT_실패처리")
     void 구독_PUT_실패처리() throws Exception {
-        SubscribePutSubscribeRequestDto subscribePutSubscribeRequestDto = new SubscribePutSubscribeRequestDto("test",
-                new String[]{"ACTIVE","ACTIVE","NOT_ACTIVE","NOT_ACTIVE","NOT_ACTIVE","NOT_ACTIVE","NOT_ACTIVE"},
-                JobType.BACKEND,
-                "3",
-                "5");
+        ArrayList<SubscribeContentsDto> subscribeContentsList = new ArrayList<>();
+        subscribeContentsList.add(new SubscribeContentsDto("SARAMIN","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("WANTED","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("CODING_WORLD","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("NAVER","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("YOZM","ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("NOMAD_CODERS","NON_ACTIVE"));
+        subscribeContentsList.add(new SubscribeContentsDto("DREAM_CODING","ACTIVE"));
+
+        SubscribePutSubscribeRequestDto subscribePutSubscribeRequestDto = new SubscribePutSubscribeRequestDto("test",subscribeContentsList);
 
         when(subscribeService.putSubscribe(any())).thenThrow(new WrongIdOrPasswordException());
 
