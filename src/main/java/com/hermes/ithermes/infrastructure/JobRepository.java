@@ -38,20 +38,5 @@ public class JobRepository {
             return jobs;
         };
 
-        public List<JobAlarmDto> getJobAlarmContents(Long userId){
-            String jpql="SELECT new com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto(j.title,j.location,j.company,j.url,j.contentsEndAt,j.contentsProvider.name) FROM Subscribe s " +
-                    "INNER JOIN s.contentsProvider con on con.id=s.contentsProvider.id " +
-                    "INNER JOIN Job j on j.contentsProvider.id=con.id " +
-                    "where s.user.id=:userId";
-
-            TypedQuery<JobAlarmDto> query=em.createQuery(jpql,JobAlarmDto.class);
-            List<JobAlarmDto> jobAlarmDtoList=query
-                    .setParameter("userId",userId)
-                    .getResultList();
-
-            return jobAlarmDtoList;
-        }
-
-
 
 }
