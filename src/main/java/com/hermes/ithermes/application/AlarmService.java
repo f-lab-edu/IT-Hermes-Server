@@ -1,8 +1,8 @@
 package com.hermes.ithermes.application;
 
-import com.hermes.ithermes.domain.entity.ContentsProvider;
 import com.hermes.ithermes.domain.util.ActiveType;
 import com.hermes.ithermes.domain.util.CategoryType;
+import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.infrastructure.JobJpaRepository;
 import com.hermes.ithermes.infrastructure.SubscribeRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
@@ -34,31 +34,42 @@ public class AlarmService {
                 .collect(Collectors.toList());
 
         for (int i = 0; i < userIdArr.size(); i++) {
-            externalAlarmClient.sendYoutubeAndNewsMessage(getYoutubeAndNewsAlarmDto(i), userIdArr.get(i));
-            externalAlarmClient.sendJobMessage(getJobAlarmDto(i), userIdArr.get(i));
+            externalAlarmClient.sendYoutubeMessage(getUserYoutubeAlarmContents(i), userIdArr.get(i));
+            externalAlarmClient.sendNewsMessage(getUserNewsAlarmContents(i), userIdArr.get(i));
+            externalAlarmClient.sendJobMessage(getUserJobAlarmContents(i), userIdArr.get(i));
         }
 
         return new CommonResponseDto();
     }
 
-    public List<YoutubeAndNewsAlarmDto> getYoutubeAndNewsAlarmDto(long userIdx){
-        List<ContentsProvider> contentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx);
+    public List<YoutubeAndNewsAlarmDto> getUserYoutubeAlarmContents(long userIdx){
+        List<ContentsProviderType> youtubeContentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx, CategoryType.YOUTUBE);
 
-        List<YoutubeAndNewsAlarmDto> youtubeAndNewsAlarmDtoList = contentsProviderList.stream()
-                .filter(m -> m.getName().equals(CategoryType.YOUTUBE) || m.getName().equals(CategoryType.NEWS))
+        List<YoutubeAndNewsAlarmDto> youtubeAlarmDtoList = youtubeContentsProviderList.stream()
                 .map(m -> youtubeAndNewsJpaRepository.findYoutubeAndNewsByContentsProvider(m))
                 .flatMap(List::stream)
                 .map(m -> YoutubeAndNewsAlarmDto.convertEntityToDto(m))
                 .collect(Collectors.toList());
 
-        return youtubeAndNewsAlarmDtoList;
+        return youtubeAlarmDtoList;
     }
 
-    public List<JobAlarmDto> getJobAlarmDto(long userIdx){
-        List<ContentsProvider> contentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx);
+    public List<YoutubeAndNewsAlarmDto> getUserNewsAlarmContents(long userIdx){
+        List<ContentsProviderType> newsContentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx, CategoryType.NEWS);
 
-        List<JobAlarmDto> jobAlarmDtoList = contentsProviderList.stream()
-                .filter(m -> m.getName().equals(CategoryType.NEWS))
+        List<YoutubeAndNewsAlarmDto> newsAlarmDtoList = newsContentsProviderList.stream()
+                .map(m -> youtubeAndNewsJpaRepository.findYoutubeAndNewsByContentsProvider(m))
+                .flatMap(List::stream)
+                .map(m -> YoutubeAndNewsAlarmDto.convertEntityToDto(m))
+                .collect(Collectors.toList());
+
+        return newsAlarmDtoList;
+    }
+
+    public List<JobAlarmDto> getUserJobAlarmContents(long userIdx){
+        List<ContentsProviderType> jobContentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx, CategoryType.JOB);
+
+        List<JobAlarmDto> jobAlarmDtoList = jobContentsProviderList.stream()
                 .map(m -> jobJpaRepository.findJobByContentsProvider(m))
                 .flatMap(List::stream)
                 .map(m -> JobAlarmDto.convertEntityToDto(m))

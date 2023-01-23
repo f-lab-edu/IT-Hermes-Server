@@ -67,7 +67,7 @@ class AlarmServiceTest {
             jobJpaRepository.save(job);
         }
 
-        Assertions.assertEquals(3, alarmService.getJobAlarmDto(1l));
+        Assertions.assertEquals(3, alarmService.getUserJobAlarmContents(1l));
     }
 
     @Test
@@ -88,7 +88,7 @@ class AlarmServiceTest {
             youtubeAndNewsJpaRepository.save(youtubeAndNews);
         }
 
-        Assertions.assertEquals(4, alarmService.getYoutubeAndNewsAlarmDto(1l));
+        Assertions.assertEquals(4, alarmService.getUserYoutubeAlarmContents(1l));
     }
 
 }
