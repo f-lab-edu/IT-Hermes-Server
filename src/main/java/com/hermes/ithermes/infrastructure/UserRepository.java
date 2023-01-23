@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByLoginId(@Param("loginId") String loginId);
 
-    boolean existsByLoginIdAndPasswordAndIsDelete(@Param("loginId") String loginId, @Param("password") String password, @Param("isDelete") boolean isDelete);
+    boolean existsByLoginIdAndPassword(@Param("loginId") String loginId, @Param("password") String password);
 
     boolean existsByNickname(@Param("nickname") String nickname);
 

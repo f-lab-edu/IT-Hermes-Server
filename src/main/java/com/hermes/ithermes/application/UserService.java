@@ -63,7 +63,7 @@ public class UserService {
     public CommonResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) {
         String loginId = userLoginRequestDto.getId();
         String password = userLoginRequestDto.getPassword();
-        if (!userFactory.existsByLoginIdAndPasswordAndIsDelete(loginId, password)) throw new WrongIdOrPasswordException();
+        if (!userFactory.existsByLoginIdAndPassword(loginId, password)) throw new WrongIdOrPasswordException();
         return new CommonResponseDto();
     }
 

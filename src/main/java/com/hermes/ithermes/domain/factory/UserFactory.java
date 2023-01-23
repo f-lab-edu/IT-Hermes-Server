@@ -39,7 +39,7 @@ public class UserFactory {
         return userRepository.existsByNickname(nickname);
     }
 
-    public boolean existsByLoginIdAndPasswordAndIsDelete(String id, String password) {
-        return userRepository.existsByLoginIdAndPasswordAndIsDelete(id, password, false);
+    public boolean existsByLoginIdAndPassword(String id, String password) {
+        return userRepository.existsByLoginIdAndPassword(id, password);
     }
 }

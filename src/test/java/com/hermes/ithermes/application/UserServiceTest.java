@@ -52,7 +52,7 @@ class UserServiceTest {
     void setUp() {
         user = User.builder()
                 .loginId("test").nickname("김승기")
-                .password("test1234").job(JobType.BACKEND)
+                .password("test1234!").job(JobType.BACKEND)
                 .yearOfExperience(1)
                 .build();
 
@@ -67,8 +67,8 @@ class UserServiceTest {
     @Test
     @DisplayName("회원가입 시 회원정보, 키워드가 테이블에 저장되어 회원가입 성공")
     void 회원가입_정상처리() {
-        userCreateUserRequestDto = new UserCreateUserRequestDto("test", "test1234",
-                "test1234", "김승기", JobType.BACKEND, "1", new String[]{"프론트", "백엔드", "인공지능", null, null});
+        userCreateUserRequestDto = new UserCreateUserRequestDto("test", "test1234!",
+                "test1234!", "김승기", JobType.BACKEND, "1", new String[]{"프론트", "백엔드", "인공지능", null, null});
 
         when(userFactory.existsByLoginId(any())).thenReturn(false);
         when(userFactory.parseLoginRequestDtoToUser(any())).thenReturn(user);
@@ -109,7 +109,7 @@ class UserServiceTest {
         UserLoginRequestDto userLoginRequestDto = new UserLoginRequestDto(id, password);
 
         //When
-        when(userFactory.existsByLoginIdAndPasswordAndIsDelete(any(), any())).thenReturn(true);
+        when(userFactory.existsByLoginIdAndPassword(any(), any())).thenReturn(true);
 
         //Then
         assertEquals(new CommonResponseDto().getMessage(), userService.loginUser(userLoginRequestDto).getMessage());
@@ -124,7 +124,7 @@ class UserServiceTest {
         UserLoginRequestDto userLoginRequestDto = new UserLoginRequestDto(id, password);
 
         //When
-        when(userFactory.existsByLoginIdAndPasswordAndIsDelete(any(), any())).thenReturn(false);
+        when(userFactory.existsByLoginIdAndPassword(any(), any())).thenReturn(false);
 
         //Then
         assertThrows(WrongIdOrPasswordException.class, () -> userService.loginUser(userLoginRequestDto));
