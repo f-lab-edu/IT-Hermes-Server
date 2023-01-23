@@ -23,7 +23,7 @@ public class JobController {
     @RequestMapping(value = "/",method = RequestMethod.POST)
     public ResponseEntity<CommonResponseDto> insertYoutubeAndNewsData(@RequestBody JobInsertRequestDto jobInsertRequestDto){
         CommonResponseDto commonResponseDto = jobService.insertJob(jobInsertRequestDto);
-        return ResponseEntity.created(URI.create("/youtube-and-news")).body(commonResponseDto);
+        return ResponseEntity.created(URI.create("/job")).body(commonResponseDto);
     }
 
     @RequestMapping(value = "/last-url",method = RequestMethod.POST)
