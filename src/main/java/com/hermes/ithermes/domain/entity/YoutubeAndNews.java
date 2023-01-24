@@ -3,6 +3,7 @@ package com.hermes.ithermes.domain.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
+import com.hermes.ithermes.domain.util.ContentsType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,7 +47,7 @@ public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterfac
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private CategoryType category;
+    private ContentsType category;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
