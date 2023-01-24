@@ -1,13 +1,9 @@
 package com.hermes.ithermes.infrastructure;
 
-import com.hermes.ithermes.domain.util.ContentsType;
-import com.hermes.ithermes.domain.util.OrderType;
-import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

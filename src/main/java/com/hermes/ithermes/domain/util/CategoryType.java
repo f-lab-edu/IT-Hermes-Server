@@ -13,7 +13,9 @@ import java.util.List;
 public enum CategoryType {
     JOB("JOB", Arrays.asList(ContentsProviderType.SARAMIN, ContentsProviderType.WANTED)),
     NEWS("NEWS", Arrays.asList(ContentsProviderType.CODING_WORLD, ContentsProviderType.NAVER, ContentsProviderType.YOZM)),
-    YOUTUBE("YOUTUBE", Arrays.asList(ContentsProviderType.NOMAD_CODERS, ContentsProviderType.DREAM_CODING));
+    YOUTUBE("YOUTUBE", Arrays.asList(ContentsProviderType.NOMAD_CODERS, ContentsProviderType.DREAM_CODING)),
+    YOUTUBE_AND_NEWS("YOUTUBE_AND_NEWS",Arrays.asList(ContentsProviderType.NOMAD_CODERS,ContentsProviderType.DREAM_CODING,ContentsProviderType.NAVER,
+            ContentsProviderType.CODING_WORLD,ContentsProviderType.YOZM));
 
     private String title;
     private List<ContentsProviderType> contentsProviderTypes;
@@ -47,5 +49,14 @@ public enum CategoryType {
     @JsonCreator
     public static CategoryType fromValue(String category) {
         return CategoryType.valueOf(category.toUpperCase());
+    }
+
+    public static boolean isContainCategoryType(String title){
+        for(CategoryType c: CategoryType.values()){
+            if(c.getTitle().equals(title)){
+                return true;
+            }
+        }
+        return false;
     }
 }

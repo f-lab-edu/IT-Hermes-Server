@@ -1,9 +1,8 @@
 package com.hermes.ithermes.application;
 
-import com.hermes.ithermes.domain.util.ContentsType;
+import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.infrastructure.JobJpaRepository;
-import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
@@ -28,25 +27,25 @@ public class ContentsService {
     private final YoutubeAndNewsJpaRepository youtubeAndNewsRepository;
     private final JobJpaRepository jobRepository;
 
-    public List<ContentsDtoInterface> getMainContents(ContentsType type){
+    public List<ContentsDtoInterface> getMainContents(CategoryType type){
         Pageable pageInfo = PageRequest.of(0,10,Sort.by(OrderType.POPULAR.getOrderQuery()).descending());
-        if(type.getName().equals("JOB")){
+        if(type.getTitle().equals("JOB")){
             return convertEntityToDtoList(jobRepository.findJobBy(pageInfo).getContent(), new MainPageContentsDto());
         }
         return pageYoutubeAndNewsConvertMainPageContentsDto(pageInfo,type);
     }
 
-    public List<ContentsDtoInterface> getCategoryContents(ContentsType type, int page, OrderType order){
+    public List<ContentsDtoInterface> getCategoryContents(CategoryType type, int page, OrderType order){
         Pageable pageInfo = PageRequest.of(page,12, Sort.by(order.getOrderQuery()).descending());
-        if(type.getName().equals("JOB")) {
+        if(type.getTitle().equals("JOB")) {
             return convertEntityToDtoList(jobRepository.findJobBy(pageInfo).getContent(), new ContentsDto());
         }
         return convertEntityToDtoList(youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageInfo,type).getContent(),new ContentsDto());
     }
 
-    private List<ContentsDtoInterface> pageYoutubeAndNewsConvertMainPageContentsDto(Pageable page, ContentsType type){
+    private List<ContentsDtoInterface> pageYoutubeAndNewsConvertMainPageContentsDto(Pageable page, CategoryType type){
         Page<ContentsEntityInterface> youtubeAndNewsContents;
-        if(type.equals(ContentsType.YOUTUBE_AND_NEWS)){
+        if(type.equals(CategoryType.YOUTUBE_AND_NEWS)){
             youtubeAndNewsContents = youtubeAndNewsRepository.findYoutubeAndNewsBy(page);
         }else{
             youtubeAndNewsContents = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(page,type);

@@ -4,7 +4,6 @@ package com.hermes.ithermes.application;
 import com.hermes.ithermes.domain.entity.ContentsProvider;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
-import com.hermes.ithermes.domain.util.ContentsType;
 import com.hermes.ithermes.infrastructure.ContentsProviderRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
@@ -46,7 +45,7 @@ class ContentsServiceTest {
     @Test
     @DisplayName("main contents를 10개 반환하는지 테스트")
     void checkMainContentsCount(){
-        List<ContentsDtoInterface> results=contentsService.getMainContents(ContentsType.YOUTUBE_AND_NEWS);
+        List<ContentsDtoInterface> results=contentsService.getMainContents(CategoryType.YOUTUBE_AND_NEWS);
         Assertions.assertEquals(10,results.size());
     }
 
