@@ -34,9 +34,9 @@ public class AlarmService {
                 .collect(Collectors.toList());
 
         for (int i = 0; i < userIdArr.size(); i++) {
-            externalAlarmClient.sendYoutubeMessage(getUserYoutubeAlarmContents(i), userIdArr.get(i));
-            externalAlarmClient.sendNewsMessage(getUserNewsAlarmContents(i), userIdArr.get(i));
-            externalAlarmClient.sendJobMessage(getUserJobAlarmContents(i), userIdArr.get(i));
+            externalAlarmClient.sendYoutubeMessage(getUserYoutubeAlarmContents(userIdArr.get(i)), userIdArr.get(i));
+            externalAlarmClient.sendNewsMessage(getUserNewsAlarmContents(userIdArr.get(i)), userIdArr.get(i));
+            externalAlarmClient.sendJobMessage(getUserJobAlarmContents(userIdArr.get(i)), userIdArr.get(i));
         }
 
         return new CommonResponseDto();

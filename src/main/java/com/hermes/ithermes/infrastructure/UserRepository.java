@@ -28,4 +28,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u.telegramId FROM User u where u.id=:id")
     String findTelegramIdByUserId(Long id);
 
+    User findUsersByNickname(String nickname);
+
 }
