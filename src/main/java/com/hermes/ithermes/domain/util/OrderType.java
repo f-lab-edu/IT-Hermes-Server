@@ -5,14 +5,16 @@ import lombok.Getter;
 @Getter
 public enum OrderType {
 
-    ID("ID"),
-    RECENT("RECENT"),
-    POPULAR("POPULAR");
+    ID("ID","createdAt"),
+    RECENT("RECENT","contentsStartAt"),
+    POPULAR("POPULAR","viewCount");
 
     private String name;
+    private String orderQuery;
 
-    OrderType(String name) {
+    OrderType(String name, String orderQuery) {
         this.name = name;
+        this.orderQuery = orderQuery;
     }
 
     public static boolean isContainOrderType(String type){
