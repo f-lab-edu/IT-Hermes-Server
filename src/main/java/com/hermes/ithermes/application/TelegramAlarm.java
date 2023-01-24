@@ -31,7 +31,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
                     .append("[이미지]" + youtubeAlarmDtoList.get(i).getImage() + "\n")
                     .append("[url]" + youtubeAlarmDtoList.get(i).getUrl() + "\n")
                     .append("[일자]" + youtubeAlarmDtoList.get(i).getContentsStartAt() + "\n")
-                    .append("[서비스]" + youtubeAlarmDtoList.get(i).getContentsProviderType().getTitle() + "\n");
+                    .append("[서비스]" + youtubeAlarmDtoList.get(i).getContentsProviderType() + "\n");
             bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),youtubeAlarmMessage.toString()));
         }
     }
@@ -46,7 +46,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
                     .append("[이미지]" + newsAlarmDtoList.get(i).getImage() + "\n")
                     .append("[url]" + newsAlarmDtoList.get(i).getUrl() + "\n")
                     .append("[일자]" + newsAlarmDtoList.get(i).getContentsStartAt() + "\n")
-                    .append("[서비스]" + newsAlarmDtoList.get(i).getContentsProviderType().getTitle() + "\n");
+                    .append("[서비스]" + newsAlarmDtoList.get(i).getContentsProviderType() + "\n");
             bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),newsAlarmMessage.toString()));
         }
     }
@@ -60,7 +60,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
                     .append("[회사]" + jobAlarmDtoList.get(i).getCompany() + "\n")
                     .append("[위치]" + jobAlarmDtoList.get(i).getLocation() + "\n")
                     .append("[url]" + jobAlarmDtoList.get(i).getUrl() + "\n")
-                    .append("[서비스]" + jobAlarmDtoList.get(i).getContentsProviderType().getTitle() + "\n")
+                    .append("[서비스]" + jobAlarmDtoList.get(i).getContentsProviderType() + "\n")
                     .append("[마감일]" + jobAlarmDtoList.get(i).getContentsEndAt());
             bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),jobAlarmMessage.toString()));
         }
