@@ -11,5 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface JobJpaRepository extends JpaRepository<Job,Long> {
 
     Page<ContentsEntityInterface> findJobBy(Pageable pageable);
+    List<Job> findFirst1ByContentsProviderOrderByUrlDesc(@Param("contentsProvider") ContentsProviderType contentsProvider);
 
 }

@@ -1,5 +1,6 @@
 package com.hermes.ithermes.domain.util;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.hermes.ithermes.domain.entity.Subscribe;
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.exception.EnumTypeFormatException;
@@ -41,5 +42,10 @@ public enum CategoryType {
                 .contentsProvider(contentsProviderType)
                 .isActive(activeType)
                 .build();
+    }
+
+    @JsonCreator
+    public static CategoryType fromValue(String category) {
+        return CategoryType.valueOf(category.toUpperCase());
     }
 }
