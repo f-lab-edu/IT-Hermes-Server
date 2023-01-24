@@ -23,8 +23,6 @@ public class YoutubeAndNewsFactory {
     public List<YoutubeAndNews> parseYoutubeAndNews(YoutubeAndNewsInsertDto youtubeAndNewsCrawlingDtoList) {
         List<YoutubeAndNews> youtubeAndNewsList = new ArrayList<>();
         ArrayList<YoutubeAndNewsCrawlingDto> crawlingList = youtubeAndNewsCrawlingDtoList.getYoutubeAndNewsCrawlingDtoList();
-        CategoryType category = youtubeAndNewsCrawlingDtoList.getCategory();
-        // 급하게 ... 임시로 만듬.... 코드 충돌떔에...
         CategoryType categoryType = youtubeAndNewsCrawlingDtoList.getCategory();
         ContentsProviderType contentsProvider = youtubeAndNewsCrawlingDtoList.getContentsProvider();
         crawlingList.stream().forEach(v -> {
