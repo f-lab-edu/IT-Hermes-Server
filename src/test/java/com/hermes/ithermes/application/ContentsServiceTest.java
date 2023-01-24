@@ -3,7 +3,6 @@ package com.hermes.ithermes.application;
 
 import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import com.hermes.ithermes.domain.entity.ContentsProvider;
-import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.domain.util.ContentsType;
@@ -21,7 +20,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
@@ -42,11 +40,11 @@ class ContentsServiceTest {
         ContentsProvider contentsProvider=new ContentsProvider(1L, CategoryType.YOUTUBE, ContentsProviderType.NOMAD_CODERS);
         ContentsProvider s1=contentsProviderRepository.save(contentsProvider);
 
-        for(int i=0; i<12; i++){
-            YoutubeAndNews youtubeAndNews=new YoutubeAndNews((long) i,s1,"이 파이썬 모듈은 시간을 아껴줍니다.","ㅎㅎㅎㅎㅎㅎ","https://asdfs",
-                    "https://naver.com", LocalDateTime.now(),100L,false);
-            youtubeAndNewsRepository.save(youtubeAndNews);
-        }
+//        for(int i=0; i<12; i++){
+//            YoutubeAndNews youtubeAndNews=new YoutubeAndNews((long) i,s1,"이 파이썬 모듈은 시간을 아껴줍니다.","ㅎㅎㅎㅎㅎㅎ","https://asdfs",
+//                    "https://naver.com", LocalDateTime.now(),100L,false);
+//            youtubeAndNewsRepository.save(youtubeAndNews);
+//        }
     }
 
     @Test

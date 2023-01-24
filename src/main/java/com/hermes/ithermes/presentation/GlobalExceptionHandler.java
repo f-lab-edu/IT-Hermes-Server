@@ -3,6 +3,7 @@ package com.hermes.ithermes.presentation;
 import com.hermes.ithermes.domain.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
@@ -41,6 +42,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EnumTypeFormatException.class)
     public ResponseEntity<String> enumTypeFormatException() {
         return new ResponseEntity<>("서버에 존재하지 않는 유효하지 않는 데이터", HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity methodArgumentNotValidException(MethodArgumentNotValidException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
 }

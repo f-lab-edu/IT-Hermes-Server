@@ -6,10 +6,13 @@ import com.hermes.ithermes.presentation.dto.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @RestController()
 @RequestMapping("/user")
@@ -26,11 +29,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/join", method = RequestMethod.POST)
-    public ResponseEntity<CommonResponseDto> joinUser(@Valid @RequestBody UserCreateUserRequestDto userCreateUserRequestDto
-            , BindingResult bindingResult) {
+    public ResponseEntity<UserCreateUserRequestDto> joinUser(@Valid @RequestBody UserCreateUserRequestDto userCreateUserRequestDto) {
+        userService.joinUser(userCreateUserRequestDto);
+        URI uri = URI.create("user/join/");
 
-        CommonResponseDto userCreateUserResponseDto = userService.joinUser(userCreateUserRequestDto);
-        return ResponseEntity.ok(userCreateUserResponseDto);
+        return ResponseEntity.created(uri).body(userCreateUserRequestDto);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
