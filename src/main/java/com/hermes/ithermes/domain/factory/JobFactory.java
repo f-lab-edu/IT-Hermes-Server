@@ -20,7 +20,7 @@ import java.util.List;
 public class JobFactory {
     private final JobJpaRepository jobJpaRepository;
 
-    public List<Job> insertJob(JobInsertRequestDto jobInsertRequestDto) {
+    public List<Job> parseJob(JobInsertRequestDto jobInsertRequestDto) {
         List<Job> jobList = new ArrayList<>();
         List<JobCrawlingDto> jobCrawlingDtoList = jobInsertRequestDto.getJobCrawlingDtoList();
         ContentsProviderType contentsProvider = jobInsertRequestDto.getContentsProvider();
@@ -32,13 +32,24 @@ public class JobFactory {
             String location = v.getLocation();
             String[] startDateArray = v.getStartDate().split("-");
             String[] endDateArray = v.getStartDate().split("-");
-            LocalDateTime startDate = LocalDateTime.of(Integer.parseInt(startDateArray[0]), Integer.parseInt(startDateArray[1]), Integer.parseInt(startDateArray[2])
-                    , Integer.parseInt(startDateArray[3]), Integer.parseInt(startDateArray[4]), Integer.parseInt(startDateArray[5]));
+            LocalDateTime startDate = LocalDateTime.of(
+                    Integer.parseInt(startDateArray[0]),
+                    Integer.parseInt(startDateArray[1]),
+                    Integer.parseInt(startDateArray[2]),
+                    Integer.parseInt(startDateArray[3]),
+                    Integer.parseInt(startDateArray[4]),
+                    Integer.parseInt(startDateArray[5]));
 
-            LocalDateTime endDate = LocalDateTime.of(Integer.parseInt(endDateArray[0]), Integer.parseInt(endDateArray[1]), Integer.parseInt(endDateArray[2])
-                    , Integer.parseInt(endDateArray[3]), Integer.parseInt(endDateArray[4]), Integer.parseInt(endDateArray[5]));
+            LocalDateTime endDate = LocalDateTime.of(
+                    Integer.parseInt(endDateArray[0]),
+                    Integer.parseInt(endDateArray[1]),
+                    Integer.parseInt(endDateArray[2]),
+                    Integer.parseInt(endDateArray[3]),
+                    Integer.parseInt(endDateArray[4]),
+                    Integer.parseInt(endDateArray[5]));
 
-            Job job = Job.builder()
+            Job job = Job
+                    .builder()
                     .company(company)
                     .title(title)
                     .url(url)
@@ -57,10 +68,18 @@ public class JobFactory {
     }
 
     public JobLastUrlResponseDto findJobLastUrl(JobLastUrlRequestDto jobLastUrlRequestDto) {
-        List<Job> lastYoutubeAndNews = jobJpaRepository.findFirst1ByContentsProviderOrderByUrlDesc(jobLastUrlRequestDto.getContentsProvider());
-        if(!lastYoutubeAndNews.isEmpty()) {
-            return JobLastUrlResponseDto.builder().lastUrl(lastYoutubeAndNews.get(0).getUrl()).contentsProvider(jobLastUrlRequestDto.getContentsProvider()).build();
+        ContentsProviderType contentsProvider = jobLastUrlRequestDto.getContentsProvider();
+        List<Job> lastYoutubeAndNews = jobJpaRepository.findFirst1ByContentsProviderOrderByUrlDesc(contentsProvider);
+        if (!lastYoutubeAndNews.isEmpty()) {
+            return JobLastUrlResponseDto
+                    .builder()
+                    .lastUrl(lastYoutubeAndNews.get(0).getUrl())
+                    .contentsProvider(contentsProvider)
+                    .build();
         }
-        return JobLastUrlResponseDto.builder().contentsProvider(jobLastUrlRequestDto.getContentsProvider()).build();
+        return JobLastUrlResponseDto
+                .builder()
+                .contentsProvider(contentsProvider)
+                .build();
     }
 }

@@ -18,8 +18,8 @@ public class YoutubeAndNewsService {
     private final YoutubeAndNewsFactory youtubeAndNewsFactory;
     private final YoutubeAndNewsJpaRepository youtubeAndNewsJpaRepository;
 
-    public CommonResponseDto insertYoutubeAndNews(YoutubeAndNewsInsertDto youtubeAndNewsCrawlingDtoList) {
-        List<YoutubeAndNews> youtubeAndNewsList = youtubeAndNewsFactory.insertYoutubeAndNews(youtubeAndNewsCrawlingDtoList);
+    public CommonResponseDto parseYoutubeAndNews(YoutubeAndNewsInsertDto youtubeAndNewsCrawlingDtoList) {
+        List<YoutubeAndNews> youtubeAndNewsList = youtubeAndNewsFactory.parseYoutubeAndNews(youtubeAndNewsCrawlingDtoList);
         youtubeAndNewsList.stream().forEach(v-> youtubeAndNewsJpaRepository.save(v));
         return new CommonResponseDto();
     }

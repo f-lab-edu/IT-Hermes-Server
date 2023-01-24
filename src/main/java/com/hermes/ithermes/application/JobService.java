@@ -18,8 +18,8 @@ public class JobService {
     private final JobFactory jobFactory;
     private final JobJpaRepository jobJpaRepository;
 
-    public CommonResponseDto insertJob(JobInsertRequestDto jobInsertRequestDto) {
-        List<Job> jobList = jobFactory.insertJob(jobInsertRequestDto);
+    public CommonResponseDto parseJob(JobInsertRequestDto jobInsertRequestDto) {
+        List<Job> jobList = jobFactory.parseJob(jobInsertRequestDto);
         jobList.stream().forEach(v-> jobJpaRepository.save(v));
         return new CommonResponseDto();
     }

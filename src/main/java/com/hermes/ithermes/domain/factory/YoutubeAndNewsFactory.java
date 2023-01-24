@@ -20,21 +20,27 @@ import java.util.List;
 public class YoutubeAndNewsFactory {
     private final YoutubeAndNewsJpaRepository youtubeAndNewsJpaRepository;
 
-    public List<YoutubeAndNews> insertYoutubeAndNews(YoutubeAndNewsInsertDto youtubeAndNewsCrawlingDtoList) {
+    public List<YoutubeAndNews> parseYoutubeAndNews(YoutubeAndNewsInsertDto youtubeAndNewsCrawlingDtoList) {
         List<YoutubeAndNews> youtubeAndNewsList = new ArrayList<>();
         ArrayList<YoutubeAndNewsCrawlingDto> crawlingList = youtubeAndNewsCrawlingDtoList.getYoutubeAndNewsCrawlingDtoList();
         CategoryType category = youtubeAndNewsCrawlingDtoList.getCategory();
         ContentsProviderType contentsProvider = youtubeAndNewsCrawlingDtoList.getContentsProvider();
-        crawlingList.stream().forEach(v-> {
+        crawlingList.stream().forEach(v -> {
             String title = v.getTitle();
             String description = v.getDescription();
             String thumbnail = v.getThumbnail();
             String url = v.getUrl();
             String[] dateArray = v.getDate().split("-");
-            LocalDateTime date = LocalDateTime.of(Integer.parseInt(dateArray[0]), Integer.parseInt(dateArray[1]),Integer.parseInt(dateArray[2])
-                    ,Integer.parseInt(dateArray[3]),Integer.parseInt(dateArray[4]),Integer.parseInt(dateArray[5]));
+            LocalDateTime date = LocalDateTime.of(
+                    Integer.parseInt(dateArray[0]),
+                    Integer.parseInt(dateArray[1]),
+                    Integer.parseInt(dateArray[2]),
+                    Integer.parseInt(dateArray[3]),
+                    Integer.parseInt(dateArray[4]),
+                    Integer.parseInt(dateArray[5]));
 
-            YoutubeAndNews youtubeAndNews = YoutubeAndNews.builder()
+            YoutubeAndNews youtubeAndNews = YoutubeAndNews
+                    .builder()
                     .description(description)
                     .title(title)
                     .image(thumbnail)
@@ -51,10 +57,18 @@ public class YoutubeAndNewsFactory {
     }
 
     public YoutubeAndNewsLastUrlResponseDto findYoutubeAndNewsLastUrl(YoutubeAndNewsLastUrlRequestDto youtubeAndNewsLastUrlRequestDto) {
-        List<YoutubeAndNews> lastYoutubeAndNews = youtubeAndNewsJpaRepository.findFirst1ByContentsProviderOrderByUrlDesc(youtubeAndNewsLastUrlRequestDto.getContentsProvider());
-        if(!lastYoutubeAndNews.isEmpty()) {
-            return YoutubeAndNewsLastUrlResponseDto.builder().lastUrl(lastYoutubeAndNews.get(0).getUrl()).contentsProvider(youtubeAndNewsLastUrlRequestDto.getContentsProvider()).build();
+        ContentsProviderType contentsProvider = youtubeAndNewsLastUrlRequestDto.getContentsProvider();
+        List<YoutubeAndNews> lastYoutubeAndNews = youtubeAndNewsJpaRepository.findFirst1ByContentsProviderOrderByUrlDesc(contentsProvider);
+        if (!lastYoutubeAndNews.isEmpty()) {
+            return YoutubeAndNewsLastUrlResponseDto
+                    .builder()
+                    .lastUrl(lastYoutubeAndNews.get(0).getUrl())
+                    .contentsProvider(contentsProvider)
+                    .build();
         }
-        return YoutubeAndNewsLastUrlResponseDto.builder().contentsProvider(youtubeAndNewsLastUrlRequestDto.getContentsProvider()).build();
+        return YoutubeAndNewsLastUrlResponseDto
+                .builder()
+                .contentsProvider(contentsProvider)
+                .build();
     }
 }
