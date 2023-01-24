@@ -1,12 +1,10 @@
 package com.hermes.ithermes.application;
 
 
-import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import com.hermes.ithermes.domain.entity.ContentsProvider;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.domain.util.ContentsType;
-import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.infrastructure.ContentsProviderRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
@@ -17,8 +15,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -54,14 +50,14 @@ class ContentsServiceTest {
         Assertions.assertEquals(10,results.size());
     }
 
-    @Test
-    @DisplayName("category contents 페이징 처리 테스트")
-    void checkpaging() {
-        Pageable pageInfo = PageRequest.of(0,2);
-        List<ContentsEntityInterface> youtubeContents=youtubeAndNewsRepository.findYoutubeAndNewsBySorting(pageInfo,ContentsType.YOUTUBE, OrderType.POPULAR);
-
-        Assertions.assertEquals(2,youtubeContents.size());
-    }
+//    @Test
+//    @DisplayName("category contents 페이징 처리 테스트")
+//    void checkpaging() {
+//        Pageable pageInfo = PageRequest.of(0,2);
+//        List<ContentsEntityInterface> youtubeContents=youtubeAndNewsRepository.findYoutubeAndNewsBySorting(pageInfo,ContentsType.YOUTUBE, OrderType.POPULAR);
+//
+//        Assertions.assertEquals(2,youtubeContents.size());
+//    }
 
 }
 

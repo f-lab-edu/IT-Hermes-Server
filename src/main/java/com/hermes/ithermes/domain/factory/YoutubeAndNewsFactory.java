@@ -3,6 +3,7 @@ package com.hermes.ithermes.domain.factory;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
+import com.hermes.ithermes.domain.util.ContentsType;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
 import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsCrawlingDto;
 import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsInsertDto;
@@ -24,6 +25,8 @@ public class YoutubeAndNewsFactory {
         List<YoutubeAndNews> youtubeAndNewsList = new ArrayList<>();
         ArrayList<YoutubeAndNewsCrawlingDto> crawlingList = youtubeAndNewsCrawlingDtoList.getYoutubeAndNewsCrawlingDtoList();
         CategoryType category = youtubeAndNewsCrawlingDtoList.getCategory();
+        // 급하게 ... 임시로 만듬.... 코드 충돌떔에...
+        ContentsType contentsType = ContentsType.valueOf(youtubeAndNewsCrawlingDtoList.getCategory().getTitle());
         ContentsProviderType contentsProvider = youtubeAndNewsCrawlingDtoList.getContentsProvider();
         crawlingList.stream().forEach(v -> {
             String title = v.getTitle();
@@ -48,7 +51,7 @@ public class YoutubeAndNewsFactory {
                     .contentsStartAt(date)
                     .isDelete(false)
                     .viewCount(0L)
-                    .category(category)
+                    .category(contentsType)
                     .contentsProvider(contentsProvider)
                     .build();
             youtubeAndNewsList.add(youtubeAndNews);
