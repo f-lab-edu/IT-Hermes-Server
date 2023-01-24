@@ -1,10 +1,7 @@
 package com.hermes.ithermes.application;
 
 
-import com.hermes.ithermes.domain.entity.ContentsProvider;
 import com.hermes.ithermes.domain.util.CategoryType;
-import com.hermes.ithermes.domain.util.ContentsProviderType;
-import com.hermes.ithermes.infrastructure.ContentsProviderRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import jakarta.transaction.Transactional;
@@ -25,15 +22,10 @@ class ContentsServiceTest {
     private ContentsService contentsService;
 
     @Autowired
-    private ContentsProviderRepository contentsProviderRepository;
-
-    @Autowired
     private YoutubeAndNewsRepository youtubeAndNewsRepository;
 
     @BeforeEach
     void setUp() {
-        ContentsProvider contentsProvider=new ContentsProvider(1L, CategoryType.YOUTUBE, ContentsProviderType.NOMAD_CODERS);
-        ContentsProvider s1=contentsProviderRepository.save(contentsProvider);
 
 //        for(int i=0; i<12; i++){
 //            YoutubeAndNews youtubeAndNews=new YoutubeAndNews((long) i,s1,"이 파이썬 모듈은 시간을 아껴줍니다.","ㅎㅎㅎㅎㅎㅎ","https://asdfs",
