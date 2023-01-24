@@ -1,11 +1,10 @@
 package com.hermes.ithermes.application;
 
-import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.ContentsType;
 import com.hermes.ithermes.domain.util.OrderType;
+import com.hermes.ithermes.infrastructure.JobJpaRepository;
 import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
-import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
@@ -18,7 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,12 +26,12 @@ import java.util.stream.Collectors;
 public class ContentsService {
 
     private final YoutubeAndNewsJpaRepository youtubeAndNewsRepository;
-    private final JobRepository jobRepository;
+    private final JobJpaRepository jobRepository;
 
     public List<ContentsDtoInterface> getMainContents(ContentsType type){
         Pageable pageInfo = PageRequest.of(0,10,Sort.by(OrderType.POPULAR.getOrderQuery()).descending());
         if(type.getName().equals("JOB")){
-            return convertEntityToDtoList(jobRepository.findJobBySorting(pageInfo,type,OrderType.POPULAR), new MainPageContentsDto());
+            return convertEntityToDtoList(jobRepository.findJobBy(pageInfo).getContent(), new MainPageContentsDto());
         }
         return pageYoutubeAndNewsConvertMainPageContentsDto(pageInfo,type);
     }
@@ -41,7 +39,7 @@ public class ContentsService {
     public List<ContentsDtoInterface> getCategoryContents(ContentsType type, int page, OrderType order){
         Pageable pageInfo = PageRequest.of(page,12, Sort.by(order.getOrderQuery()).descending());
         if(type.getName().equals("JOB")) {
-            return convertEntityToDtoList(jobRepository.findJobBySorting(pageInfo,ContentsType.JOB,order), new ContentsDto());
+            return convertEntityToDtoList(jobRepository.findJobBy(pageInfo).getContent(), new ContentsDto());
         }
         return convertEntityToDtoList(youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageInfo,type).getContent(),new ContentsDto());
     }
