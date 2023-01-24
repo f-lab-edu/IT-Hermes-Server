@@ -2,7 +2,6 @@ package com.hermes.ithermes.presentation.controller;
 
 import com.hermes.ithermes.application.ContentsService;
 import com.hermes.ithermes.domain.exception.NotExistsRequestParamException;
-import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
@@ -23,7 +22,7 @@ public class ContentsController {
     private final ContentsService contentsService;
 
     @RequestMapping(value = "/main",method = RequestMethod.GET)
-    public ResponseEntity<List<ContentsDtoInterface>> getMainContents(@RequestParam(value = "type")ContentsType type){
+    public ResponseEntity<List<ContentsDtoInterface>> getMainContents(@RequestParam(value = "type") ContentsType type){
         if(!ContentsType.isContainContentsType(type.getName())){
             throw new NotExistsRequestParamException();
         }
