@@ -18,26 +18,6 @@ public class JobRepository {
         @PersistenceContext
         private EntityManager em;
 
-        public List<ContentsEntityInterface> findJobBySorting(Pageable pageable, ContentsType type, OrderType orderType){
-            String jpql="select j from Job j left join j.contentsProvider where j.contentsProvider.category=:type and j.isDelete=false";
-
-            if(orderType.getName().equals("RECENT")){
-                jpql+=" order by j.createdAt desc";
-            }else if(orderType.getName().equals("POPULAR")){
-                jpql+=" order by j.viewCount desc";
-            }else{
-                jpql+="";
-            }
-            TypedQuery<ContentsEntityInterface> query=em.createQuery(jpql, ContentsEntityInterface.class);
-
-            List<ContentsEntityInterface> jobs=query.setFirstResult((int)pageable.getOffset())
-                    .setParameter("category",ContentsType.JOB)
-                    .setMaxResults(pageable.getPageSize()+1)
-                    .getResultList();
-
-            return jobs;
-        };
-
         public List<JobAlarmDto> getJobAlarmContents(Long userId){
             String jpql="SELECT new com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto(j.title,j.location,j.company,j.url,j.contentsEndAt,j.contentsProvider.name) FROM Subscribe s " +
                     "INNER JOIN s.contentsProvider con on con.id=s.contentsProvider.id " +
