@@ -1,4 +1,4 @@
-package com.hermes.ithermes.presentation;
+package com.hermes.ithermes.presentation.controller;
 
 import com.hermes.ithermes.application.ContentsService;
 import com.hermes.ithermes.domain.util.CategoryType;
@@ -37,15 +37,15 @@ class ContentsControllerTest {
     @Test
     @DisplayName("CategoryType에 존재하지 않는 enum값으로 요청 파라미터에 요청시에 400 상태코드가 반환되어야 한다.")
     void notExistsCategoryTypeTest() throws Exception {
-        String wrongCategoryType= "ABCDE";
+        CategoryType wrongCategoryType = CategoryType.valueOf("잘못된 enum");
 
         List<ContentsDtoInterface> mainPageContentsDtoList=new ArrayList<>();
-        mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ", ContentsProviderType.NAVER, LocalDateTime.now()));
+        mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ",CategoryType.NEWS, ContentsProviderType.NAVER, LocalDateTime.now()));
 
         when(contentsService.getMainContents(any())).thenReturn(mainPageContentsDtoList);
 
         mockMvc.perform(get("/contents/main")
-                        .param("type", wrongCategoryType))
+                        .param("type", String.valueOf(wrongCategoryType)))
                         .andExpect(status().isBadRequest());
     }
 
@@ -55,7 +55,7 @@ class ContentsControllerTest {
         CategoryType correctCategoryType = CategoryType.JOB;
 
         List<ContentsDtoInterface> mainPageContentsDtoList = new ArrayList<>();
-        mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎㅎ", ContentsProviderType.NAVER, LocalDateTime.now()));
+        mainPageContentsDtoList.add(new MainPageContentsDto("안녕하세요.", "ㅎㅎㅎㅎㅎㅎ", "ㅎㅎㅎㅎㅎ", CategoryType.NEWS, ContentsProviderType.NAVER, LocalDateTime.now()));
 
         when(contentsService.getMainContents(any())).thenReturn(mainPageContentsDtoList);
 
@@ -67,18 +67,18 @@ class ContentsControllerTest {
     @Test
     @DisplayName("categoryType이나 orderType에 존재하지 않는 enum값으로 요청 파라미터에 요청시 400 코드가 반환되어야 한다.")
     void notExistCategoryTypeAndOrderTypeTest()throws Exception{
-        String wrongContentsType="FGH";
-        String wrongOrderType="ABCDE";
+        CategoryType wrongCategoryType=CategoryType.valueOf("FGH");
+        OrderType wrongOrderType=OrderType.valueOf("ABCDE");
 
         List<ContentsDtoInterface> contentsDtoList=new ArrayList<>();
-        contentsDtoList.add(new ContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ",ContentsProviderType.NAVER,LocalDateTime.now(),"ㅎㅎㅎㅎㅎ"));
+        contentsDtoList.add(new ContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ",CategoryType.NEWS,ContentsProviderType.NAVER,LocalDateTime.now(),"ㅎㅎㅎㅎㅎ"));
 
         when(contentsService.getCategoryContents(any(),anyInt(),any())).thenReturn(contentsDtoList);
 
         mockMvc.perform(get("/contents/category")
-                        .param("type",wrongContentsType)
+                        .param("type", String.valueOf(wrongCategoryType))
                         .param("page", String.valueOf(0))
-                        .param("order",wrongOrderType))
+                        .param("order", String.valueOf(wrongOrderType)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -89,7 +89,7 @@ class ContentsControllerTest {
         OrderType correctOrderType=OrderType.RECENT;
 
         List<ContentsDtoInterface> contentsDtoList=new ArrayList<>();
-        contentsDtoList.add(new ContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎ",ContentsProviderType.NAVER,LocalDateTime.now(),"ㅎㅎㅎㅎㅎ"));
+        contentsDtoList.add(new ContentsDto("안녕하세요","ㅎㅎㅎㅎㅎㅎ","ㅎㅎㅎㅎㅎㅎ",CategoryType.NEWS,ContentsProviderType.NAVER,LocalDateTime.now(),"ㅎㅎㅎㅎㅎ"));
 
         when(contentsService.getCategoryContents(any(),anyInt(),any())).thenReturn(contentsDtoList);
 
