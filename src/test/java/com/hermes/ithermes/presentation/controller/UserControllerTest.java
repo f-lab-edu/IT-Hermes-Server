@@ -74,7 +74,7 @@ class UserControllerTest {
         UserLoginRequestDto userLoginRequestDto = new UserLoginRequestDto(id,password);
 
         //When
-        when(userService.loginUser(any())).thenReturn(new CommonResponseDto());
+        when(userService.loginUser(any())).thenReturn(new UserLoginResponseDto());
 
         mockMvc.perform(post("/user/login")
                         .contentType(MediaType.APPLICATION_JSON)

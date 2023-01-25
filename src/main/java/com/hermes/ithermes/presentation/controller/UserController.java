@@ -37,8 +37,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<CommonResponseDto> loginUser(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
-        CommonResponseDto userLoginResponseDto = userService.loginUser(userLoginRequestDto);
+    public ResponseEntity<UserLoginResponseDto> loginUser(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
+        UserLoginResponseDto userLoginResponseDto = userService.loginUser(userLoginRequestDto);
         return ResponseEntity.ok(userLoginResponseDto);
     }
 

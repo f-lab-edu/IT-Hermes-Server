@@ -3,7 +3,10 @@ package com.hermes.ithermes.application;
 import com.hermes.ithermes.domain.entity.Keyword;
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.entity.UserKeywordRegistry;
-import com.hermes.ithermes.domain.exception.*;
+import com.hermes.ithermes.domain.exception.SameIdException;
+import com.hermes.ithermes.domain.exception.SameNicknameException;
+import com.hermes.ithermes.domain.exception.UnMatchedPasswordException;
+import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
 import com.hermes.ithermes.domain.factory.KeywordFactory;
 import com.hermes.ithermes.domain.factory.UserFactory;
 import com.hermes.ithermes.domain.factory.UserKeywordRegistryFactory;
@@ -14,6 +17,7 @@ import com.hermes.ithermes.presentation.dto.user.UserCreateUserRequestDto;
 import com.hermes.ithermes.presentation.dto.user.UserFindMyDataRequestDto;
 import com.hermes.ithermes.presentation.dto.user.UserLoginRequestDto;
 import com.hermes.ithermes.presentation.dto.user.UserUpdateNicknameRequestDto;
+import com.hermes.ithermes.presentation.security.JwtTokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,8 +25,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.*;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -42,6 +47,10 @@ class UserServiceTest {
     private UserFactory userFactory;
     @Mock
     private KeywordFactory keywordFactory;
+    @Mock
+    private PasswordEncoder passwordEncoder;
+    @Mock
+    private JwtTokenProvider jwtTokenProvider;
 
     private UserCreateUserRequestDto userCreateUserRequestDto;
     private User user;
@@ -72,7 +81,7 @@ class UserServiceTest {
 
         when(userFactory.existsByLoginId(any())).thenReturn(false);
         when(userFactory.parseLoginRequestDtoToUser(any())).thenReturn(user);
-        when(userKeywordRegistryFactory.parseUserAndKeyword(any(),any())).thenReturn(userKeywordRegistry);
+        when(userKeywordRegistryFactory.parseUserAndKeyword(any(), any())).thenReturn(userKeywordRegistry);
 
         assertEquals(new CommonResponseDto().getMessage(), userService.joinUser(userCreateUserRequestDto).getMessage());
     }
@@ -109,10 +118,11 @@ class UserServiceTest {
         UserLoginRequestDto userLoginRequestDto = new UserLoginRequestDto(id, password);
 
         //When
-        when(userFactory.existsByLoginIdAndPassword(any(), any())).thenReturn(true);
-
+        when(userFactory.findLoginId(any())).thenReturn(Optional.ofNullable(user));
+        when(jwtTokenProvider.createToken(any(),any())).thenReturn("1q2w3e4r!");
+        when(passwordEncoder.matches(any(),any())).thenReturn(true);
         //Then
-        assertEquals(new CommonResponseDto().getMessage(), userService.loginUser(userLoginRequestDto).getMessage());
+        assertEquals("success", userService.loginUser(userLoginRequestDto).getMessage());
     }
 
     @Test
@@ -124,7 +134,7 @@ class UserServiceTest {
         UserLoginRequestDto userLoginRequestDto = new UserLoginRequestDto(id, password);
 
         //When
-        when(userFactory.existsByLoginIdAndPassword(any(), any())).thenReturn(false);
+        when(userFactory.findLoginId(any())).thenThrow(new WrongIdOrPasswordException());
 
         //Then
         assertThrows(WrongIdOrPasswordException.class, () -> userService.loginUser(userLoginRequestDto));

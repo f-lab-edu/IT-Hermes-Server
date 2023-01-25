@@ -14,7 +14,7 @@ import org.hibernate.annotations.Where;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Where(clause = "isDelete = false")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,4 +49,32 @@ public class User extends BaseEntity {
         this.isDelete = true;
     }
 
+    @Override
+    public String getUsername() {
+        return this.loginId;
+    }
+
+    @Override
+    public boolean isAccountNotExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public void parsePassword(String password) {
+        this.password = password;
+    }
 }

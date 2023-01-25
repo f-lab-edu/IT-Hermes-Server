@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByNickname(@Param("nickname") String nickname);
 
-    boolean existsByLoginId(@Param("userId") String userId);
+    boolean existsByLoginId(@Param("loginId") String loginId);
 
     Boolean existsUserByNicknameAndTelegramId(String nickname,String telegramId);
 
