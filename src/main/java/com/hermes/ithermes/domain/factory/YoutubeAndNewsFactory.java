@@ -6,8 +6,6 @@ import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
 import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsCrawlingDto;
 import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsInsertDto;
-import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsLastUrlRequestDto;
-import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsLastUrlResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -54,21 +52,5 @@ public class YoutubeAndNewsFactory {
             youtubeAndNewsList.add(youtubeAndNews);
         });
         return youtubeAndNewsList;
-    }
-
-    public YoutubeAndNewsLastUrlResponseDto findYoutubeAndNewsLastUrl(YoutubeAndNewsLastUrlRequestDto youtubeAndNewsLastUrlRequestDto) {
-        ContentsProviderType contentsProvider = youtubeAndNewsLastUrlRequestDto.getContentsProvider();
-        List<YoutubeAndNews> lastYoutubeAndNews = youtubeAndNewsJpaRepository.findFirst1ByContentsProviderOrderByUrlDesc(contentsProvider);
-        if (!lastYoutubeAndNews.isEmpty()) {
-            return YoutubeAndNewsLastUrlResponseDto
-                    .builder()
-                    .lastUrl(lastYoutubeAndNews.get(0).getUrl())
-                    .contentsProvider(contentsProvider)
-                    .build();
-        }
-        return YoutubeAndNewsLastUrlResponseDto
-                .builder()
-                .contentsProvider(contentsProvider)
-                .build();
     }
 }

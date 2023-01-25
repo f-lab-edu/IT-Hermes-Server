@@ -48,4 +48,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
+    @ExceptionHandler(value = NoCrawlingDataException.class)
+    public ResponseEntity noCrawlingDataException(){
+        return new ResponseEntity<>("크롤링 데이터가 존재하지 않음", HttpStatus.BAD_REQUEST);
+    }
+
 }
