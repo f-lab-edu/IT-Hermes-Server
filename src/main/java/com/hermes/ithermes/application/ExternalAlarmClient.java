@@ -7,8 +7,7 @@ import java.util.List;
 
 public interface ExternalAlarmClient {
 
-    void sendYoutubeMessage(List<YoutubeAndNewsAlarmDto> youtubeAlarmDtoList, long userIdx);
-    void sendNewsMessage(List<YoutubeAndNewsAlarmDto> newsAlarmDtoList, long userIdx);
+    void sendYoutubeAndNewsMessage(List<YoutubeAndNewsAlarmDto> youtubeAlarmDtoList, long userIdx);
     void sendJobMessage(List<JobAlarmDto> jobAlarmDtoList, long userIdx);
 
 }

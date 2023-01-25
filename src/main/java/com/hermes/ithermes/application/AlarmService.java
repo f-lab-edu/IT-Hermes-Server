@@ -34,16 +34,16 @@ public class AlarmService {
                 .collect(Collectors.toList());
 
         for (int i = 0; i < userIdArr.size(); i++) {
-            externalAlarmClient.sendYoutubeMessage(getUserYoutubeAlarmContents(userIdArr.get(i)), userIdArr.get(i));
-            externalAlarmClient.sendNewsMessage(getUserNewsAlarmContents(userIdArr.get(i)), userIdArr.get(i));
+            externalAlarmClient.sendYoutubeAndNewsMessage(getUserYoutubeAndNewsAlarmContents(userIdArr.get(i),CategoryType.YOUTUBE), userIdArr.get(i));
+            externalAlarmClient.sendYoutubeAndNewsMessage(getUserYoutubeAndNewsAlarmContents(userIdArr.get(i),CategoryType.NEWS), userIdArr.get(i));
             externalAlarmClient.sendJobMessage(getUserJobAlarmContents(userIdArr.get(i)), userIdArr.get(i));
         }
 
         return new CommonResponseDto();
     }
 
-    public List<YoutubeAndNewsAlarmDto> getUserYoutubeAlarmContents(long userIdx){
-        List<ContentsProviderType> youtubeContentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx, CategoryType.YOUTUBE);
+    public List<YoutubeAndNewsAlarmDto> getUserYoutubeAndNewsAlarmContents(long userIdx,CategoryType type){
+        List<ContentsProviderType> youtubeContentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx, type);
 
         List<YoutubeAndNewsAlarmDto> youtubeAlarmDtoList = youtubeContentsProviderList.stream()
                 .map(m -> youtubeAndNewsJpaRepository.findYoutubeAndNewsByContentsProvider(m))
@@ -52,18 +52,6 @@ public class AlarmService {
                 .collect(Collectors.toList());
 
         return youtubeAlarmDtoList;
-    }
-
-    public List<YoutubeAndNewsAlarmDto> getUserNewsAlarmContents(long userIdx){
-        List<ContentsProviderType> newsContentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx, CategoryType.NEWS);
-
-        List<YoutubeAndNewsAlarmDto> newsAlarmDtoList = newsContentsProviderList.stream()
-                .map(m -> youtubeAndNewsJpaRepository.findYoutubeAndNewsByContentsProvider(m))
-                .flatMap(List::stream)
-                .map(m -> YoutubeAndNewsAlarmDto.convertEntityToDto(m))
-                .collect(Collectors.toList());
-
-        return newsAlarmDtoList;
     }
 
     public List<JobAlarmDto> getUserJobAlarmContents(long userIdx){

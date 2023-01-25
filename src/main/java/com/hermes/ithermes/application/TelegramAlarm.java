@@ -22,32 +22,17 @@ public class TelegramAlarm implements ExternalAlarmClient {
     private final UserRepository userRepository;
 
     @Override
-    public void sendYoutubeMessage(List<YoutubeAndNewsAlarmDto> youtubeAlarmDtoList, long userIdx) {
-        for(int i = 0; i < youtubeAlarmDtoList.size(); i++){
+    public void sendYoutubeAndNewsMessage(List<YoutubeAndNewsAlarmDto> youtubeAndNewsAlarmDtoList, long userIdx) {
+        for(int i = 0; i < youtubeAndNewsAlarmDtoList.size(); i++){
             StringBuilder youtubeAlarmMessage = new StringBuilder();
-            youtubeAlarmMessage.append("[유투브 정보] + \n")
-                    .append("[제목]" + youtubeAlarmDtoList.get(i).getTitle() + "\n")
-                    .append("[본문]" + youtubeAlarmDtoList.get(i).getDescription() + "\n")
-                    .append("[이미지]" + youtubeAlarmDtoList.get(i).getImage() + "\n")
-                    .append("[url]" + youtubeAlarmDtoList.get(i).getUrl() + "\n")
-                    .append("[일자]" + youtubeAlarmDtoList.get(i).getContentsStartAt() + "\n")
-                    .append("[서비스]" + youtubeAlarmDtoList.get(i).getContentsProviderType() + "\n");
+            youtubeAlarmMessage.append("[유투브 및 뉴스 정보] + \n")
+                    .append("[제목]" + youtubeAndNewsAlarmDtoList.get(i).getTitle() + "\n")
+                    .append("[본문]" + youtubeAndNewsAlarmDtoList.get(i).getDescription() + "\n")
+                    .append("[이미지]" + youtubeAndNewsAlarmDtoList.get(i).getImage() + "\n")
+                    .append("[url]" + youtubeAndNewsAlarmDtoList.get(i).getUrl() + "\n")
+                    .append("[일자]" + youtubeAndNewsAlarmDtoList.get(i).getContentsStartAt() + "\n")
+                    .append("[서비스]" + youtubeAndNewsAlarmDtoList.get(i).getContentsProviderType() + "\n");
             bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),youtubeAlarmMessage.toString()));
-        }
-    }
-
-    @Override
-    public void sendNewsMessage(List<YoutubeAndNewsAlarmDto> newsAlarmDtoList, long userIdx) {
-        for(int i = 0; i < newsAlarmDtoList.size(); i++){
-            StringBuilder newsAlarmMessage = new StringBuilder();
-            newsAlarmMessage.append("[뉴스 정보] + \n")
-                    .append("[제목]" + newsAlarmDtoList.get(i).getTitle() + "\n")
-                    .append("[본문]" + newsAlarmDtoList.get(i).getDescription() + "\n")
-                    .append("[이미지]" + newsAlarmDtoList.get(i).getImage() + "\n")
-                    .append("[url]" + newsAlarmDtoList.get(i).getUrl() + "\n")
-                    .append("[일자]" + newsAlarmDtoList.get(i).getContentsStartAt() + "\n")
-                    .append("[서비스]" + newsAlarmDtoList.get(i).getContentsProviderType() + "\n");
-            bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),newsAlarmMessage.toString()));
         }
     }
 
