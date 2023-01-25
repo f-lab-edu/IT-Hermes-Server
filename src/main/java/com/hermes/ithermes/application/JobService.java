@@ -14,18 +14,21 @@ import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.job.JobInsertRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class JobService {
     private final JobFactory jobFactory;
     private final JobJpaRepository jobJpaRepository;
     private final CrawlingContentsLastUrlFactory crawlingContentsLastUrlFactory;
     private final CrawlingContentsLastUrlRepository crawlingContentsLastUrlRepository;
 
+    @Transactional
     public CommonResponseDto parseJob(JobInsertRequestDto jobInsertRequestDto) {
         if (jobInsertRequestDto.getJobCrawlingDtoList().isEmpty()) throw new NoCrawlingDataException();
 

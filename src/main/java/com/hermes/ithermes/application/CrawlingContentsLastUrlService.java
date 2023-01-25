@@ -5,11 +5,13 @@ import com.hermes.ithermes.presentation.dto.crawlingcontentslasttitle.CrawlingCo
 import com.hermes.ithermes.presentation.dto.crawlingcontentslasttitle.CrawlingContentsLastUrlFindAllResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CrawlingContentsLastUrlService {
     private final CrawlingContentsLastUrlFactory crawlingContentsLastUrlFactory;
 

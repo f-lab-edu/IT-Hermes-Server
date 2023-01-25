@@ -12,18 +12,21 @@ import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsInsertDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class YoutubeAndNewsService {
     private final YoutubeAndNewsFactory youtubeAndNewsFactory;
     private final YoutubeAndNewsJpaRepository youtubeAndNewsJpaRepository;
     private final CrawlingContentsLastUrlFactory crawlingContentsLastUrlFactory;
     private final CrawlingContentsLastUrlRepository crawlingContentsLastUrlRepository;
 
+    @Transactional
     public CommonResponseDto insertYoutubeAndNews(YoutubeAndNewsInsertDto youtubeAndNewsCrawlingDtoList) {
         if(youtubeAndNewsCrawlingDtoList.getYoutubeAndNewsCrawlingDtoList().isEmpty()) throw new NoCrawlingDataException();
 
