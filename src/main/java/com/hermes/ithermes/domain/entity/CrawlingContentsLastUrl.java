@@ -2,6 +2,7 @@ package com.hermes.ithermes.domain.entity;
 
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.domain.util.GradeType;
+import com.hermes.ithermes.domain.util.JobType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,9 @@ public class CrawlingContentsLastUrl {
 
     @Enumerated(EnumType.STRING)
     private GradeType grade;
+
+    @Enumerated(EnumType.STRING)
+    private JobType job;
 
     @Column(nullable = false, length = 1000)
     private String lastUrl;

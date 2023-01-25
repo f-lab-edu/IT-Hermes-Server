@@ -6,6 +6,8 @@ import com.hermes.ithermes.domain.exception.NoCrawlingDataException;
 import com.hermes.ithermes.domain.factory.CrawlingContentsLastUrlFactory;
 import com.hermes.ithermes.domain.factory.JobFactory;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
+import com.hermes.ithermes.domain.util.GradeType;
+import com.hermes.ithermes.domain.util.JobType;
 import com.hermes.ithermes.infrastructure.CrawlingContentsLastUrlRepository;
 import com.hermes.ithermes.infrastructure.JobJpaRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
@@ -25,16 +27,19 @@ public class JobService {
     private final CrawlingContentsLastUrlRepository crawlingContentsLastUrlRepository;
 
     public CommonResponseDto parseJob(JobInsertRequestDto jobInsertRequestDto) {
-        if(jobInsertRequestDto.getJobCrawlingDtoList().isEmpty()) throw new NoCrawlingDataException();
+        if (jobInsertRequestDto.getJobCrawlingDtoList().isEmpty()) throw new NoCrawlingDataException();
 
         List<Job> jobList = jobFactory.parseJob(jobInsertRequestDto);
-        jobList.stream().forEach(v-> jobJpaRepository.save(v));
+        jobList.stream().forEach(v -> jobJpaRepository.save(v));
 
         Job recentJob = jobList.get(0);
 
         ContentsProviderType contentsProvider = recentJob.getContentsProvider();
-        Optional<CrawlingContentsLastUrl> contentsLastTitle = crawlingContentsLastUrlRepository.findByContentsProvider(contentsProvider);
-        CrawlingContentsLastUrl recentCrawlingContentsLastUrl = crawlingContentsLastUrlFactory.parseCrawlingContentsLastUrlToJob(recentJob);
+        GradeType grade = recentJob.getGrade();
+        JobType jobType = jobInsertRequestDto.getJob();
+
+        Optional<CrawlingContentsLastUrl> contentsLastTitle = crawlingContentsLastUrlRepository.findByContentsProviderAndGradeAndJob(contentsProvider, grade, jobType);
+        CrawlingContentsLastUrl recentCrawlingContentsLastUrl = crawlingContentsLastUrlFactory.parseCrawlingContentsLastUrlToJob(recentJob, jobType);
 
         contentsLastTitle.ifPresentOrElse(
                 v -> {
