@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @AllArgsConstructor
-public class JobAlarmDto {
+public class JobAlarmDto{
 
     private String title;
 

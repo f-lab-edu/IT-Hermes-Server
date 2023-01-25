@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @Builder
-public class YoutubeAndNewsAlarmDto {
+public class YoutubeAndNewsAlarmDto implements AlarmDtoInterface{
 
     private String title;
 
@@ -35,4 +35,33 @@ public class YoutubeAndNewsAlarmDto {
                 .build();
     }
 
+    @Override
+    public String title() {
+        return title;
+    }
+
+    @Override
+    public String description() {
+        return description;
+    }
+
+    @Override
+    public String image() {
+        return image;
+    }
+
+    @Override
+    public String url() {
+        return url;
+    }
+
+    @Override
+    public LocalDateTime contentsStartAt() {
+        return contentsStartAt;
+    }
+
+    @Override
+    public ContentsProviderType contentsProvider() {
+        return contentsProviderType;
+    }
 }

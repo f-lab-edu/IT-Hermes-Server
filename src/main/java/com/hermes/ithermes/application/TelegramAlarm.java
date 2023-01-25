@@ -1,6 +1,7 @@
 package com.hermes.ithermes.application;
 
 import com.hermes.ithermes.infrastructure.*;
+import com.hermes.ithermes.presentation.dto.alarm.AlarmDtoInterface;
 import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
 import com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto;
 import com.pengrad.telegrambot.TelegramBot;
@@ -22,16 +23,16 @@ public class TelegramAlarm implements ExternalAlarmClient {
     private final UserRepository userRepository;
 
     @Override
-    public void sendYoutubeAndNewsMessage(List<YoutubeAndNewsAlarmDto> youtubeAndNewsAlarmDtoList, long userIdx) {
-        for(int i = 0; i < youtubeAndNewsAlarmDtoList.size(); i++){
+    public void sendContentsMessage(List<AlarmDtoInterface> contentsAlarmDtoList, long userIdx) {
+        for(int i = 0; i < contentsAlarmDtoList.size(); i++){
             StringBuilder youtubeAlarmMessage = new StringBuilder();
             youtubeAlarmMessage.append("[유투브 및 뉴스 정보] + \n")
-                    .append("[제목]" + youtubeAndNewsAlarmDtoList.get(i).getTitle() + "\n")
-                    .append("[본문]" + youtubeAndNewsAlarmDtoList.get(i).getDescription() + "\n")
-                    .append("[이미지]" + youtubeAndNewsAlarmDtoList.get(i).getImage() + "\n")
-                    .append("[url]" + youtubeAndNewsAlarmDtoList.get(i).getUrl() + "\n")
-                    .append("[일자]" + youtubeAndNewsAlarmDtoList.get(i).getContentsStartAt() + "\n")
-                    .append("[서비스]" + youtubeAndNewsAlarmDtoList.get(i).getContentsProviderType() + "\n");
+                    .append("[제목]" + contentsAlarmDtoList.get(i).title() + "\n")
+                    .append("[본문]" + contentsAlarmDtoList.get(i).description() + "\n")
+                    .append("[이미지]" + contentsAlarmDtoList.get(i).image() + "\n")
+                    .append("[url]" + contentsAlarmDtoList.get(i).url() + "\n")
+                    .append("[일자]" + contentsAlarmDtoList.get(i).contentsStartAt() + "\n")
+                    .append("[서비스]" + contentsAlarmDtoList.get(i).contentsProvider() + "\n");
             bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),youtubeAlarmMessage.toString()));
         }
     }

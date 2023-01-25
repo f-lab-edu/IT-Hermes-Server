@@ -8,6 +8,7 @@ import com.hermes.ithermes.infrastructure.SubscribeRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
+import com.hermes.ithermes.presentation.dto.alarm.AlarmDtoInterface;
 import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
 import com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto;
 import lombok.RequiredArgsConstructor;
@@ -34,18 +35,18 @@ public class AlarmService {
                 .collect(Collectors.toList());
 
         for (int i = 0; i < userIdArr.size(); i++) {
-            externalAlarmClient.sendYoutubeAndNewsMessage(getUserYoutubeAndNewsAlarmContents(userIdArr.get(i),CategoryType.YOUTUBE), userIdArr.get(i));
-            externalAlarmClient.sendYoutubeAndNewsMessage(getUserYoutubeAndNewsAlarmContents(userIdArr.get(i),CategoryType.NEWS), userIdArr.get(i));
+            externalAlarmClient.sendContentsMessage(getUserYoutubeAndNewsAlarmContents(userIdArr.get(i),CategoryType.YOUTUBE), userIdArr.get(i));
+            externalAlarmClient.sendContentsMessage(getUserYoutubeAndNewsAlarmContents(userIdArr.get(i),CategoryType.NEWS), userIdArr.get(i));
             externalAlarmClient.sendJobMessage(getUserJobAlarmContents(userIdArr.get(i)), userIdArr.get(i));
         }
 
         return new CommonResponseDto();
     }
 
-    public List<YoutubeAndNewsAlarmDto> getUserYoutubeAndNewsAlarmContents(long userIdx,CategoryType type){
+    public List<AlarmDtoInterface> getUserYoutubeAndNewsAlarmContents(long userIdx, CategoryType type){
         List<ContentsProviderType> youtubeContentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx, type);
 
-        List<YoutubeAndNewsAlarmDto> youtubeAlarmDtoList = youtubeContentsProviderList.stream()
+        List<AlarmDtoInterface> youtubeAlarmDtoList = youtubeContentsProviderList.stream()
                 .map(m -> youtubeAndNewsJpaRepository.findYoutubeAndNewsByContentsProvider(m))
                 .flatMap(List::stream)
                 .map(m -> YoutubeAndNewsAlarmDto.convertEntityToDto(m))
