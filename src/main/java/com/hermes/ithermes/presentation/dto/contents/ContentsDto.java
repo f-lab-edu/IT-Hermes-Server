@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
+import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +25,7 @@ public class ContentsDto implements ContentsDtoInterface {
 
     public String url;
 
-    public String category;
+    public CategoryType category;
 
     public ContentsProviderType contentProvider;
 
@@ -33,32 +34,19 @@ public class ContentsDto implements ContentsDtoInterface {
 
     public String description;
 
-    public ContentsDto(YoutubeAndNews youtubeAndNews) {
-        this.title = youtubeAndNews.getTitle();
-        this.image = youtubeAndNews.getImage();
-        this.url = youtubeAndNews.getUrl();
-        //this.category = youtubeAndNews.getContentsProvider().getCategory().getTitle();
-        //this.contentProvider = youtubeAndNews.getContentsProvider().getName();
-        this.contentsDate = youtubeAndNews.getContentsStartAt();
-        this.description = youtubeAndNews.getDescription();
-    }
-
-    public ContentsDto(Job job) {
-        this.title = job.getTitle();
-        this.image = null;
-        this.url = job.getUrl();
-        //this.category = job.getContentsProvider().getCategory().getTitle();
-        //this.contentProvider = job.getContentsProvider().getName();
-        this.contentsDate = job.getContentsEndAt();
-        this.description = job.getCompany();
+    public ContentsDto(ContentsEntityInterface contentsEntityInterface){
+        this.title = contentsEntityInterface.title();
+        this.image = contentsEntityInterface.image();
+        this.url = contentsEntityInterface.url();
+        this.category = contentsEntityInterface.categoryType();
+        this.contentProvider = contentsEntityInterface.contentsProvider();
+        this.contentsDate = contentsEntityInterface.contentsTime();
+        this.description = contentsEntityInterface.description();
     }
 
     @Override
     public ContentsDto convertEntityToDto(ContentsEntityInterface contentsEntityInterface) {
-        if(contentsEntityInterface instanceof YoutubeAndNews){
-            return new ContentsDto((YoutubeAndNews) contentsEntityInterface);
-        }
-        return new ContentsDto((Job) contentsEntityInterface);
+        return new ContentsDto(contentsEntityInterface);
     }
 
 }

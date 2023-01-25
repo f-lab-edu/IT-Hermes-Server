@@ -1,6 +1,7 @@
 package com.hermes.ithermes.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.domain.util.GradeType;
 import jakarta.persistence.*;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Job extends BaseEntity implements ContentsEntityInterface{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -57,8 +59,43 @@ public class Job extends BaseEntity implements ContentsEntityInterface{
     @Column(nullable = false)
     private GradeType grade;
 
-
     public void initDefaultData() {
         viewCount=0L;
     }
+
+    @Override
+    public String title() {
+        return title;
+    }
+
+    @Override
+    public String image() {
+        return null;
+    }
+
+    @Override
+    public String url() {
+        return url;
+    }
+
+    @Override
+    public CategoryType categoryType() {
+        return CategoryType.JOB;
+    }
+
+    @Override
+    public ContentsProviderType contentsProvider() {
+        return contentsProvider;
+    }
+
+    @Override
+    public LocalDateTime contentsTime() {
+        return contentsEndAt;
+    }
+
+    @Override
+    public String description() {
+        return company;
+    }
+
 }
