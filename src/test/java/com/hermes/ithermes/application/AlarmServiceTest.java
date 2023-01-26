@@ -49,7 +49,7 @@ class AlarmServiceTest {
     @Test
     @DisplayName("유저 id값 1을 가진 유저에게 유투브 알림을 전송가는지 테스트")
     public void telegramYoutubeAndNewsTest(){
-        externalAlarmClient.sendYoutubeMessage(alarmService.getUserYoutubeAlarmContents(1L),1L);
+        externalAlarmClient.sendContentsMessage(alarmService.getUserYoutubeAndNewsAlarmContents(1L,CategoryType.YOUTUBE),1L);
     }
 
     @Test
@@ -91,7 +91,7 @@ class AlarmServiceTest {
             youtubeAndNewsRepository.save(youtubeAndNews);
         }
 
-        Assertions.assertEquals(4, alarmService.getUserYoutubeAlarmContents(1l).size());
+        Assertions.assertEquals(4, alarmService.getUserYoutubeAndNewsAlarmContents(1l,CategoryType.YOUTUBE).size());
     }
 
 }
