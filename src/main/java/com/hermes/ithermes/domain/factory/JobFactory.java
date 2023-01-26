@@ -3,7 +3,7 @@ package com.hermes.ithermes.domain.factory;
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.domain.util.GradeType;
-import com.hermes.ithermes.infrastructure.JobJpaRepository;
+import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.presentation.dto.job.JobCrawlingDto;
 import com.hermes.ithermes.presentation.dto.job.JobInsertRequestDto;
 import com.hermes.ithermes.presentation.dto.job.JobLastUrlRequestDto;
@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class JobFactory {
-    private final JobJpaRepository jobJpaRepository;
+    private final JobRepository jobRepository;
 
     public List<Job> parseJob(JobInsertRequestDto jobInsertRequestDto) {
         List<Job> jobList = new ArrayList<>();
@@ -69,7 +69,7 @@ public class JobFactory {
 
     public JobLastUrlResponseDto findJobLastUrl(JobLastUrlRequestDto jobLastUrlRequestDto) {
         ContentsProviderType contentsProvider = jobLastUrlRequestDto.getContentsProvider();
-        List<Job> lastYoutubeAndNews = jobJpaRepository.findFirst1ByContentsProviderOrderByUrlDesc(contentsProvider);
+        List<Job> lastYoutubeAndNews = jobRepository.findFirst1ByContentsProviderOrderByUrlDesc(contentsProvider);
         if (!lastYoutubeAndNews.isEmpty()) {
             return JobLastUrlResponseDto
                     .builder()
