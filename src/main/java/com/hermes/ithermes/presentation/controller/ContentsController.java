@@ -3,7 +3,6 @@ package com.hermes.ithermes.presentation.controller;
 import com.hermes.ithermes.application.ContentsService;
 import com.hermes.ithermes.domain.exception.NotExistsRequestParamException;
 import com.hermes.ithermes.domain.util.CategoryType;
-import com.hermes.ithermes.domain.util.ContentsType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +22,8 @@ public class ContentsController {
     private final ContentsService contentsService;
 
     @RequestMapping(value = "/main",method = RequestMethod.GET)
-    public ResponseEntity<List<ContentsDtoInterface>> getMainContents(@RequestParam(value = "type")ContentsType type){
-        if(!ContentsType.isContainContentsType(type.getName())){
+    public ResponseEntity<List<ContentsDtoInterface>> getMainContents(@RequestParam(value = "type") CategoryType type){
+        if(!CategoryType.isContainCategoryType(type.getTitle())){
             throw new NotExistsRequestParamException();
         }
         return ResponseEntity.ok(contentsService.getMainContents(type));
@@ -32,9 +31,9 @@ public class ContentsController {
 
 
     @RequestMapping(value = "/category",method = RequestMethod.GET)
-    public ResponseEntity<List<ContentsDtoInterface>> getCategoryContents(@RequestParam(value = "type") ContentsType type, @RequestParam(value = "page")int page,
+    public ResponseEntity<List<ContentsDtoInterface>> getCategoryContents(@RequestParam(value = "type") CategoryType type, @RequestParam(value = "page")int page,
                                                                           @RequestParam(value = "order",required = false)OrderType order){
-        if(!ContentsType.isContainContentsType(type.getName())||!OrderType.isContainOrderType(order.getName())){
+        if(!CategoryType.isContainCategoryType(type.getTitle())||!OrderType.isContainOrderType(order.getName())){
             throw new NotExistsRequestParamException();
         }
         return ResponseEntity.ok(contentsService.getCategoryContents(type, page,order));
