@@ -12,12 +12,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
 @Repository
 public interface YoutubeAndNewsJpaRepository extends JpaRepository<YoutubeAndNews, Long> {
 
     Page<ContentsEntityInterface> findYoutubeAndNewsBy(Pageable pageable);
     Page<ContentsEntityInterface> findYoutubeAndNewsByCategory(Pageable pageable, CategoryType type);
     List<YoutubeAndNews> findFirst1ByContentsProviderOrderByUrlDesc(@Param("contentsProvider") ContentsProviderType contentsProvider);
+    List<YoutubeAndNews> findYoutubeAndNewsByContentsProvider(ContentsProviderType contentsProvider);
 
 }

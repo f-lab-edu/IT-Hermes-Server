@@ -16,8 +16,8 @@ public class AlarmController {
     private final AlarmService alarmService;
 
     @RequestMapping(value = "/",method = RequestMethod.GET)
-    public ResponseEntity<CommonResponseDto> alarm(){
-        return ResponseEntity.ok(alarmService.alarm());
+    public ResponseEntity<CommonResponseDto> alarmSubscribeContents(){
+        return ResponseEntity.ok(alarmService.sendAlarm());
     }
 
 }

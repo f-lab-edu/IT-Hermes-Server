@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterface {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
