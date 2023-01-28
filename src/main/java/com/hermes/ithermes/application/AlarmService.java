@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +51,7 @@ public class AlarmService {
         for(int i = 0; i < userIdArr.size(); i++){
             externalAlarmClient.sendContentsMessage(getUserRecommendAlarmContents(userIdArr.get(i),CategoryType.YOUTUBE), userIdArr.get(i));
             externalAlarmClient.sendContentsMessage(getUserRecommendAlarmContents(userIdArr.get(i),CategoryType.NEWS), userIdArr.get(i));
+            externalAlarmClient.sendJobMessage(getUserRecommendAlarmJobContents(userIdArr.get(i)),userIdArr.get(i));
         }
         return new CommonResponseDto();
     }
@@ -99,7 +101,7 @@ public class AlarmService {
     }
 
     public List<AlarmDtoInterface> getUserRecommendAlarmContents(long userIdx, CategoryType type){
-        List<String> userRecommendKeywords = getRecommendKeywords(userIdx,type);
+        List<String> userRecommendKeywords = getRecommendKeywords(userIdx);
         List<ContentsProviderType> userContentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx, type);
         return userContentsProviderList.stream()
                         .map(m -> youtubeAndNewsRepository.findYoutubeAndNewsByContentsProvider(m))
@@ -109,18 +111,22 @@ public class AlarmService {
                         .collect(Collectors.toList());
     }
 
-    public List<String> getRecommendKeywords(long userIdx,CategoryType type){
-        List<String> keywords = new ArrayList<>();
-        keywords.add("머신러닝");
-        keywords.add("빅데이터");
-        keywords.add("보안");
-        keywords.add("오픈소스");
-        keywords.add("클라우드");
-        keywords.add("프레임워크");
-        /*
-        List<String> userCustomKeywords = userRepository.findUsersById(userIdx).getJob();
+    public List<JobAlarmDto> getUserRecommendAlarmJobContents(long userIdx){
+        List<String> userRecommendKeywords = getRecommendKeywords(userIdx);
+        List<ContentsProviderType> userContentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx, CategoryType.JOB);
+        return userContentsProviderList.stream()
+                .map(m -> jobRepository.findJobByContentsProvider(m))
+                .flatMap(List::stream)
+                .filter(m -> userRecommendKeywords.contains(m.getTitle()))
+                .map(m -> JobAlarmDto.convertEntityToDto(m))
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getRecommendKeywords(long userIdx){
+        List<String> keywords = Arrays.asList("머신러닝,빅데이터,보안,오픈소스,클라우드,프레임워크");
+        List<String> userCustomKeywords = userRepository.findUsersById(userIdx).getJob().getKeywords();
         userCustomKeywords.stream()
-                .map(m -> keywords.add(m));*/
+                .map(m -> keywords.add(m));
         return keywords;
     }
 
