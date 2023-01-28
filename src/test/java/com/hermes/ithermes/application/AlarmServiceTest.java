@@ -49,7 +49,7 @@ class AlarmServiceTest {
     @Test
     @DisplayName("유저 id값 1을 가진 유저에게 유투브 알림을 전송가는지 테스트")
     public void telegramYoutubeAndNewsTest(){
-        externalAlarmClient.sendYoutubeMessage(alarmService.getUserYoutubeAlarmContents(1L),1L);
+        externalAlarmClient.sendContentsMessage(alarmService.getUserYoutubeAndNewsAlarmContents(1L,CategoryType.YOUTUBE),1L);
     }
 
     @Test
@@ -67,7 +67,7 @@ class AlarmServiceTest {
             jobJpaRepository.save(job);
         }
 
-        Subscribe subscribe = new Subscribe(1L, user1, ActiveType.ACTIVE, CategoryType.JOB, ContentsProviderType.NAVER);
+        Subscribe subscribe = new Subscribe(1L, user1, ActiveType.ACTIVE, CategoryType.JOB, ContentsProviderType.NAVER,"마지막 url");
         subscribeRepository.save(subscribe);
 
         Assertions.assertEquals(3, alarmService.getUserJobAlarmContents(1l).size());
@@ -83,7 +83,7 @@ class AlarmServiceTest {
         User user1 = new User(1L,"이은영","eun02323","12345", JobType.BACKEND,0,"123455235",false);
         userRepository.save(user1);
 
-        Subscribe subscribe = new Subscribe(1L, user1, ActiveType.ACTIVE, CategoryType.YOUTUBE, ContentsProviderType.DREAM_CODING);
+        Subscribe subscribe = new Subscribe(1L, user1, ActiveType.ACTIVE, CategoryType.YOUTUBE, ContentsProviderType.DREAM_CODING,"마지막 url");
         subscribeRepository.save(subscribe);
 
         for(int i = 0; i < 4; i++){
@@ -91,7 +91,7 @@ class AlarmServiceTest {
             youtubeAndNewsJpaRepository.save(youtubeAndNews);
         }
 
-        Assertions.assertEquals(4, alarmService.getUserYoutubeAlarmContents(1l).size());
+        Assertions.assertEquals(4, alarmService.getUserYoutubeAndNewsAlarmContents(1l,CategoryType.YOUTUBE).size());
     }
 
 }

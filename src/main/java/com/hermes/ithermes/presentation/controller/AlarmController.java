@@ -15,9 +15,14 @@ public class AlarmController {
 
     private final AlarmService alarmService;
 
-    @RequestMapping(value = "/",method = RequestMethod.GET)
+    @RequestMapping(value = "/subscription",method = RequestMethod.GET)
     public ResponseEntity<CommonResponseDto> alarmSubscribeContents(){
-        return ResponseEntity.ok(alarmService.sendAlarm());
+        return ResponseEntity.ok(alarmService.sendSubscribeAlarm());
+    }
+
+    @RequestMapping(value = "/recommend",method = RequestMethod.GET)
+    public ResponseEntity<CommonResponseDto> alarmRecommendContents(){
+        return ResponseEntity.ok(alarmService.sendRecommendAlarm());
     }
 
 }
