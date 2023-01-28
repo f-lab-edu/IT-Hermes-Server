@@ -19,4 +19,8 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
 
     boolean existsByUserId(@Param("userId") Long userId);
 
+    List<Subscribe> findByUserIdAndCategoryAndIsActive(@Param("userId")Long userId,@Param("category")CategoryType categoryType,@Param("active")ActiveType active);
+
+    Subscribe findByUserIdAndContentsProvider(Long userId,ContentsProviderType contentsProviderType);
+
 }
