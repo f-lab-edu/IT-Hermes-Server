@@ -3,10 +3,10 @@ package com.hermes.ithermes.application;
 import com.hermes.ithermes.domain.util.ActiveType;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
-import com.hermes.ithermes.infrastructure.JobJpaRepository;
+import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.SubscribeRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
-import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
+import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.alarm.AlarmDtoInterface;
 import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
@@ -26,8 +26,8 @@ public class AlarmService {
     private final ExternalAlarmClient externalAlarmClient;
     private final UserRepository userRepository;
     private final SubscribeRepository subscribeRepository;
-    private final YoutubeAndNewsJpaRepository youtubeAndNewsJpaRepository;
-    private final JobJpaRepository jobJpaRepository;
+    private final YoutubeAndNewsRepository youtubeAndNewsRepository;
+    private final JobRepository jobRepository;
 
     public CommonResponseDto sendAlarm() {
         List<Long> userIdArr = userRepository.findByTelegramIdIsNotNull().stream()
@@ -47,7 +47,7 @@ public class AlarmService {
         List<ContentsProviderType> youtubeContentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx, type);
 
         List<AlarmDtoInterface> youtubeAlarmDtoList = youtubeContentsProviderList.stream()
-                .map(m -> youtubeAndNewsJpaRepository.findYoutubeAndNewsByContentsProvider(m))
+                .map(m -> youtubeAndNewsRepository.findYoutubeAndNewsByContentsProvider(m))
                 .flatMap(List::stream)
                 .map(m -> YoutubeAndNewsAlarmDto.convertEntityToDto(m))
                 .collect(Collectors.toList());
@@ -59,7 +59,7 @@ public class AlarmService {
         List<ContentsProviderType> jobContentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx, CategoryType.JOB);
 
         List<JobAlarmDto> jobAlarmDtoList = jobContentsProviderList.stream()
-                .map(m -> jobJpaRepository.findJobByContentsProvider(m))
+                .map(m -> jobRepository.findJobByContentsProvider(m))
                 .flatMap(List::stream)
                 .map(m -> JobAlarmDto.convertEntityToDto(m))
                 .collect(Collectors.toList());
