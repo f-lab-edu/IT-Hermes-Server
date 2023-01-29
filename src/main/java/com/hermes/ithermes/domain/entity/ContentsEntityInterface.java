@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 
 public interface ContentsEntityInterface {
 
-    String title();
-    String image();
-    String url();
-    CategoryType categoryType();
-    ContentsProviderType contentsProvider();
-    LocalDateTime contentsTime();
-    String description();
+    String findTitle();
+    String findImage();
+    String findUrl();
+    CategoryType findCategoryType();
+    ContentsProviderType findContentsProvider();
+    LocalDateTime findContentsTime();
+    String findDescription();
 
 }

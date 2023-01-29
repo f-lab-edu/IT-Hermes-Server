@@ -54,37 +54,37 @@ public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterfac
     }
 
     @Override
-    public String title() {
+    public String findTitle() {
         return title;
     }
 
     @Override
-    public String image() {
+    public String findImage() {
         return image;
     }
 
     @Override
-    public String url() {
+    public String findUrl() {
         return url;
     }
 
     @Override
-    public CategoryType categoryType() {
+    public CategoryType findCategoryType() {
         return category;
     }
 
     @Override
-    public ContentsProviderType contentsProvider() {
+    public ContentsProviderType findContentsProvider() {
         return contentsProvider;
     }
 
     @Override
-    public LocalDateTime contentsTime() {
+    public LocalDateTime findContentsTime() {
         return contentsStartAt;
     }
 
     @Override
-    public String description() {
+    public String findDescription() {
         return description;
     }
 }

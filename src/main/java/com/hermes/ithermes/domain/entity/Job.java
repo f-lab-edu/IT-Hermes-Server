@@ -64,37 +64,37 @@ public class Job extends BaseEntity implements ContentsEntityInterface{
     }
 
     @Override
-    public String title() {
+    public String findTitle() {
         return title;
     }
 
     @Override
-    public String image() {
+    public String findImage() {
         return null;
     }
 
     @Override
-    public String url() {
+    public String findUrl() {
         return url;
     }
 
     @Override
-    public CategoryType categoryType() {
+    public CategoryType findCategoryType() {
         return CategoryType.JOB;
     }
 
     @Override
-    public ContentsProviderType contentsProvider() {
+    public ContentsProviderType findContentsProvider() {
         return contentsProvider;
     }
 
     @Override
-    public LocalDateTime contentsTime() {
+    public LocalDateTime findContentsTime() {
         return contentsEndAt;
     }
 
     @Override
-    public String description() {
+    public String findDescription() {
         return company;
     }
 

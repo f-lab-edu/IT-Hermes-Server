@@ -2,8 +2,6 @@ package com.hermes.ithermes.presentation.dto.contents;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
-import com.hermes.ithermes.domain.entity.Job;
-import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import lombok.AllArgsConstructor;
@@ -33,12 +31,12 @@ public class MainPageContentsDto implements ContentsDtoInterface {
     public LocalDateTime contentsDate;
 
     public MainPageContentsDto(ContentsEntityInterface contentsEntityInterface){
-        this.title = contentsEntityInterface.title();
-        this.image = contentsEntityInterface.image();
-        this.url = contentsEntityInterface.url();
-        this.category = contentsEntityInterface.categoryType();
-        this.contentsProviderType = contentsEntityInterface.contentsProvider();
-        this.contentsDate = contentsEntityInterface.contentsTime();
+        this.title = contentsEntityInterface.findTitle();
+        this.image = contentsEntityInterface.findImage();
+        this.url = contentsEntityInterface.findUrl();
+        this.category = contentsEntityInterface.findCategoryType();
+        this.contentsProviderType = contentsEntityInterface.findContentsProvider();
+        this.contentsDate = contentsEntityInterface.findContentsTime();
     }
 
     @Override
