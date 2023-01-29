@@ -1,5 +1,6 @@
 package com.hermes.ithermes.application;
 
+import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.Subscribe;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
@@ -68,10 +69,9 @@ public class AlarmService {
             for(long j = startIdx; j < youtubeAndNewsList.size(); j++) {
                 youtubeAndNewsAlarmList.add(youtubeAndNewsList.get((int) j));
             }
-            String lastUrl = youtubeAndNewsAlarmList.get(youtubeAndNewsAlarmList.size()-1).getUrl();
-            Subscribe subscribe1 = subscribeRepository.findByUserIdAndContentsProvider(userIdx,subscribe.get(i).getContentsProvider());
-            subscribe1.setAlarmLastUrl(lastUrl);
-            subscribeRepository.save(subscribe1);
+            if(youtubeAndNewsAlarmList.size()>0){
+                updateUserSubscribeContentsLastUrl(youtubeAndNewsAlarmList.get(youtubeAndNewsAlarmList.size()-1).getUrl(),userIdx,subscribe.get(i).getContentsProvider());
+            }
         }
         return youtubeAndNewsAlarmList.stream()
                 .map(m -> YoutubeAndNewsAlarmDto.convertEntityToDto(m))
@@ -90,43 +90,78 @@ public class AlarmService {
             for(long j = startIdx; j < jobList.size(); j++){
                 jobAlarmList.add(jobAlarmList.get((int) j));
             }
-            String lastUrl = jobAlarmList.get(jobAlarmList.size()-1).getUrl();
-            Subscribe subscribe1 = subscribeRepository.findByUserIdAndContentsProvider(userIdx,subscribe.get(i).getContentsProvider());
-            subscribe1.setAlarmLastUrl(lastUrl);
-            subscribeRepository.save(subscribe1);
+            if(jobAlarmList.size()>0){
+                updateUserSubscribeContentsLastUrl(jobAlarmList.get(jobAlarmList.size()-1).getUrl(),userIdx,subscribe.get(i).getContentsProvider());
+            }
         }
         return jobAlarmList.stream()
                 .map(m -> JobAlarmDto.convertEntityToDto(m))
                 .collect(Collectors.toList());
     }
 
+    public void updateUserSubscribeContentsLastUrl(String lastUrl,long userIdx,ContentsProviderType contentsProvider){
+        Subscribe subscribe = subscribeRepository.findByUserIdAndContentsProvider(userIdx,contentsProvider);
+        subscribe.setAlarmLastUrl(lastUrl);
+        subscribeRepository.save(subscribe);
+    }
+
     public List<AlarmDtoInterface> getUserRecommendAlarmContents(long userIdx, CategoryType type){
         List<String> userRecommendKeywords = getRecommendKeywords(userIdx);
         List<ContentsProviderType> userContentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx, type);
-        return userContentsProviderList.stream()
+
+        List<YoutubeAndNews> youtubeAndNewsSubscribeContents = userContentsProviderList.stream()
                         .map(m -> youtubeAndNewsRepository.findYoutubeAndNewsByContentsProvider(m))
                         .flatMap(List::stream)
-                        .filter(m -> userRecommendKeywords.contains(m.getTitle()))
-                        .map(m -> YoutubeAndNewsAlarmDto.convertEntityToDto(m))
                         .collect(Collectors.toList());
+        List<YoutubeAndNews> youtubeAndNewsRecommendList = new ArrayList<>();
+        for(String keyword : userRecommendKeywords){
+            for(YoutubeAndNews youtubeAndNewsContents : youtubeAndNewsSubscribeContents){
+                if(keyword.contains(youtubeAndNewsContents.getTitle())){
+                    youtubeAndNewsRecommendList.add(youtubeAndNewsContents);
+                    break;
+                }
+            }
+        }
+        return youtubeAndNewsRecommendList.stream()
+                .distinct()
+                .map(m -> YoutubeAndNewsAlarmDto.convertEntityToDto(m))
+                .collect(Collectors.toList());
     }
 
     public List<JobAlarmDto> getUserRecommendAlarmJobContents(long userIdx){
         List<String> userRecommendKeywords = getRecommendKeywords(userIdx);
         List<ContentsProviderType> userContentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx, CategoryType.JOB);
-        return userContentsProviderList.stream()
+        List<Job> jobSubscribeContents = userContentsProviderList.stream()
                 .map(m -> jobRepository.findJobByContentsProvider(m))
                 .flatMap(List::stream)
-                .filter(m -> userRecommendKeywords.contains(m.getTitle()))
+                .collect(Collectors.toList());
+        List<Job> jobRecommendList = new ArrayList<>();
+        for(String keyword : userRecommendKeywords){
+            for(Job jobContents : jobSubscribeContents){
+                if(keyword.contains(jobContents.getTitle())){
+                    jobRecommendList.add(jobContents);
+                    break;
+                }
+            }
+        }
+        return jobRecommendList.stream()
+                .distinct()
                 .map(m -> JobAlarmDto.convertEntityToDto(m))
                 .collect(Collectors.toList());
     }
 
     public List<String> getRecommendKeywords(long userIdx){
-        List<String> keywords = Arrays.asList("머신러닝,빅데이터,보안,오픈소스,클라우드,프레임워크");
+        List<String> keywords = new ArrayList<>();
+        keywords.add("머신러닝");
+        keywords.add("빅데이터");
+        keywords.add("보안");
+        keywords.add("오픈소스");
+        keywords.add("클라우드");
+        keywords.add("프레임워크");
         List<String> userCustomKeywords = userRepository.findUsersById(userIdx).getJob().getKeywords();
         userCustomKeywords.stream()
-                .map(m -> keywords.add(m));
+                .forEach(m -> keywords.add(m));
+
         return keywords;
     }
 
