@@ -15,13 +15,13 @@ import com.hermes.ithermes.infrastructure.UserKeywordRegistryRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.user.*;
-import com.hermes.ithermes.presentation.security.JwtTokenProvider;
+import com.hermes.ithermes.presentation.security.JwtUtil;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +40,8 @@ public class UserService {
     private final KeywordFactory keywordFactory;
     private final UserRepository userRepository;
     private final UserKeywordRegistryFactory userKeywordRegistryFactory;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtUtil jwtUtil;
+    private final BCryptPasswordEncoder encoder;
 
     @Transactional
     public CommonResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
@@ -51,7 +51,7 @@ public class UserService {
                 .orElseThrow(() -> new UnMatchedPasswordException());
 
         String loginId = userLoginRequestDto.getId();
-        String password = passwordEncoder.encode(userLoginRequestDto.getPassword());
+        String password = encoder.encode(userLoginRequestDto.getPassword());
         if (userFactory.existsByLoginId(loginId)) throw new SameIdException();
 
         User user = userFactory.parseLoginRequestDtoToUser(userLoginRequestDto);
@@ -74,11 +74,11 @@ public class UserService {
 
         User user = userFactory.findLoginId(loginId).orElseThrow(() -> new WrongIdOrPasswordException());
 
-        if (!passwordEncoder.matches(password, user.getPassword())) throw new WrongIdOrPasswordException();
+        if (!encoder.matches(password, user.getPassword())) throw new WrongIdOrPasswordException();
 
         UserLoginResponseDto userLoginResponseDto = UserLoginResponseDto.builder()
                 .message("success")
-                .token(jwtTokenProvider.createToken(loginId, password)).build();
+                .token(jwtUtil.createToken(loginId)).build();
         return userLoginResponseDto;
     }
 

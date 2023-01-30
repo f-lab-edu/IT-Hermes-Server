@@ -7,7 +7,7 @@ import lombok.Getter;
 public enum ContentsProviderType {
     SARAMIN("SARAMIN"),
     WANTED("WANTED"),
-    CODING_WORLD("CONING_WORLD"),
+    CODING_WORLD("CODING_WORLD"),
     NAVER("NAVER"),
     YOZM("YOZM"),
     NOMAD_CODERS("NOMAD_CODERS"),

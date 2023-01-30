@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,6 +38,7 @@ class SubscribeControllerTest {
 
     @Test
     @DisplayName("구독_PUT_정상처리")
+    @WithMockUser
     void 구독_PUT_정상처리() throws Exception {
         ArrayList<SubscribeContentsDto> subscribeContentsList = new ArrayList<>();
         subscribeContentsList.add(new SubscribeContentsDto("SARAMIN","ACTIVE"));
@@ -49,6 +52,7 @@ class SubscribeControllerTest {
         SubscribePutSubscribeRequestDto subscribePutSubscribeRequestDto = new SubscribePutSubscribeRequestDto("test",subscribeContentsList);
 
         mockMvc.perform(put("/subscribe/")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(subscribePutSubscribeRequestDto)))
                 .andExpect(status().isOk()); // 추후 201로 수정필요!
@@ -56,6 +60,7 @@ class SubscribeControllerTest {
 
     @Test
     @DisplayName("구독_PUT_실패처리")
+    @WithMockUser
     void 구독_PUT_실패처리() throws Exception {
         ArrayList<SubscribeContentsDto> subscribeContentsList = new ArrayList<>();
         subscribeContentsList.add(new SubscribeContentsDto("SARAMIN","ACTIVE"));
@@ -71,6 +76,7 @@ class SubscribeControllerTest {
         when(subscribeService.putSubscribe(any())).thenThrow(new WrongIdOrPasswordException());
 
         mockMvc.perform(put("/subscribe/")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(subscribePutSubscribeRequestDto)))
                 .andExpect(status().isBadRequest());
@@ -78,10 +84,12 @@ class SubscribeControllerTest {
 
     @Test
     @DisplayName("구독조회_성공처리")
+    @WithMockUser
     void 구독조회_성공처리() throws Exception {
         SubscribeFindSubscribeRequestDto subscribeFindSubscribeRequestDto = new SubscribeFindSubscribeRequestDto("test");
 
         mockMvc.perform(post("/subscribe/")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(subscribeFindSubscribeRequestDto)))
                 .andExpect(status().isOk());
@@ -89,12 +97,14 @@ class SubscribeControllerTest {
 
     @Test
     @DisplayName("구독조회_실패처리")
+    @WithMockUser
     void 구독조회_실패처리() throws Exception {
         SubscribeFindSubscribeRequestDto subscribeFindSubscribeRequestDto = new SubscribeFindSubscribeRequestDto("test");
 
         when(subscribeService.findSubscribe(any())).thenThrow(new WrongIdOrPasswordException());
 
         mockMvc.perform(post("/subscribe/")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(subscribeFindSubscribeRequestDto)))
                 .andExpect(status().isBadRequest());

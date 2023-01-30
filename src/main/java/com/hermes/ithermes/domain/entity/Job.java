@@ -57,8 +57,11 @@ public class Job extends BaseEntity implements ContentsEntityInterface{
     @Column(nullable = false)
     private GradeType grade;
 
-
     public void initDefaultData() {
         viewCount=0L;
+    }
+
+    public void updateViewCount(Long viewCount) {
+        this.viewCount=viewCount+1L;
     }
 }

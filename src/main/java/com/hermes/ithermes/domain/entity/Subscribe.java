@@ -8,16 +8,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@DynamicInsert
-@DynamicUpdate
+
 public class Subscribe extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,8 +40,8 @@ public class Subscribe extends BaseEntity {
         this.user = user;
     }
 
-    public void changeUpdateAt(Subscribe subscribe) {
-        this.isActive=subscribe.getIsActive();
+    public void changeUpdateAt(ActiveType activeType) {
+        this.isActive=activeType;
         changeUpdateAt();
     }
 }

@@ -17,7 +17,7 @@ import com.hermes.ithermes.presentation.dto.user.UserCreateUserRequestDto;
 import com.hermes.ithermes.presentation.dto.user.UserFindMyDataRequestDto;
 import com.hermes.ithermes.presentation.dto.user.UserLoginRequestDto;
 import com.hermes.ithermes.presentation.dto.user.UserUpdateNicknameRequestDto;
-import com.hermes.ithermes.presentation.security.JwtTokenProvider;
+import com.hermes.ithermes.presentation.security.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
@@ -48,9 +48,9 @@ class UserServiceTest {
     @Mock
     private KeywordFactory keywordFactory;
     @Mock
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder encoder;
     @Mock
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtUtil jwtUtil;
 
     private UserCreateUserRequestDto userCreateUserRequestDto;
     private User user;
@@ -119,8 +119,8 @@ class UserServiceTest {
 
         //When
         when(userFactory.findLoginId(any())).thenReturn(Optional.ofNullable(user));
-        when(jwtTokenProvider.createToken(any(),any())).thenReturn("1q2w3e4r!");
-        when(passwordEncoder.matches(any(),any())).thenReturn(true);
+        when(jwtUtil.createToken(any())).thenReturn("1q2w3e4r!");
+        when(encoder.matches(any(),any())).thenReturn(true);
         //Then
         assertEquals("success", userService.loginUser(userLoginRequestDto).getMessage());
     }

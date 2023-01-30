@@ -1,8 +1,5 @@
 package com.hermes.ithermes.presentation.security;
 
-import com.hermes.ithermes.domain.entity.UserDetails;
-import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
-import com.hermes.ithermes.domain.factory.UserFactory;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -13,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -21,8 +20,8 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
-public class JwtTokenProvider {
-    private final UserFactory userFactory;
+public class JwtUtil {
+    private final UserDetailsService userDetailsService;
 
     @Value("${springboot.jwt.secret}")
     private String secretKey = "secretKey";
@@ -33,9 +32,9 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createToken(String loginId, String password) {
-        Claims claims = Jwts.claims().setSubject(loginId);
-        claims.put("passsword",password);
+    public String createToken(String userName) {
+        Claims claims = Jwts.claims();
+        claims.put("userName",userName);
         Date now = new Date();
 
         String token = Jwts.builder()
@@ -49,7 +48,7 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userFactory.findLoginId(this.getUsername(token)).orElseThrow(() -> new WrongIdOrPasswordException());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "");
     }
 
@@ -62,7 +61,7 @@ public class JwtTokenProvider {
         return request.getHeader("HERMES-AUTH-TOKEN");
     }
 
-    public boolean validateToken(String token) {
+    public static boolean validateToken(String token, String secretKey) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());

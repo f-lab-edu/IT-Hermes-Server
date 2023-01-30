@@ -53,4 +53,7 @@ public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterfac
         viewCount=0L;
     }
 
+    public void updateViewCount(Long viewCount) {
+        this.viewCount=viewCount+1L;
+    }
 }

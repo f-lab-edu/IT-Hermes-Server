@@ -39,7 +39,7 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<UserLoginResponseDto> loginUser(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
         UserLoginResponseDto userLoginResponseDto = userService.loginUser(userLoginRequestDto);
-        return ResponseEntity.ok(userLoginResponseDto);
+        return ResponseEntity.ok().body(userLoginResponseDto);
     }
 
     @RequestMapping(value = "/duplicate-nickname", method = RequestMethod.POST)
@@ -72,8 +72,8 @@ public class UserController {
         return ResponseEntity.ok(userFindMyDataResponseDto);
     }
 
-    @RequestMapping(value = "/telegramId",method = RequestMethod.PUT)
-    public ResponseEntity<CommonResponseDto> updateTelegramId(){
+    @RequestMapping(value = "/telegramId", method = RequestMethod.PUT)
+    public ResponseEntity<CommonResponseDto> updateTelegramId() {
         return ResponseEntity.ok(userService.updateTelegramId(telegramKey));
     }
 }
