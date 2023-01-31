@@ -54,4 +54,38 @@ public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterfac
         viewCount=0L;
     }
 
+    @Override
+    public String findTitle() {
+        return title;
+    }
+
+    @Override
+    public String findImage() {
+        return image;
+    }
+
+    @Override
+    public String findUrl() {
+        return url;
+    }
+
+    @Override
+    public CategoryType findCategoryType() {
+        return category;
+    }
+
+    @Override
+    public ContentsProviderType findContentsProvider() {
+        return contentsProvider;
+    }
+
+    @Override
+    public LocalDateTime findContentsTime() {
+        return contentsStartAt;
+    }
+
+    @Override
+    public String findDescription() {
+        return description;
+    }
 }
