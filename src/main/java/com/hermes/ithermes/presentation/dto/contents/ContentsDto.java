@@ -34,6 +34,8 @@ public class ContentsDto implements ContentsDtoInterface {
 
     public String description;
 
+    public Long viewCnt;
+
     public ContentsDto(YoutubeAndNews youtubeAndNews) {
         this.title = youtubeAndNews.getTitle();
         this.image = youtubeAndNews.getImage();
@@ -42,6 +44,7 @@ public class ContentsDto implements ContentsDtoInterface {
         this.contentProvider = youtubeAndNews.getContentsProvider();
         this.contentsDate = youtubeAndNews.getContentsStartAt();
         this.description = youtubeAndNews.getDescription();
+        this.viewCnt = youtubeAndNews.getViewCount();
     }
 
     public ContentsDto(Job job) {
@@ -52,6 +55,7 @@ public class ContentsDto implements ContentsDtoInterface {
         this.contentProvider = job.getContentsProvider();
         this.contentsDate = job.getContentsEndAt();
         this.description = job.getCompany();
+        this.viewCnt = job.getViewCount();
     }
 
     @Override

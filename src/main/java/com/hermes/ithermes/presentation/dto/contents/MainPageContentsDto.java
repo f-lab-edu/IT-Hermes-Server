@@ -32,6 +32,8 @@ public class MainPageContentsDto implements ContentsDtoInterface {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime contentsDate;
 
+    public Long viewCnt;
+
     public MainPageContentsDto(YoutubeAndNews youtubeAndNews) {
         this.title = youtubeAndNews.getTitle();
         this.image = youtubeAndNews.getImage();
@@ -39,6 +41,7 @@ public class MainPageContentsDto implements ContentsDtoInterface {
         this.category = youtubeAndNews.getCategory();
         this.contentsProviderType = youtubeAndNews.getContentsProvider();
         this.contentsDate = youtubeAndNews.getContentsStartAt();
+        this.viewCnt = youtubeAndNews.getViewCount();
     }
 
     public MainPageContentsDto(Job job) {
@@ -48,6 +51,7 @@ public class MainPageContentsDto implements ContentsDtoInterface {
         this.category = CategoryType.JOB;
         this.contentsProviderType = job.getContentsProvider();
         this.contentsDate = job.getContentsEndAt();
+        this.viewCnt = job.getViewCount();
     }
 
     @Override
