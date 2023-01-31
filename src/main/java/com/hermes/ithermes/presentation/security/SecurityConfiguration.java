@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests().requestMatchers("/user/login", "/user/join","/user/duplicate-id","/user/duplicate-nickname").permitAll()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/youtube-and-news/",
-                        "/job/","/crawling-contents-last-title/","/alarm/","/contents/main","/url-record/")
+                        "/job/","/crawling-contents-last-title/","/alarm/","/contents/main","/url-record/","/contents/count/")
                 .permitAll()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/**").authenticated()
