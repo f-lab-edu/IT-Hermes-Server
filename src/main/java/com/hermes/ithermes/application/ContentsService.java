@@ -4,6 +4,7 @@ import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.infrastructure.JobJpaRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
+import com.hermes.ithermes.presentation.dto.contents.CategoryCountDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
@@ -55,6 +56,14 @@ public class ContentsService {
 
     private List<ContentsDtoInterface> convertEntityToDtoList(List<ContentsEntityInterface> content, ContentsDtoInterface t){
         return content.stream().map(x->t.convertEntityToDto(x)).collect(Collectors.toList());
+    }
+
+    public CategoryCountDto getCategoryCount(){
+        int youtubeCnt = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(CategoryType.YOUTUBE).size();
+        int jobCnt = jobRepository.findJobBy().size();
+        int newsCnt = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(CategoryType.NEWS).size();
+
+        return new CategoryCountDto(youtubeCnt,jobCnt,newsCnt);
     }
 
 }

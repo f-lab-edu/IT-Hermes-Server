@@ -15,4 +15,5 @@ import java.util.Optional;
 public interface JobJpaRepository extends JpaRepository<Job,Long> {
     Page<ContentsEntityInterface> findJobBy(Pageable pageable);
     Optional<List<Job>> findByUrl(@Param("url") String url);
+    List<Job> findJobBy();
 }

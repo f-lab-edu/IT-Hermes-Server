@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -17,5 +18,5 @@ public interface YoutubeAndNewsJpaRepository extends JpaRepository<YoutubeAndNew
     Page<ContentsEntityInterface> findYoutubeAndNewsBy(Pageable pageable);
     Page<ContentsEntityInterface> findYoutubeAndNewsByCategory(Pageable pageable, CategoryType type);
     Optional<YoutubeAndNews> findByUrl(@Param("url") String url);
-
+    List<YoutubeAndNews> findYoutubeAndNewsByCategory(CategoryType categoryType);
 }

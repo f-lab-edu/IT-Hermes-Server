@@ -4,6 +4,7 @@ import com.hermes.ithermes.application.ContentsService;
 import com.hermes.ithermes.domain.exception.NotExistsRequestParamException;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.OrderType;
+import com.hermes.ithermes.presentation.dto.contents.CategoryCountDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,11 @@ public class ContentsController {
             throw new NotExistsRequestParamException();
         }
         return ResponseEntity.ok(contentsService.getCategoryContents(type, page,order));
+    }
+
+    @RequestMapping(value = "/count",method = RequestMethod.GET)
+    public ResponseEntity<CategoryCountDto> getCategoryCount(){
+        return ResponseEntity.ok(contentsService.getCategoryCount());
     }
 
 
