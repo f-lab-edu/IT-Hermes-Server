@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class JobFactory {
 
-    public List<Job> parseJob(JobInsertRequestDto jobInsertRequestDto) {
+    public List<Job> insertJob(JobInsertRequestDto jobInsertRequestDto) {
         List<Job> jobList = new ArrayList<>();
         List<JobCrawlingDto> jobCrawlingDtoList = jobInsertRequestDto.getJobCrawlingDtoList();
         ContentsProviderType contentsProvider = jobInsertRequestDto.getContentsProvider();

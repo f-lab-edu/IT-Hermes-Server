@@ -19,8 +19,8 @@ public class JobController {
     private final JobService jobService;
 
     @RequestMapping(value = "/",method = RequestMethod.POST)
-    public ResponseEntity<CommonResponseDto> parseJob(@RequestBody JobInsertRequestDto jobInsertRequestDto){
-        CommonResponseDto commonResponseDto = jobService.parseJob(jobInsertRequestDto);
+    public ResponseEntity<CommonResponseDto> insertJob(@RequestBody JobInsertRequestDto jobInsertRequestDto){
+        CommonResponseDto commonResponseDto = jobService.insertJob(jobInsertRequestDto);
         return ResponseEntity.created(URI.create("/job")).body(commonResponseDto);
     }
 }

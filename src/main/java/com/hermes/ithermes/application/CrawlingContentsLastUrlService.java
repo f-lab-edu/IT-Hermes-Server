@@ -1,7 +1,7 @@
 package com.hermes.ithermes.application;
 
+import com.hermes.ithermes.domain.entity.CrawlingContentsLastUrl;
 import com.hermes.ithermes.domain.factory.CrawlingContentsLastUrlFactory;
-import com.hermes.ithermes.presentation.dto.crawlingcontentslasttitle.CrawlingContentsLastUrlDto;
 import com.hermes.ithermes.presentation.dto.crawlingcontentslasttitle.CrawlingContentsLastUrlFindAllResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class CrawlingContentsLastUrlService {
     private final CrawlingContentsLastUrlFactory crawlingContentsLastUrlFactory;
 
     public CrawlingContentsLastUrlFindAllResponseDto findAllCrawlingContentsLastTitle() {
-        List<CrawlingContentsLastUrlDto> crawlingContentsLastTitles = crawlingContentsLastUrlFactory.parseAllCrawlingContentsLastTitle();
+        List<CrawlingContentsLastUrl> crawlingContentsLastTitles = crawlingContentsLastUrlFactory.parseAllCrawlingContentsLastTitle();
         return new CrawlingContentsLastUrlFindAllResponseDto(crawlingContentsLastTitles);
     }
 }

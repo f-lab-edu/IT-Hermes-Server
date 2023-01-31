@@ -5,11 +5,9 @@ import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.JobType;
 import com.hermes.ithermes.infrastructure.CrawlingContentsLastUrlRepository;
-import com.hermes.ithermes.presentation.dto.crawlingcontentslasttitle.CrawlingContentsLastUrlDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -17,15 +15,10 @@ import java.util.List;
 public class CrawlingContentsLastUrlFactory {
     private final CrawlingContentsLastUrlRepository crawlingContentsLastUrlRepository;
 
-    public List<CrawlingContentsLastUrlDto> parseAllCrawlingContentsLastTitle() {
-
-        List<CrawlingContentsLastUrlDto> crawlingContentsLastUrlDtoList = new ArrayList<>();
+    public List<CrawlingContentsLastUrl> parseAllCrawlingContentsLastTitle() {
 
         List<CrawlingContentsLastUrl> crawlingContentsLastUrlRepositoryAll = crawlingContentsLastUrlRepository.findAll();
-        crawlingContentsLastUrlRepositoryAll.stream().forEach(v -> {
-            crawlingContentsLastUrlDtoList.add(new CrawlingContentsLastUrlDto(v.getContentsProvider(), v.getLastUrl(),v.getJob(),v.getGrade()));
-        });
-        return crawlingContentsLastUrlDtoList;
+        return crawlingContentsLastUrlRepositoryAll;
     }
 
     public CrawlingContentsLastUrl parseCrawlingContentsLastUrlToYoutubeAndNews(YoutubeAndNews youtubeAndNews) {

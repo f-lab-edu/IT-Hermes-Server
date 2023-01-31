@@ -29,10 +29,10 @@ public class JobService {
     private final CrawlingContentsLastUrlRepository crawlingContentsLastUrlRepository;
 
     @Transactional
-    public CommonResponseDto parseJob(JobInsertRequestDto jobInsertRequestDto) {
+    public CommonResponseDto insertJob(JobInsertRequestDto jobInsertRequestDto) {
         if (jobInsertRequestDto.getJobCrawlingDtoList().isEmpty()) throw new NoCrawlingDataException();
 
-        List<Job> jobList = jobFactory.parseJob(jobInsertRequestDto);
+        List<Job> jobList = jobFactory.insertJob(jobInsertRequestDto);
         jobList.stream().forEach(v -> jobJpaRepository.save(v));
 
         Job recentJob = jobList.get(0);
