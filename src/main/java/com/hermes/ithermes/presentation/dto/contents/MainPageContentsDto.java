@@ -25,7 +25,7 @@ public class MainPageContentsDto implements ContentsDtoInterface {
 
     public String url;
 
-    public String category;
+    public CategoryType category;
 
     public ContentsProviderType contentsProviderType;
 
@@ -36,7 +36,7 @@ public class MainPageContentsDto implements ContentsDtoInterface {
         this.title = youtubeAndNews.getTitle();
         this.image = youtubeAndNews.getImage();
         this.url = youtubeAndNews.getUrl();
-        this.category = youtubeAndNews.getCategory().getTitle();
+        this.category = youtubeAndNews.getCategory();
         this.contentsProviderType = youtubeAndNews.getContentsProvider();
         this.contentsDate = youtubeAndNews.getContentsStartAt();
     }
@@ -45,7 +45,7 @@ public class MainPageContentsDto implements ContentsDtoInterface {
         this.title = job.getTitle();
         this.image = null;
         this.url = job.getUrl();
-        this.category = CategoryType.JOB.getTitle();
+        this.category = CategoryType.JOB;
         this.contentsProviderType = job.getContentsProvider();
         this.contentsDate = job.getContentsEndAt();
     }

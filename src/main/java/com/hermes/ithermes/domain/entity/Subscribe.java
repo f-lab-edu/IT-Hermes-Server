@@ -39,8 +39,14 @@ public class Subscribe extends BaseEntity {
     @Column(nullable = false)
     private ContentsProviderType contentsProvider;
 
+    private String alarmLastUrl;
+
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setAlarmLastUrl(String alarmLastUrl) {
+        this.alarmLastUrl = alarmLastUrl;
     }
 
     public void changeUpdateAt(Subscribe subscribe) {

@@ -19,5 +19,6 @@ public interface YoutubeAndNewsRepository extends JpaRepository<YoutubeAndNews, 
     Page<ContentsEntityInterface> findYoutubeAndNewsByCategory(Pageable pageable, CategoryType type);
     List<YoutubeAndNews> findFirst1ByContentsProviderOrderByUrlDesc(@Param("contentsProvider") ContentsProviderType contentsProvider);
     List<YoutubeAndNews> findYoutubeAndNewsByContentsProvider(ContentsProviderType contentsProvider);
+    YoutubeAndNews findYoutubeAndNewsByUrl(String url);
 
 }
