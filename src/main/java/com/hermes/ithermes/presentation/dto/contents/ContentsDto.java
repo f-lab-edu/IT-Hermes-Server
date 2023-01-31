@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
+import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +25,7 @@ public class ContentsDto implements ContentsDtoInterface {
 
     public String url;
 
-    public String category;
+    public CategoryType category;
 
     public ContentsProviderType contentProvider;
 
@@ -37,8 +38,8 @@ public class ContentsDto implements ContentsDtoInterface {
         this.title = youtubeAndNews.getTitle();
         this.image = youtubeAndNews.getImage();
         this.url = youtubeAndNews.getUrl();
-        //this.category = youtubeAndNews.getContentsProvider().getCategory().getTitle();
-        //this.contentProvider = youtubeAndNews.getContentsProvider().getName();
+        this.category = youtubeAndNews.getCategory();
+        this.contentProvider = youtubeAndNews.getContentsProvider();
         this.contentsDate = youtubeAndNews.getContentsStartAt();
         this.description = youtubeAndNews.getDescription();
     }
@@ -47,8 +48,8 @@ public class ContentsDto implements ContentsDtoInterface {
         this.title = job.getTitle();
         this.image = null;
         this.url = job.getUrl();
-        //this.category = job.getContentsProvider().getCategory().getTitle();
-        //this.contentProvider = job.getContentsProvider().getName();
+        this.category = CategoryType.JOB;
+        this.contentProvider = job.getContentsProvider();
         this.contentsDate = job.getContentsEndAt();
         this.description = job.getCompany();
     }
