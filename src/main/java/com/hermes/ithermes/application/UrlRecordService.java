@@ -8,6 +8,7 @@ import com.hermes.ithermes.domain.factory.UrlRecordFactory;
 import com.hermes.ithermes.infrastructure.JobJpaRepository;
 import com.hermes.ithermes.infrastructure.UrlRecordRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
+import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.urlrecord.UrlRecordPutViewCountRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class UrlRecordService {
     private final YoutubeAndNewsJpaRepository youtubeAndNewsJpaRepository;
 
     @Transactional
-    public void putViewCount(UrlRecordPutViewCountRequestDto urlRecordPutViewCountRequestDto, String ipAddress) {
+    public CommonResponseDto putViewCount(UrlRecordPutViewCountRequestDto urlRecordPutViewCountRequestDto, String ipAddress) {
         String url = urlRecordPutViewCountRequestDto.getUrl();
         boolean existsView = urlRecordRepository.existsByUrlAndPc(url, ipAddress);
         if (!existsView) {
@@ -40,5 +41,6 @@ public class UrlRecordService {
                 youtubeAndNews.updateViewCount();
             }
         }
+        return new CommonResponseDto();
     }
 }
