@@ -1,5 +1,6 @@
 package com.hermes.ithermes.application;
 
+import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.UrlRecord;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.exception.NoCrawlingDataException;
@@ -11,6 +12,8 @@ import com.hermes.ithermes.presentation.dto.urlrecord.UrlRecordPutViewCountReque
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,14 +31,14 @@ public class UrlRecordService {
         if (!existsView) {
             UrlRecord urlRecord = urlRecordFactory.parseUrlRecord(urlRecordPutViewCountRequestDto, ipAddress);
             urlRecordRepository.save(urlRecord);
-            jobJpaRepository.findByUrl(url).ifPresentOrElse(
-            v -> {
-                v.stream().forEach(job -> job.updateViewCount(job.getViewCount()));
-            },
-            () -> {
+            List<Job> jobList = jobJpaRepository.findByUrl(url).orElseThrow(() -> new NoCrawlingDataException());
+
+            if(jobList.size()!=0) {
+                jobList.stream().forEach(job -> job.updateViewCount());
+            } else {
                 YoutubeAndNews youtubeAndNews = youtubeAndNewsJpaRepository.findByUrl(url).orElseThrow(()-> new NoCrawlingDataException());
-                youtubeAndNews.updateViewCount(youtubeAndNews.getViewCount());
-            });
+                youtubeAndNews.updateViewCount();
+            }
         }
     }
 }

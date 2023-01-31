@@ -61,7 +61,7 @@ public class Job extends BaseEntity implements ContentsEntityInterface{
         viewCount=0L;
     }
 
-    public void updateViewCount(Long viewCount) {
-        this.viewCount=viewCount+1L;
+    public void updateViewCount() {
+        this.viewCount+=1L;
     }
 }
