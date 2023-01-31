@@ -2,7 +2,7 @@ package com.hermes.ithermes.application;
 
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.factory.YoutubeAndNewsFactory;
-import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
+import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsInsertDto;
 import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsLastUrlRequestDto;
@@ -16,11 +16,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class YoutubeAndNewsService {
     private final YoutubeAndNewsFactory youtubeAndNewsFactory;
-    private final YoutubeAndNewsJpaRepository youtubeAndNewsJpaRepository;
+    private final YoutubeAndNewsRepository youtubeAndNewsRepository;
 
     public CommonResponseDto parseYoutubeAndNews(YoutubeAndNewsInsertDto youtubeAndNewsCrawlingDtoList) {
         List<YoutubeAndNews> youtubeAndNewsList = youtubeAndNewsFactory.parseYoutubeAndNews(youtubeAndNewsCrawlingDtoList);
-        youtubeAndNewsList.stream().forEach(v-> youtubeAndNewsJpaRepository.save(v));
+        youtubeAndNewsList.stream().forEach(v-> youtubeAndNewsRepository.save(v));
         return new CommonResponseDto();
     }
 

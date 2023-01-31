@@ -3,7 +3,7 @@ package com.hermes.ithermes.domain.factory;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
-import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
+import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsCrawlingDto;
 import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsInsertDto;
 import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsLastUrlRequestDto;
@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class YoutubeAndNewsFactory {
-    private final YoutubeAndNewsJpaRepository youtubeAndNewsJpaRepository;
+    private final YoutubeAndNewsRepository youtubeAndNewsRepository;
 
     public List<YoutubeAndNews> parseYoutubeAndNews(YoutubeAndNewsInsertDto youtubeAndNewsCrawlingDtoList) {
         List<YoutubeAndNews> youtubeAndNewsList = new ArrayList<>();
@@ -58,7 +58,7 @@ public class YoutubeAndNewsFactory {
 
     public YoutubeAndNewsLastUrlResponseDto findYoutubeAndNewsLastUrl(YoutubeAndNewsLastUrlRequestDto youtubeAndNewsLastUrlRequestDto) {
         ContentsProviderType contentsProvider = youtubeAndNewsLastUrlRequestDto.getContentsProvider();
-        List<YoutubeAndNews> lastYoutubeAndNews = youtubeAndNewsJpaRepository.findFirst1ByContentsProviderOrderByUrlDesc(contentsProvider);
+        List<YoutubeAndNews> lastYoutubeAndNews = youtubeAndNewsRepository.findFirst1ByContentsProviderOrderByUrlDesc(contentsProvider);
         if (!lastYoutubeAndNews.isEmpty()) {
             return YoutubeAndNewsLastUrlResponseDto
                     .builder()

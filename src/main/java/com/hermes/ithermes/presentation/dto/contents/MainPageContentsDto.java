@@ -29,7 +29,7 @@ public class MainPageContentsDto implements ContentsDtoInterface {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime contentsDate;
-
+    
     public MainPageContentsDto(ContentsEntityInterface contentsEntityInterface){
         this.title = contentsEntityInterface.findTitle();
         this.image = contentsEntityInterface.findImage();
