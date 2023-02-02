@@ -1,6 +1,5 @@
 package com.hermes.ithermes.application;
 
-import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.Subscribe;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
@@ -19,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -113,15 +111,11 @@ public class AlarmService {
                         .map(m -> youtubeAndNewsRepository.findYoutubeAndNewsByContentsProvider(m))
                         .flatMap(List::stream)
                         .collect(Collectors.toList());
-        List<YoutubeAndNews> youtubeAndNewsRecommendList = new ArrayList<>();
-        for(String keyword : userRecommendKeywords){
-            for(YoutubeAndNews youtubeAndNewsContents : youtubeAndNewsSubscribeContents){
-                if(keyword.contains(youtubeAndNewsContents.getTitle())){
-                    youtubeAndNewsRecommendList.add(youtubeAndNewsContents);
-                    break;
-                }
-            }
-        }
+
+        List<YoutubeAndNews> youtubeAndNewsRecommendList = youtubeAndNewsSubscribeContents.stream()
+                .filter(m->m.isContainRecommendKeywords(userRecommendKeywords))
+                .collect(Collectors.toList());
+
         return youtubeAndNewsRecommendList.stream()
                 .distinct()
                 .map(m -> YoutubeAndNewsAlarmDto.convertEntityToDto(m))
@@ -131,19 +125,16 @@ public class AlarmService {
     public List<JobAlarmDto> getUserRecommendAlarmJobContents(long userIdx){
         List<String> userRecommendKeywords = getRecommendKeywords(userIdx);
         List<ContentsProviderType> userContentsProviderList = subscribeRepository.findContentsProvider(ActiveType.ACTIVE, userIdx, CategoryType.JOB);
+
         List<Job> jobSubscribeContents = userContentsProviderList.stream()
                 .map(m -> jobRepository.findJobByContentsProvider(m))
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
-        List<Job> jobRecommendList = new ArrayList<>();
-        for(String keyword : userRecommendKeywords){
-            for(Job jobContents : jobSubscribeContents){
-                if(keyword.contains(jobContents.getTitle())){
-                    jobRecommendList.add(jobContents);
-                    break;
-                }
-            }
-        }
+
+        List<Job> jobRecommendList = jobSubscribeContents.stream()
+                .filter(m->m.isContainRecommendKeywords(userRecommendKeywords))
+                .collect(Collectors.toList());
+
         return jobRecommendList.stream()
                 .distinct()
                 .map(m -> JobAlarmDto.convertEntityToDto(m))

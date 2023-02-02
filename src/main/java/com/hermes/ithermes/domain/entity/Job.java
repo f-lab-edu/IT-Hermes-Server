@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -96,6 +97,15 @@ public class Job extends BaseEntity implements ContentsEntityInterface{
     @Override
     public String findDescription() {
         return company;
+    }
+
+    public boolean isContainRecommendKeywords(List<String> keywordList){
+        for(String keyword : keywordList){
+            if(keyword.contains(title)){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

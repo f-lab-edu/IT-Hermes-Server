@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -87,5 +88,14 @@ public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterfac
     @Override
     public String findDescription() {
         return description;
+    }
+
+    public boolean isContainRecommendKeywords(List<String> keywordList){
+        for(String keyword : keywordList){
+            if(keyword.contains(title)){
+                return true;
+            }
+        }
+        return false;
     }
 }
