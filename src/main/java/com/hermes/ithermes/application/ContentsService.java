@@ -29,27 +29,33 @@ public class ContentsService {
 
     public List<ContentsDtoInterface> getMainContents(CategoryType type){
         Pageable pageInfo = PageRequest.of(0,10,Sort.by(OrderType.POPULAR.getOrderQuery()).descending());
+
         if(type.getTitle().equals("JOB")){
             return convertEntityToDtoList(jobRepository.findJobBy(pageInfo).getContent(), new MainPageContentsDto());
         }
+
         return pageYoutubeAndNewsConvertMainPageContentsDto(pageInfo,type);
     }
 
     public List<ContentsDtoInterface> getCategoryContents(CategoryType type, int page, OrderType order){
         Pageable pageInfo = PageRequest.of(page,12, Sort.by(order.getOrderQuery()).descending());
+
         if(type.getTitle().equals("JOB")) {
             return convertEntityToDtoList(jobRepository.findJobBy(pageInfo).getContent(), new ContentsDto());
         }
+
         return convertEntityToDtoList(youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageInfo,type).getContent(),new ContentsDto());
     }
 
     private List<ContentsDtoInterface> pageYoutubeAndNewsConvertMainPageContentsDto(Pageable page, CategoryType type){
         Page<ContentsEntityInterface> youtubeAndNewsContents;
+
         if(type.equals(CategoryType.YOUTUBE_AND_NEWS)){
             youtubeAndNewsContents = youtubeAndNewsRepository.findYoutubeAndNewsBy(page);
         }else{
             youtubeAndNewsContents = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(page,type);
         }
+
         return convertEntityToDtoList(youtubeAndNewsContents.getContent(), new MainPageContentsDto());
     }
 

@@ -35,11 +35,13 @@ public class AlarmService {
         List<Long> userIdArr = userRepository.findByTelegramIdIsNotNull().stream()
                 .map(m -> m.getId())
                 .collect(Collectors.toList());
+
         for (int i = 0; i < userIdArr.size(); i++) {
             externalAlarmClient.sendContentsMessage(getUserYoutubeAndNewsAlarmContents(userIdArr.get(i),CategoryType.YOUTUBE), userIdArr.get(i));
             externalAlarmClient.sendContentsMessage(getUserYoutubeAndNewsAlarmContents(userIdArr.get(i),CategoryType.NEWS), userIdArr.get(i));
             externalAlarmClient.sendJobMessage(getUserJobAlarmContents(userIdArr.get(i)), userIdArr.get(i));
         }
+
         return new CommonResponseDto();
     }
 
@@ -47,11 +49,13 @@ public class AlarmService {
         List<Long> userIdArr = userRepository.findByTelegramIdIsNotNull().stream()
                 .map(m -> m.getId())
                 .collect(Collectors.toList());
+
         for(int i = 0; i < userIdArr.size(); i++){
             externalAlarmClient.sendContentsMessage(getUserRecommendAlarmContents(userIdArr.get(i),CategoryType.YOUTUBE), userIdArr.get(i));
             externalAlarmClient.sendContentsMessage(getUserRecommendAlarmContents(userIdArr.get(i),CategoryType.NEWS), userIdArr.get(i));
             externalAlarmClient.sendJobMessage(getUserRecommendAlarmJobContents(userIdArr.get(i)),userIdArr.get(i));
         }
+
         return new CommonResponseDto();
     }
 
@@ -59,6 +63,7 @@ public class AlarmService {
         List<Subscribe> subscribe = subscribeRepository.findByUserIdAndCategoryAndIsActive(userIdx,type,ActiveType.ACTIVE);
         List<YoutubeAndNews> youtubeAndNewsAlarmList = new ArrayList<>();
         Long startIdx = Long.valueOf(0);
+
         for(int i = 0; i < subscribe.size(); i++){
             List<YoutubeAndNews> youtubeAndNewsList = youtubeAndNewsRepository.findYoutubeAndNewsByContentsProvider(subscribe.get(i).getContentsProvider());
             if(subscribe.get(i).getAlarmLastUrl()!=null){
@@ -71,6 +76,7 @@ public class AlarmService {
                 updateUserSubscribeContentsLastUrl(youtubeAndNewsAlarmList.get(youtubeAndNewsAlarmList.size()-1).getUrl(),userIdx,subscribe.get(i).getContentsProvider());
             }
         }
+
         return youtubeAndNewsAlarmList.stream()
                 .map(m -> YoutubeAndNewsAlarmDto.convertEntityToDto(m))
                 .collect(Collectors.toList());
@@ -80,6 +86,7 @@ public class AlarmService {
         List<Subscribe> subscribe = subscribeRepository.findByUserIdAndCategoryAndIsActive(userIdx,CategoryType.JOB,ActiveType.ACTIVE);
         List<Job> jobAlarmList = new ArrayList<>();
         Long startIdx = Long.valueOf(0);
+
         for(int i = 0; i < subscribe.size(); i++){
             List<Job> jobList = jobRepository.findJobByContentsProvider(subscribe.get(i).getContentsProvider());
             if(subscribe.get(i).getAlarmLastUrl()!=null){
@@ -92,6 +99,7 @@ public class AlarmService {
                 updateUserSubscribeContentsLastUrl(jobAlarmList.get(jobAlarmList.size()-1).getUrl(),userIdx,subscribe.get(i).getContentsProvider());
             }
         }
+
         return jobAlarmList.stream()
                 .map(m -> JobAlarmDto.convertEntityToDto(m))
                 .collect(Collectors.toList());

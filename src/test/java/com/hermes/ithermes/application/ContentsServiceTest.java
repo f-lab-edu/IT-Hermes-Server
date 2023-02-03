@@ -5,7 +5,6 @@ import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
-import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import jakarta.transaction.Transactional;
@@ -29,13 +28,13 @@ class ContentsServiceTest {
     private ContentsService contentsService;
 
     @Autowired
-    private YoutubeAndNewsJpaRepository youtubeAndNewsJpaRepository;
+    private YoutubeAndNewsRepository youtubeAndNewsRepository;
 
     @BeforeEach
     void setUp() {
         for(int i=0; i<12; i++){
             YoutubeAndNews youtubeAndNews = new YoutubeAndNews((long)i,"안녕하세요","ㅎㅎㅎㅎㅎ","이미지 url","그냥 url", LocalDateTime.now(),123L,false,CategoryType.YOUTUBE, ContentsProviderType.DREAM_CODING);
-            youtubeAndNewsJpaRepository.save(youtubeAndNews);
+            youtubeAndNewsRepository.save(youtubeAndNews);
         }
     }
 
@@ -50,7 +49,7 @@ class ContentsServiceTest {
     @DisplayName("category contents 페이징 처리 테스트")
     void checkpaging() {
         Pageable pageInfo = PageRequest.of(0,2);
-        List<ContentsEntityInterface> youtubeContents = youtubeAndNewsJpaRepository.findYoutubeAndNewsByCategory(pageInfo, CategoryType.YOUTUBE).getContent();
+        List<ContentsEntityInterface> youtubeContents = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageInfo, CategoryType.YOUTUBE).getContent();
 
         Assertions.assertEquals(2,youtubeContents.size());
     }
