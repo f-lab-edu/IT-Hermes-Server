@@ -91,11 +91,7 @@ public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterfac
     }
 
     public boolean isContainRecommendKeywords(List<String> keywordList){
-        for(String keyword : keywordList){
-            if(keyword.contains(title)){
-                return true;
-            }
-        }
-        return false;
+        return keywordList.stream()
+                .anyMatch(m->m.contains(title));
     }
 }

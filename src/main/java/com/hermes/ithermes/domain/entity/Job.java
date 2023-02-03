@@ -100,12 +100,8 @@ public class Job extends BaseEntity implements ContentsEntityInterface{
     }
 
     public boolean isContainRecommendKeywords(List<String> keywordList){
-        for(String keyword : keywordList){
-            if(keyword.contains(title)){
-                return true;
-            }
-        }
-        return false;
+        return keywordList.stream()
+                .anyMatch(m->m.contains(title));
     }
 
 }
