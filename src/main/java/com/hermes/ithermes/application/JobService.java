@@ -46,7 +46,7 @@ public class JobService {
 
         contentsLastTitle.ifPresentOrElse(
                 v -> {
-                    v.change(recentCrawlingContentsLastUrl);
+                    v.updateLastUrl(recentCrawlingContentsLastUrl);
                 },
                 () -> {
                     crawlingContentsLastUrlRepository.save(recentCrawlingContentsLastUrl);

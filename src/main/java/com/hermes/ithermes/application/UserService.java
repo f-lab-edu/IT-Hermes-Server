@@ -52,10 +52,10 @@ public class UserService {
 
         String loginId = userLoginRequestDto.getId();
         String password = encoder.encode(userLoginRequestDto.getPassword());
-        if (userFactory.existsByLoginId(loginId)) throw new SameIdException();
+        userLoginRequestDto.encodingPassword(password);
 
+        if (userFactory.existsByLoginId(loginId)) throw new SameIdException();
         User user = userFactory.parseLoginRequestDtoToUser(userLoginRequestDto);
-        user.parsePassword(password);
 
         Arrays.stream(userLoginRequestDto.getKeywordList())
                 .filter(v -> Objects.nonNull(v))

@@ -1,6 +1,6 @@
 INSERT
 INTO
-    UrlRecord (createdAt, updatedAt, url, pc)
+    UrlRecord (createdAt, updatedAt, url, clientIpAddress)
 VALUES
     (NOW(), NOW(),"www.naver.com", "LG-PC-1"),
     (NOW(), NOW(),"www.naver.com", "LG-PC-2"),

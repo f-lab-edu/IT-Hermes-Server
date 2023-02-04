@@ -28,19 +28,20 @@ public class UrlRecordService {
     @Transactional
     public CommonResponseDto putViewCount(UrlRecordPutViewCountRequestDto urlRecordPutViewCountRequestDto, String ipAddress) {
         String url = urlRecordPutViewCountRequestDto.getUrl();
-        boolean existsView = urlRecordRepository.existsByUrlAndPc(url, ipAddress);
-        if (!existsView) {
-            UrlRecord urlRecord = urlRecordFactory.parseUrlRecord(urlRecordPutViewCountRequestDto, ipAddress);
-            urlRecordRepository.save(urlRecord);
-            List<Job> jobList = jobJpaRepository.findByUrl(url).orElseThrow(() -> new NoCrawlingDataException());
+        boolean existsView = urlRecordRepository.existsByUrlAndClientIpAddress(url, ipAddress);
+        if (existsView) return new CommonResponseDto();
 
-            if(jobList.size()!=0) {
-                jobList.stream().forEach(job -> job.updateViewCount());
-            } else {
-                YoutubeAndNews youtubeAndNews = youtubeAndNewsJpaRepository.findByUrl(url).orElseThrow(()-> new NoCrawlingDataException());
-                youtubeAndNews.updateViewCount();
-            }
+        UrlRecord urlRecord = urlRecordFactory.parseUrlRecord(urlRecordPutViewCountRequestDto, ipAddress);
+        urlRecordRepository.save(urlRecord);
+        List<Job> jobList = jobJpaRepository.findByUrl(url).orElseThrow(() -> new NoCrawlingDataException());
+
+        if (jobList.isEmpty()) {
+            YoutubeAndNews youtubeAndNews = youtubeAndNewsJpaRepository.findByUrl(url).orElseThrow(() -> new NoCrawlingDataException());
+            youtubeAndNews.updateViewCount();
+        } else {
+            jobList.stream().forEach(job -> job.updateViewCount());
         }
+
         return new CommonResponseDto();
     }
 }

@@ -32,7 +32,7 @@ public class CrawlingContentsLastUrl {
     @Column(nullable = false, length = 1000)
     private String lastUrl;
 
-    public void change(CrawlingContentsLastUrl crawlingContentsLastUrl) {
+    public void updateLastUrl(CrawlingContentsLastUrl crawlingContentsLastUrl) {
         this.lastUrl = crawlingContentsLastUrl.getLastUrl();
     }
 }

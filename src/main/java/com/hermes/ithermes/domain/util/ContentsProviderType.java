@@ -23,4 +23,5 @@ public enum ContentsProviderType {
     public static ContentsProviderType fromValue(String contentsProvider) {
         return ContentsProviderType.valueOf(contentsProvider.toUpperCase());
     }
+
 }

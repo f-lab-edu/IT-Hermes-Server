@@ -15,7 +15,7 @@ public class UrlRecordFactory {
         UrlRecord urlRecord = UrlRecord
                 .builder()
                 .url(urlRecordPutViewCountRequestDto.getUrl())
-                .pc(ipAddress)
+                .clientIpAddress(ipAddress)
                 .build();
 
         return urlRecord;

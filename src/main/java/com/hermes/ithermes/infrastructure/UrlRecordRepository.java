@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UrlRecordRepository extends JpaRepository<UrlRecord, Long> {
-    boolean existsByUrlAndPc(@Param("url") String url, @Param("pc") String pc);
+    boolean existsByUrlAndClientIpAddress(@Param("url") String url, @Param("clientIpAddress") String clientIpAddress);
 }

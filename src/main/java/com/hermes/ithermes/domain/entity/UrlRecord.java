@@ -20,5 +20,5 @@ public class UrlRecord extends BaseEntity {
     private String url;
 
     @Column(nullable = false)
-    private String pc;
+    private String clientIpAddress;
 }
