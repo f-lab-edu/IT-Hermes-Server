@@ -24,7 +24,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        final String authentication = request.getHeader("HERMES-AUTH-TOKEN");
+        final String authentication = request.getHeader("HERMES-ACCESS-TOKEN");
 
         if (authentication == null || !authentication.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -33,8 +33,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String token = authentication.split(" ")[1];
 
-        if (JwtUtil.validateToken(token, secretKey)) {
+        if (!JwtUtil.validateToken(token, secretKey)) {
             logger.error("Token 만료");
+            final String refreshToken = request.getHeader("HERMES-REFRESH-TOKEN");
+            if(refreshToken!=null) {
+            } else {
+                //예외처리
+            }
             filterChain.doFilter(request, response);
             return;
         }

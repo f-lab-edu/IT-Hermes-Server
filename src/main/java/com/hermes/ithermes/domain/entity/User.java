@@ -41,6 +41,8 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Boolean isDelete;
 
+    private String refreshToken;
+
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }

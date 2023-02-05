@@ -119,7 +119,8 @@ class UserServiceTest {
 
         //When
         when(userFactory.findLoginId(any())).thenReturn(Optional.ofNullable(user));
-        when(jwtUtil.createToken(any())).thenReturn("1q2w3e4r!");
+        when(jwtUtil.createAccessToken(any())).thenReturn("1q2w3e4r!");
+        when(jwtUtil.createRefreshToken(any())).thenReturn("1q2w3e4r!");
         when(encoder.matches(any(),any())).thenReturn(true);
         //Then
         assertEquals("success", userService.loginUser(userLoginRequestDto).getMessage());

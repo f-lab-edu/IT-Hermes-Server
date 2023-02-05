@@ -73,7 +73,9 @@ public class UserService {
 
         UserLoginResponseDto userLoginResponseDto = UserLoginResponseDto.builder()
                 .message("success")
-                .token(jwtUtil.createToken(loginId)).build();
+                .accessToken(jwtUtil.createAccessToken(loginId))
+                .refreshToken(jwtUtil.createRefreshToken(loginId))
+                .build();
         return userLoginResponseDto;
     }
 

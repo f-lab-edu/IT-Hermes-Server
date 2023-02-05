@@ -32,15 +32,32 @@ public class JwtUtil {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createToken(String userName) {
+    public String createAccessToken(String userName) {
         Claims claims = Jwts.claims();
         claims.put("userName",userName);
         Date now = new Date();
 
         String token = Jwts.builder()
+                .setHeaderParam("type", "jwt")
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + tokenValidMillisecond))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+
+        return token;
+    }
+
+    public String createRefreshToken(String userName) {
+        Claims claims = Jwts.claims();
+        claims.put("userName",userName);
+        Date now = new Date();
+
+        String token = Jwts.builder()
+                .setHeaderParam("type", "jwt")
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + tokenValidMillisecond*72))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
 
@@ -57,12 +74,13 @@ public class JwtUtil {
         return info;
     }
 
-    public String resolveToken(HttpServletRequest request) {
+    public static String resolveToken(HttpServletRequest request) {
         return request.getHeader("HERMES-AUTH-TOKEN");
     }
 
     public static boolean validateToken(String token, String secretKey) {
         try {
+            secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
