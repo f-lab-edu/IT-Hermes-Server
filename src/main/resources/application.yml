@@ -27,4 +27,5 @@ springboot:
 logging:
   level:
     org.hibernate.SQL: debug
-telegram-key: 5809477338:AAFJXWDvGef5QynoEW40aUE-IK5Bt8sfk
+
+telegram-key: "5810579378:AAGNSVQz1Mzn1FjMkBuL1x-5UUz9u-jXdXc"

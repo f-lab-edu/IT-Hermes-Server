@@ -48,7 +48,8 @@ public class User extends BaseEntity {
     public void isDelete() {
         this.isDelete = true;
     }
-    public void parsePassword(String password) {
-        this.password = password;
+
+    public void updateTelegramId(String telegramId) {
+        this.telegramId = telegramId;
     }
 }

@@ -2,9 +2,9 @@ package com.hermes.ithermes.application;
 
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.OrderType;
-import com.hermes.ithermes.infrastructure.JobJpaRepository;
-import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
 import com.hermes.ithermes.presentation.dto.contents.CategoryCountDto;
+import com.hermes.ithermes.infrastructure.JobRepository;
+import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class ContentsService {
 
-    private final YoutubeAndNewsJpaRepository youtubeAndNewsRepository;
-    private final JobJpaRepository jobRepository;
+    private final YoutubeAndNewsRepository youtubeAndNewsRepository;
+    private final JobRepository jobRepository;
 
     public List<ContentsDtoInterface> getMainContents(CategoryType type){
         Pageable pageInfo = PageRequest.of(0,10,Sort.by(OrderType.POPULAR.getOrderQuery()).descending());

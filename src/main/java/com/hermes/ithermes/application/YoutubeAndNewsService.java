@@ -7,7 +7,7 @@ import com.hermes.ithermes.domain.factory.CrawlingContentsLastUrlFactory;
 import com.hermes.ithermes.domain.factory.YoutubeAndNewsFactory;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.infrastructure.CrawlingContentsLastUrlRepository;
-import com.hermes.ithermes.infrastructure.YoutubeAndNewsJpaRepository;
+import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsInsertDto;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class YoutubeAndNewsService {
     private final YoutubeAndNewsFactory youtubeAndNewsFactory;
-    private final YoutubeAndNewsJpaRepository youtubeAndNewsJpaRepository;
+    private final YoutubeAndNewsRepository youtubeAndNewsRepository;
     private final CrawlingContentsLastUrlFactory crawlingContentsLastUrlFactory;
     private final CrawlingContentsLastUrlRepository crawlingContentsLastUrlRepository;
 
@@ -31,7 +31,7 @@ public class YoutubeAndNewsService {
         if(youtubeAndNewsCrawlingDtoList.getYoutubeAndNewsCrawlingDtoList().isEmpty()) throw new NoCrawlingDataException();
 
         List<YoutubeAndNews> youtubeAndNewsList = youtubeAndNewsFactory.parseYoutubeAndNews(youtubeAndNewsCrawlingDtoList);
-        youtubeAndNewsList.stream().forEach(v -> youtubeAndNewsJpaRepository.save(v));
+        youtubeAndNewsList.stream().forEach(v -> youtubeAndNewsRepository.save(v));
 
         YoutubeAndNews recentYoutubeAndNews = youtubeAndNewsList.get(0);
 

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterface {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,11 +50,42 @@ public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterfac
     @Column(nullable = false)
     private ContentsProviderType contentsProvider;
 
-    public void initDefaultData() {
-        viewCount=0L;
+    public void updateViewCount() {
+        this.viewCount += +1L;
     }
 
-    public void updateViewCount() {
-        this.viewCount+=+1L;
+    @Override
+    public String findTitle() {
+        return title;
+    }
+
+    @Override
+    public String findImage() {
+        return image;
+    }
+
+    @Override
+    public String findUrl() {
+        return url;
+    }
+
+    @Override
+    public CategoryType findCategoryType() {
+        return category;
+    }
+
+    @Override
+    public ContentsProviderType findContentsProvider() {
+        return contentsProvider;
+    }
+
+    @Override
+    public LocalDateTime findContentsTime() {
+        return contentsStartAt;
+    }
+
+    @Override
+    public String findDescription() {
+        return description;
     }
 }

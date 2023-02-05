@@ -9,10 +9,11 @@ import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.domain.util.GradeType;
 import com.hermes.ithermes.domain.util.JobType;
 import com.hermes.ithermes.infrastructure.CrawlingContentsLastUrlRepository;
-import com.hermes.ithermes.infrastructure.JobJpaRepository;
+import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.job.JobInsertRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +25,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class JobService {
     private final JobFactory jobFactory;
-    private final JobJpaRepository jobJpaRepository;
+    private final JobRepository jobRepository;
     private final CrawlingContentsLastUrlFactory crawlingContentsLastUrlFactory;
     private final CrawlingContentsLastUrlRepository crawlingContentsLastUrlRepository;
 
@@ -33,7 +34,7 @@ public class JobService {
         if (jobInsertRequestDto.getJobCrawlingDtoList().isEmpty()) throw new NoCrawlingDataException();
 
         List<Job> jobList = jobFactory.insertJob(jobInsertRequestDto);
-        jobList.stream().forEach(v -> jobJpaRepository.save(v));
+        jobList.stream().forEach(v -> jobRepository.save(v));
 
         Job recentJob = jobList.get(0);
 
