@@ -63,6 +63,7 @@ public class UserService {
         return new CommonResponseDto();
     }
 
+    @Transactional
     public UserLoginResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) {
         String loginId = userLoginRequestDto.getId();
         String password = userLoginRequestDto.getPassword();
@@ -71,10 +72,13 @@ public class UserService {
 
         if (!encoder.matches(password, user.getPassword())) throw new WrongIdOrPasswordException();
 
+        String refreshToken = jwtUtil.createRefreshToken(loginId);
+        user.updateRefreshToken(refreshToken);
+
         UserLoginResponseDto userLoginResponseDto = UserLoginResponseDto.builder()
                 .message("success")
                 .accessToken(jwtUtil.createAccessToken(loginId))
-                .refreshToken(jwtUtil.createRefreshToken(loginId))
+                .refreshToken(refreshToken)
                 .build();
         return userLoginResponseDto;
     }
@@ -97,7 +101,7 @@ public class UserService {
         if (userFactory.existsByNickname(newNickname)) throw new SameNicknameException();
 
         User user = userFactory.findLoginId(userUpdateNicknameRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
-        user.changeNickname(newNickname);
+        user.updateNickname(newNickname);
         return new CommonResponseDto();
     }
 

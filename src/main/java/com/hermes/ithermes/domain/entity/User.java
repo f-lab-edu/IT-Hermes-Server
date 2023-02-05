@@ -43,7 +43,7 @@ public class User extends BaseEntity {
 
     private String refreshToken;
 
-    public void changeNickname(String nickname) {
+    public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
 
@@ -53,5 +53,9 @@ public class User extends BaseEntity {
 
     public void updateTelegramId(String telegramId) {
         this.telegramId = telegramId;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }
