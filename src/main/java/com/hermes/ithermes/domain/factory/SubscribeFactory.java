@@ -2,6 +2,7 @@ package com.hermes.ithermes.domain.factory;
 
 import com.hermes.ithermes.domain.entity.Subscribe;
 import com.hermes.ithermes.domain.entity.User;
+import com.hermes.ithermes.domain.exception.EnumTypeFormatException;
 import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
 import com.hermes.ithermes.domain.util.ActiveType;
 import com.hermes.ithermes.domain.util.CategoryType;
@@ -39,8 +40,13 @@ public class SubscribeFactory {
             ActiveType activeType = ActiveType.valueOf(v.getIsActive());
 
             Subscribe subscribe = CategoryType.parseSubscribe(user, categoryType, contentsProviderType, activeType);
-            if (isEdit) subscribe.changeUpdateAt();
-            subscribes.add(subscribe);
+            if (isEdit) {
+                Subscribe editSubscribe = subscribeRepository.findByContentsProvider(ContentsProviderType.valueOf(v.getContentsProvider())).orElseThrow(() -> new EnumTypeFormatException());
+                editSubscribe.changeUpdateAt(ActiveType.valueOf(v.getIsActive()));
+            } else {
+                subscribes.add(subscribe);
+            }
+
         });
         return subscribes;
     }
@@ -53,7 +59,7 @@ public class SubscribeFactory {
     }
 
     public List<SubscribeContentsDto> findActiveContentsProviderType(List<Subscribe> subscribes) {
-        return subscribes.stream().map(v -> new SubscribeContentsDto(v.getContentsProvider().getTitle(),v.getIsActive().getTitle())).collect(Collectors.toList());
+        return subscribes.stream().map(v -> new SubscribeContentsDto(v.getContentsProvider().getTitle(), v.getIsActive().getTitle())).collect(Collectors.toList());
     }
 
     public Optional<List<Subscribe>> findSubscribeByUserId(Long userId) {

@@ -1,13 +1,14 @@
-package com.hermes.ithermes.presentation.dto.youtubeandnews;
+package com.hermes.ithermes.presentation.dto.urlrecord;
 
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class YoutubeAndNewsLastUrlRequestDto {
-    private ContentsProviderType contentsProvider;
+@Getter
+public class UrlRecordPutViewCountRequestDto {
+    private String url;
+    private ContentsProviderType contentsProviderType;
 }

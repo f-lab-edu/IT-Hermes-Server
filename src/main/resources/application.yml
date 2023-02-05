@@ -20,6 +20,10 @@ spring:
     init:
       mode: always
 
+springboot:
+  jwt:
+    secret: test123!@#
+
 logging:
   level:
     org.hibernate.SQL: debug

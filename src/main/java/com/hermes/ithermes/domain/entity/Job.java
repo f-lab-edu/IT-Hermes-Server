@@ -63,6 +63,9 @@ public class Job extends BaseEntity implements ContentsEntityInterface{
         viewCount=0L;
     }
 
+    public void updateViewCount() {
+        this.viewCount+=1L;
+    }
     @Override
     public String findTitle() {
         return title;
@@ -97,5 +100,4 @@ public class Job extends BaseEntity implements ContentsEntityInterface{
     public String findDescription() {
         return company;
     }
-
 }

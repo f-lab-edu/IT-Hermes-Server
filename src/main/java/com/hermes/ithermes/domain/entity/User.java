@@ -49,7 +49,7 @@ public class User extends BaseEntity {
         this.isDelete = true;
     }
 
-    public void setTelegramId(String telegramId) {
+    public void updateTelegramId(String telegramId) {
         this.telegramId = telegramId;
     }
 }

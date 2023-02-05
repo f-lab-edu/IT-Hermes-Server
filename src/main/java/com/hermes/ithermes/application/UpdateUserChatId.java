@@ -38,7 +38,7 @@ public class UpdateUserChatId {
                         bot.execute(new SendMessage(chatId,"이미 생성한 봇이 있는 유저입니다."));
                     }else{
                         User newUser = userRepository.findByNickname(userSendMessage);
-                        newUser.setTelegramId(chatId);
+                        newUser.updateTelegramId(chatId);
                         userRepository.save(newUser);
                         bot.execute(new SendMessage(chatId,"유저로 등록되었습니다."));
                     }

@@ -4,7 +4,10 @@ package com.hermes.ithermes.application;
 import com.hermes.ithermes.domain.entity.Keyword;
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.entity.UserKeywordRegistry;
-import com.hermes.ithermes.domain.exception.*;
+import com.hermes.ithermes.domain.exception.SameIdException;
+import com.hermes.ithermes.domain.exception.SameNicknameException;
+import com.hermes.ithermes.domain.exception.UnMatchedPasswordException;
+import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
 import com.hermes.ithermes.domain.factory.KeywordFactory;
 import com.hermes.ithermes.domain.factory.UserFactory;
 import com.hermes.ithermes.domain.factory.UserKeywordRegistryFactory;
@@ -12,7 +15,9 @@ import com.hermes.ithermes.infrastructure.UserKeywordRegistryRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.user.*;
+import com.hermes.ithermes.presentation.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,18 +35,21 @@ public class UserService {
     private final KeywordFactory keywordFactory;
     private final UserRepository userRepository;
     private final UserKeywordRegistryFactory userKeywordRegistryFactory;
+    private final JwtUtil jwtUtil;
+    private final BCryptPasswordEncoder encoder;
 
     @Transactional
     public CommonResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
-        String loginId = userLoginRequestDto.getId();
-        String password = userLoginRequestDto.getPassword();
 
-        Optional.ofNullable(password.equals(userLoginRequestDto.getPasswordConfirm()))
+        Optional.ofNullable(userLoginRequestDto.getPassword().equals(userLoginRequestDto.getPasswordConfirm()))
                 .filter(v -> v)
                 .orElseThrow(() -> new UnMatchedPasswordException());
 
-        if (userFactory.existsByLoginId(loginId)) throw new SameIdException();
+        String loginId = userLoginRequestDto.getId();
+        String password = encoder.encode(userLoginRequestDto.getPassword());
+        userLoginRequestDto.encodingPassword(password);
 
+        if (userFactory.existsByLoginId(loginId)) throw new SameIdException();
         User user = userFactory.parseLoginRequestDtoToUser(userLoginRequestDto);
 
         Arrays.stream(userLoginRequestDto.getKeywordList())
@@ -55,11 +63,18 @@ public class UserService {
         return new CommonResponseDto();
     }
 
-    public CommonResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) {
+    public UserLoginResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) {
         String loginId = userLoginRequestDto.getId();
         String password = userLoginRequestDto.getPassword();
-        if (!userFactory.existsByLoginIdAndPassword(loginId, password)) throw new WrongIdOrPasswordException();
-        return new CommonResponseDto();
+
+        User user = userFactory.findLoginId(loginId).orElseThrow(() -> new WrongIdOrPasswordException());
+
+        if (!encoder.matches(password, user.getPassword())) throw new WrongIdOrPasswordException();
+
+        UserLoginResponseDto userLoginResponseDto = UserLoginResponseDto.builder()
+                .message("success")
+                .token(jwtUtil.createToken(loginId)).build();
+        return userLoginResponseDto;
     }
 
     public CommonResponseDto checkDuplicateNickname(UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {

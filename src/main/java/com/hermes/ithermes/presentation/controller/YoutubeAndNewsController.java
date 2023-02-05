@@ -3,8 +3,6 @@ package com.hermes.ithermes.presentation.controller;
 import com.hermes.ithermes.application.YoutubeAndNewsService;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsInsertDto;
-import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsLastUrlRequestDto;
-import com.hermes.ithermes.presentation.dto.youtubeandnews.YoutubeAndNewsLastUrlResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,13 +20,7 @@ public class YoutubeAndNewsController {
 
     @RequestMapping(value = "/",method = RequestMethod.POST)
     public ResponseEntity<CommonResponseDto> parseYoutubeAndNews(@RequestBody YoutubeAndNewsInsertDto youtubeAndNewsCrawlingDtoList){
-        CommonResponseDto commonResponseDto = youtubeAndNewsService.parseYoutubeAndNews(youtubeAndNewsCrawlingDtoList);
+        CommonResponseDto commonResponseDto = youtubeAndNewsService.insertYoutubeAndNews(youtubeAndNewsCrawlingDtoList);
         return ResponseEntity.created(URI.create("/youtube-and-news")).body(commonResponseDto);
-    }
-
-    @RequestMapping(value = "/last-url",method = RequestMethod.POST)
-    public ResponseEntity<YoutubeAndNewsLastUrlResponseDto> findYoutubeAndNewsLastUrl(@RequestBody YoutubeAndNewsLastUrlRequestDto youtubeAndNewsLastUrlRequestDto){
-        YoutubeAndNewsLastUrlResponseDto youtubeAndNewsLastUrlResponseDto = youtubeAndNewsService.findYoutubeAndNewsLastUrl(youtubeAndNewsLastUrlRequestDto);
-        return ResponseEntity.ok(youtubeAndNewsLastUrlResponseDto);
     }
 }

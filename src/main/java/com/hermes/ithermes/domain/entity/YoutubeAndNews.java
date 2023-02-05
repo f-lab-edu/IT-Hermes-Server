@@ -50,8 +50,8 @@ public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterfac
     @Column(nullable = false)
     private ContentsProviderType contentsProvider;
 
-    public void initDefaultData() {
-        viewCount=0L;
+    public void updateViewCount() {
+        this.viewCount += +1L;
     }
 
     @Override

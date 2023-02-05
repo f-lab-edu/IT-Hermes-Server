@@ -2,6 +2,7 @@ package com.hermes.ithermes.application;
 
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.OrderType;
+import com.hermes.ithermes.presentation.dto.contents.CategoryCountDto;
 import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
@@ -36,7 +37,7 @@ public class ContentsService {
     }
 
     public List<ContentsDtoInterface> getCategoryContents(CategoryType type, int page, OrderType order){
-        Pageable pageInfo = PageRequest.of(page,12, Sort.by(order.getOrderQuery()).descending());
+        Pageable pageInfo = PageRequest.of(page,8, Sort.by(order.getOrderQuery()).descending());
         if(type.getTitle().equals("JOB")) {
             return convertEntityToDtoList(jobRepository.findJobBy(pageInfo).getContent(), new ContentsDto());
         }
@@ -55,6 +56,14 @@ public class ContentsService {
 
     private List<ContentsDtoInterface> convertEntityToDtoList(List<ContentsEntityInterface> content, ContentsDtoInterface t){
         return content.stream().map(x->t.convertEntityToDto(x)).collect(Collectors.toList());
+    }
+
+    public CategoryCountDto getCategoryCount(){
+        int youtubeCnt = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(CategoryType.YOUTUBE).size();
+        int jobCnt = jobRepository.findJobBy().size();
+        int newsCnt = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(CategoryType.NEWS).size();
+
+        return new CategoryCountDto(youtubeCnt,jobCnt,newsCnt);
     }
 
 }

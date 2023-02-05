@@ -1,6 +1,5 @@
 package com.hermes.ithermes.application;
 
-import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.Subscribe;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
@@ -19,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,7 +99,7 @@ public class AlarmService {
 
     public void updateUserSubscribeContentsLastUrl(String lastUrl,long userIdx,ContentsProviderType contentsProvider){
         Subscribe subscribe = subscribeRepository.findByUserIdAndContentsProvider(userIdx,contentsProvider);
-        subscribe.setAlarmLastUrl(lastUrl);
+        subscribe.updateAlarmLastUrl(lastUrl);
         subscribeRepository.save(subscribe);
     }
 

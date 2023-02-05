@@ -32,7 +32,9 @@ public class ContentsDto implements ContentsDtoInterface {
 
     public String description;
 
-    public ContentsDto(ContentsEntityInterface contentsEntityInterface){
+    public Long viewCnt;
+
+    public ContentsDto(ContentsEntityInterface contentsEntityInterface) {
         this.title = contentsEntityInterface.findTitle();
         this.image = contentsEntityInterface.findImage();
         this.url = contentsEntityInterface.findUrl();

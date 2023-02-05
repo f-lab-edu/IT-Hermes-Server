@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface YoutubeAndNewsRepository extends JpaRepository<YoutubeAndNews, Long> {
@@ -20,5 +21,7 @@ public interface YoutubeAndNewsRepository extends JpaRepository<YoutubeAndNews, 
     List<YoutubeAndNews> findFirst1ByContentsProviderOrderByUrlDesc(@Param("contentsProvider") ContentsProviderType contentsProvider);
     List<YoutubeAndNews> findYoutubeAndNewsByContentsProvider(ContentsProviderType contentsProvider);
     YoutubeAndNews findYoutubeAndNewsByUrl(String url);
+    Optional<YoutubeAndNews> findByUrl(@Param("url") String url);
+    List<YoutubeAndNews> findYoutubeAndNewsByCategory(CategoryType categoryType);
 
 }
