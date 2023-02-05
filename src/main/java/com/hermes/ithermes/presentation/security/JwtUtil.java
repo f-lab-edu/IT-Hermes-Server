@@ -5,13 +5,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -19,9 +13,7 @@ import java.util.Base64;
 import java.util.Date;
 
 @Component
-@RequiredArgsConstructor
 public class JwtUtil {
-    private final UserDetailsService userDetailsService;
 
     @Value("${springboot.jwt.secret}")
     private String secretKey = "secretKey";
@@ -64,18 +56,10 @@ public class JwtUtil {
         return token;
     }
 
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUsername(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "");
-    }
-
-    public String getUsername(String token) {
-        String info = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    public static String getUsername(String token, String secretKey) {
+        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
+        String info = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("userName",String.class);
         return info;
-    }
-
-    public static String resolveToken(HttpServletRequest request) {
-        return request.getHeader("HERMES-AUTH-TOKEN");
     }
 
     public static boolean validateToken(String token, String secretKey) {

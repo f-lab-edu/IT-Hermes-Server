@@ -31,6 +31,10 @@ public class UserFactory {
         return userRepository.findByLoginId(userId);
     }
 
+    public Optional<User> findRefreshToken(String refreshToken) {
+        return userRepository.findByRefreshToken(refreshToken);
+    }
+
     public boolean existsByLoginId(String userId) {
         return userRepository.existsByLoginId(userId);
     }

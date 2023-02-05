@@ -4,10 +4,7 @@ package com.hermes.ithermes.application;
 import com.hermes.ithermes.domain.entity.Keyword;
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.entity.UserKeywordRegistry;
-import com.hermes.ithermes.domain.exception.SameIdException;
-import com.hermes.ithermes.domain.exception.SameNicknameException;
-import com.hermes.ithermes.domain.exception.UnMatchedPasswordException;
-import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
+import com.hermes.ithermes.domain.exception.*;
 import com.hermes.ithermes.domain.factory.KeywordFactory;
 import com.hermes.ithermes.domain.factory.UserFactory;
 import com.hermes.ithermes.domain.factory.UserKeywordRegistryFactory;
@@ -17,6 +14,7 @@ import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.user.*;
 import com.hermes.ithermes.presentation.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +27,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
+    @Value("${springboot.jwt.secret}")
+    private String secretKey = "secretKey";
 
     private final UserKeywordRegistryRepository userKeywordRegistryRepository;
     private final UserFactory userFactory;
@@ -116,6 +116,31 @@ public class UserService {
     public UserFindMyDataResponseDto findMyData(UserFindMyDataRequestDto userFindMyDataRequestDto) {
         User user = userFactory.findLoginId(userFindMyDataRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         return new UserFindMyDataResponseDto(user.getLoginId(), user.getNickname());
+    }
+
+    public UserCheckRefreshTokenResponseDto checkRefreshToken(String refreshToken) {
+        String token = refreshToken.split(" ")[1];
+        boolean validateToken = jwtUtil.validateToken(token, secretKey);
+        if (!validateToken) {
+            throw new ExpireTokenException();
+        }
+        User user = userFactory.findRefreshToken(token).orElseThrow(() -> new ExpireTokenException());
+        String storedRefreshToken = user.getRefreshToken();
+        if (!token.equals(storedRefreshToken)) throw new ExpireTokenException();
+        String loginId = user.getLoginId();
+        String accessToken = jwtUtil.createAccessToken(loginId);
+        return UserCheckRefreshTokenResponseDto
+                .builder()
+                .accessToken(accessToken)
+                .message("success")
+                .build();
+    }
+
+    @Transactional
+    public CommonResponseDto userLogout(String loginId) {
+        User user = userFactory.findLoginId(loginId).orElseThrow(()->new WrongIdOrPasswordException());
+        user.updateRefreshToken(null);
+        return new CommonResponseDto();
     }
 
 }

@@ -36,11 +36,11 @@ public class SecurityConfiguration {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeHttpRequests().requestMatchers("/user/login", "/user/join","/user/duplicate-id","/user/duplicate-nickname").permitAll()
+                .authorizeHttpRequests().requestMatchers("/user/login", "/user/join","/user/duplicate-id","/user/duplicate-nickname","/user/refresh-token").permitAll()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/youtube-and-news/",
-                        "/job/","/crawling-contents-last-title/","/alarm/","/contents/main","/url-record/","/contents/count")
-                .permitAll()
+                .authorizeHttpRequests().requestMatchers("/youtube-and-news/", "/job/","/crawling-contents-last-title/","/alarm/").permitAll()
+                .and()
+                .authorizeHttpRequests().requestMatchers("/contents/main","/url-record/","/contents/count").permitAll()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/**").authenticated()
                 .and()
@@ -48,7 +48,7 @@ public class SecurityConfiguration {
                 .and()
                 .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
-                .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

@@ -1,6 +1,5 @@
 package com.hermes.ithermes.presentation.security;
 
-import com.hermes.ithermes.application.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,7 +16,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
-    private final UserService userService;
     private final String secretKey;
 
     @Override
@@ -35,16 +33,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (!JwtUtil.validateToken(token, secretKey)) {
             logger.error("Token 만료");
-            final String refreshToken = request.getHeader("HERMES-REFRESH-TOKEN");
-            if(refreshToken!=null) {
-            } else {
-                //예외처리
-            }
             filterChain.doFilter(request, response);
-            return;
         }
 
-        String userName = "";
+        String userName = JwtUtil.getUsername(token, secretKey);
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userName, null, List.of(new SimpleGrantedAuthority("USER")));
