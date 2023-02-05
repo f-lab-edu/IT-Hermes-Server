@@ -88,4 +88,11 @@ public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterfac
     public String findDescription() {
         return description;
     }
+
+    @Override
+    public Long findViewCount() {
+        return viewCount;
+    }
+
+
 }

@@ -15,5 +15,6 @@ public interface ContentsEntityInterface {
     ContentsProviderType findContentsProvider();
     LocalDateTime findContentsTime();
     String findDescription();
+    Long findViewCount();
 
 }

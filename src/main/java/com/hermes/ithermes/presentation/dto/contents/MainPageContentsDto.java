@@ -39,6 +39,7 @@ public class MainPageContentsDto implements ContentsDtoInterface {
         this.category = contentsEntityInterface.findCategoryType();
         this.contentsProviderType = contentsEntityInterface.findContentsProvider();
         this.contentsDate = contentsEntityInterface.findContentsTime();
+        this.viewCnt = contentsEntityInterface.findViewCount();
     }
 
     @Override

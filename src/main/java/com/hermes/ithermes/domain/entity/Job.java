@@ -100,4 +100,9 @@ public class Job extends BaseEntity implements ContentsEntityInterface{
     public String findDescription() {
         return company;
     }
+
+    @Override
+    public Long findViewCount() {
+        return viewCount;
+    }
 }

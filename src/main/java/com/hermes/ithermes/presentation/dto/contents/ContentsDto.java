@@ -42,6 +42,7 @@ public class ContentsDto implements ContentsDtoInterface {
         this.contentProvider = contentsEntityInterface.findContentsProvider();
         this.contentsDate = contentsEntityInterface.findContentsTime();
         this.description = contentsEntityInterface.findDescription();
+        this.viewCnt = contentsEntityInterface.findViewCount();
     }
 
     @Override
