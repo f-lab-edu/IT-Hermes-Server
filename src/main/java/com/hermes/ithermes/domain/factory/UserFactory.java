@@ -31,19 +31,11 @@ public class UserFactory {
         return userRepository.findByLoginId(userId);
     }
 
-    public Optional<User> findRefreshToken(String refreshToken) {
-        return userRepository.findByRefreshToken(refreshToken);
-    }
-
     public boolean existsByLoginId(String userId) {
         return userRepository.existsByLoginId(userId);
     }
 
     public boolean existsByNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
-    }
-
-    public boolean existsByLoginIdAndPassword(String id, String password) {
-        return userRepository.existsByLoginIdAndPassword(id, password);
     }
 }

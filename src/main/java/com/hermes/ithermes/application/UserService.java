@@ -124,10 +124,10 @@ public class UserService {
         if (!validateToken) {
             throw new ExpireTokenException();
         }
-        User user = userFactory.findRefreshToken(token).orElseThrow(() -> new ExpireTokenException());
+        String loginId = JwtUtil.getUsername(token, secretKey);
+        User user = userFactory.findLoginId(loginId).orElseThrow(() -> new ExpireTokenException());
         String storedRefreshToken = user.getRefreshToken();
         if (!token.equals(storedRefreshToken)) throw new ExpireTokenException();
-        String loginId = user.getLoginId();
         String accessToken = jwtUtil.createAccessToken(loginId);
         return UserCheckRefreshTokenResponseDto
                 .builder()

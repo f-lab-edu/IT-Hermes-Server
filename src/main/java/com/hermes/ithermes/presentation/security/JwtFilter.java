@@ -25,6 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
         final String authentication = request.getHeader("HERMES-ACCESS-TOKEN");
 
         if (authentication == null || !authentication.startsWith("Bearer ")) {
+            request.setAttribute("exception", SecurityErrorCode.WRONG_TYPE_TOKEN);
             filterChain.doFilter(request, response);
             return;
         }
@@ -33,7 +34,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (!JwtUtil.validateToken(token, secretKey)) {
             logger.error("Token 만료");
+            request.setAttribute("exception", SecurityErrorCode.EXPIRED_TOKEN);
             filterChain.doFilter(request, response);
+            return;
         }
 
         String userName = JwtUtil.getUsername(token, secretKey);

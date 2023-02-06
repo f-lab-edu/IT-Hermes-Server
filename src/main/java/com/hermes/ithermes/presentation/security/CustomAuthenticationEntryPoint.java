@@ -14,11 +14,29 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
+        String exception = request.getAttribute("exception").toString();
+
+        if(exception.equals(SecurityErrorCode.WRONG_TYPE_TOKEN.getCode())) {
+            setResponse(response, exception);
+            return;
+        }
+
+        if(exception.equals(SecurityErrorCode.EXPIRED_TOKEN.getCode())) {
+            setResponse(response, exception);
+            return;
+        }
+
+        if(exception.equals(null)) {
+            setResponse(response, "인증실패");
+        }
+    }
+
+    private void setResponse(HttpServletResponse response, String message) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         EntryPointErrorResponse entryPointErrorResponse = new EntryPointErrorResponse();
-        entryPointErrorResponse.setMsg("인증 실패");
-        response.setStatus(401);
-        response.setContentType("application/json");
+        entryPointErrorResponse.setMsg(message);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(objectMapper.writeValueAsString(entryPointErrorResponse));
     }

@@ -13,10 +13,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByLoginId(@Param("loginId") String loginId);
 
-    Optional<User> findByRefreshToken(@Param("refreshToken") String refreshToken);
-
-    boolean existsByLoginIdAndPassword(@Param("loginId") String loginId, @Param("password") String password);
-
     boolean existsByNickname(@Param("nickname") String nickname);
 
     boolean existsByLoginId(@Param("loginId") String loginId);
