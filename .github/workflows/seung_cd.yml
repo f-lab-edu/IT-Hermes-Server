@@ -25,4 +25,4 @@ jobs:
         port: ${{ secrets.SEUNGKI_SERVER_PORT }}
         script: |
           cd /usr/it-hermes-project/hermes-cd/
-          sudo sh hermes-server-cd.sh
+          # sudo sh hermes-server-cd.sh(주석처리)
