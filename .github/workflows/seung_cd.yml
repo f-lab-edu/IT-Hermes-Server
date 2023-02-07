@@ -10,13 +10,11 @@ name: Java CD with Gradle
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
     - name: connect seung-server and hermes-server-cd shell script
       uses: appleboy/ssh-action@v0.1.4
