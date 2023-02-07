@@ -21,7 +21,7 @@ jobs:
 
     runs-on: ubuntu-18.04
     steps:
-    - name: connect seung-server and server-cd shell script
+    - name: connect seung-server and hermes-server-cd shell script
       uses: appleboy/ssh-action@v0.1.4
       with:
         host: ${{ secrets.SEUNGKI_SERVER_HOST }}
