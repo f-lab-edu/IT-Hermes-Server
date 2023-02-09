@@ -22,8 +22,8 @@ class UserRepositoryTest {
     void notExistsTelegramIdUserTest(){
         userRepository.deleteAll();
 
-        User user1 = new User(1l,"회원1","login1","1234", JobType.BACKEND,1,"telegram아이디",false);
-        User user2 = new User(2l,"회원2","login2","5678", JobType.FRONT,0,null,false);
+        User user1 = new User(1l,"회원1","login1","1234", JobType.BACKEND,1,"telegram아이디",false,"eysdfetwetwe");
+        User user2 = new User(2l,"회원2","login2","5678", JobType.FRONT,0,null,false,"eysdfetwetwe");
 
         userRepository.save(user1);
         userRepository.save(user2);

@@ -59,7 +59,7 @@ class AlarmServiceTest {
         subscribeRepository.deleteAll();
         jobRepository.deleteAll();
 
-        User user1 = new User(1L,"이은영","eun02323","12345", JobType.BACKEND,0,"123455235",false);
+        User user1 = new User(1L,"이은영","eun02323","12345", JobType.BACKEND,0,"123455235",false,"eysdfetwetwe");
         userRepository.save(user1);
 
         for(int i = 0; i < 3; i++){
@@ -80,7 +80,7 @@ class AlarmServiceTest {
         userRepository.deleteAll();
         subscribeRepository.deleteAll();
 
-        User user1 = new User(1L,"이은영","eun02323","12345", JobType.BACKEND,0,"123455235",false);
+        User user1 = new User(1L,"이은영","eun02323","12345", JobType.BACKEND,0,"123455235",false,"eysdfetwetwe");
         userRepository.save(user1);
 
         Subscribe subscribe = new Subscribe(1L, user1, ActiveType.ACTIVE, CategoryType.YOUTUBE, ContentsProviderType.DREAM_CODING,"마지막 url");
@@ -97,7 +97,7 @@ class AlarmServiceTest {
     @Test
     @DisplayName("유저 JOB이 백엔드 경우인 경우 키워드가 8개인지 테스트")
     void userCustomKeywordsTest(){
-        User user1 = new User(1l,"은영","eun0232","eun232323",JobType.BACKEND,1,"telgramasdf",false);
+        User user1 = new User(1l,"은영","eun0232","eun232323",JobType.BACKEND,1,"telgramasdf",false,"eysdfetwetwe");
         userRepository.save(user1);
         Assertions.assertEquals(8, alarmService.getRecommendKeywords(1l).size());
     }
@@ -105,7 +105,7 @@ class AlarmServiceTest {
     @Test
     @DisplayName("유저 JOB이 백엔드인 경우 키워드에 맞는 youtube 컨텐츠가 반환되는지 테스트")
     void youtubeAndNewsRecommendAlarmTest(){
-        User user1 = new User(1l,"은영","eun0232","eun232323",JobType.BACKEND,1,"telgramasdf",false);
+        User user1 = new User(1l,"은영","eun0232","eun232323",JobType.BACKEND,1,"telgramasdf",false,"eysdfetwetwe");
         userRepository.save(user1);
 
         YoutubeAndNews youtubeAndNews1 = new YoutubeAndNews(1l,"API","내용","이미지 url","그냥 url",LocalDateTime.now(),123l,false,CategoryType.YOUTUBE,ContentsProviderType.DREAM_CODING);
