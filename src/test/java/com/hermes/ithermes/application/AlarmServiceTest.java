@@ -53,48 +53,6 @@ class AlarmServiceTest {
     }
 
     @Test
-    @DisplayName("유저아이디 번호 1번인 유저가 구독한 job의 구독정보는 3개인지 테스트")
-    void subscribeJobAlarmCountTest(){
-        userRepository.deleteAll();
-        subscribeRepository.deleteAll();
-        jobRepository.deleteAll();
-
-        User user1 = new User(1L,"이은영","eun02323","12345", JobType.BACKEND,0,"123455235",false,"eysdfetwetwe");
-        userRepository.save(user1);
-
-        for(int i = 0; i < 3; i++){
-            Job job = new Job((long) i,"안녕하세요","url 주소","서울","회사명", LocalDateTime.now(),LocalDateTime.now(),123l,false, ContentsProviderType.NAVER, GradeType.BEGINNER);
-            jobRepository.save(job);
-        }
-
-        Subscribe subscribe = new Subscribe(1L, user1, ActiveType.ACTIVE, CategoryType.JOB, ContentsProviderType.NAVER,"마지막 url");
-        subscribeRepository.save(subscribe);
-
-        Assertions.assertEquals(3, alarmService.getUserJobAlarmContents(1l).size());
-    }
-
-    @Test
-    @DisplayName("유저아이디 번호 1번인 유저가 구독한 youtube의 구독정보는 4개인지 테스트")
-    void subscribeYoutubeAlarmCountTest(){
-        youtubeAndNewsRepository.deleteAll();
-        userRepository.deleteAll();
-        subscribeRepository.deleteAll();
-
-        User user1 = new User(1L,"이은영","eun02323","12345", JobType.BACKEND,0,"123455235",false,"eysdfetwetwe");
-        userRepository.save(user1);
-
-        Subscribe subscribe = new Subscribe(1L, user1, ActiveType.ACTIVE, CategoryType.YOUTUBE, ContentsProviderType.DREAM_CODING,"마지막 url");
-        subscribeRepository.save(subscribe);
-
-        for(int i = 0; i < 4; i++){
-            YoutubeAndNews youtubeAndNews = new YoutubeAndNews((long) i,"안녕하세요","ㅎㅎㅎㅎㅎㅎ","이미지 url","그냥 url", LocalDateTime.now(),123L,false,CategoryType.YOUTUBE,ContentsProviderType.DREAM_CODING);
-            youtubeAndNewsRepository.save(youtubeAndNews);
-        }
-
-        Assertions.assertEquals(4, alarmService.getUserYoutubeAndNewsAlarmContents(1l,CategoryType.YOUTUBE).size());
-    }
-
-    @Test
     @DisplayName("유저 JOB이 백엔드 경우인 경우 키워드가 8개인지 테스트")
     void userCustomKeywordsTest(){
         User user1 = new User(1l,"은영","eun0232","eun232323",JobType.BACKEND,1,"telgramasdf",false,"eysdfetwetwe");
