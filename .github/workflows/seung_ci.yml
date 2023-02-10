@@ -47,7 +47,7 @@ jobs:
     - name: Docker Hub push
       run: docker push skkim0832/it-hermes-server
       
-    - name: connect seung-server and hermes-server-cd shell script
+    - name: ssh seung-server and docker container start
       uses: appleboy/ssh-action@v0.1.4
       with:
         host: ${{ secrets.SEUNGKI_SERVER_PORTFOWARDING_IP }}
