@@ -37,6 +37,7 @@ jobs:
 
     - name: Docker build & push to prod
       run: |
+          ./gradlew build -x test
           docker login -u ${{ secrets.SEUNGKI_DOCKER_USERNAME }} -p ${{ secrets.SEUNGKI_DOCKER_PASSWORD }}
           docker build -t it-hermes-server .
           docker tag it-hermes-server skkim0832/it-hermes-server
