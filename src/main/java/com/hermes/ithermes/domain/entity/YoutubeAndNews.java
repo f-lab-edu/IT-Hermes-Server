@@ -25,7 +25,6 @@ public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterfac
     @Column(nullable = false, length = 1000)
     private String description;
 
-    @Column(nullable = false)
     private String image;
 
     @Column(nullable = false)
