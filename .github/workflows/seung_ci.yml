@@ -55,4 +55,6 @@ jobs:
         password: ${{ secrets.SEUNGKI_SERVER_PASSWORD }}
         port: ${{ secrets.SEUNGKI_SERVER_PORTFORWARDING_PORT }}
         script: | 
+              docker rmi -f skkim0832/it-hermes-server
               docker pull skkim0832/it-hermes-server
+              nohup docker run -p 8080:8080 skkim0832/it-hermes-server &
