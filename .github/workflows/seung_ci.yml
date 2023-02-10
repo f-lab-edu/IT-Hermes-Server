@@ -33,12 +33,12 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew build -x test
+      run: | 
+          ./gradlew build -x test
+          docker build -t it-hermes-server .
 
     - name: Docker build & push to prod
       run: |
-          ./gradlew clean build -x test
           docker login -u ${{ secrets.SEUNGKI_DOCKER_USERNAME }} -p ${{ secrets.SEUNGKI_DOCKER_PASSWORD }}
-          docker build -t it-hermes-server .
           docker tag it-hermes-server skkim0832/it-hermes-server
           docker push skkim0832/it-hermes-server
