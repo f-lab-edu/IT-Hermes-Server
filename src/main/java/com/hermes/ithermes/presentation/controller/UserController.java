@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController()
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
@@ -29,7 +29,7 @@ public class UserController {
     @RequestMapping(value = "/join", method = RequestMethod.POST)
     public ResponseEntity<UserCreateUserRequestDto> joinUser(@Valid @RequestBody UserCreateUserRequestDto userCreateUserRequestDto) {
         userService.joinUser(userCreateUserRequestDto);
-        URI uri = URI.create("user/join/");
+        URI uri = URI.create("/api/user/join/");
 
         return ResponseEntity.created(uri).body(userCreateUserRequestDto);
     }

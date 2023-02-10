@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/crawling-contents-last-title")
+@RequestMapping("/api/crawling-contents-last-title")
 public class CrawlingContentsLastUrlController {
 
     private final CrawlingContentsLastUrlService crawlingContentsLastUrlService;

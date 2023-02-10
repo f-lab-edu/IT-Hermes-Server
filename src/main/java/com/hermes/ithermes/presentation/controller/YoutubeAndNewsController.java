@@ -14,13 +14,13 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/youtube-and-news")
+@RequestMapping("/api/youtube-and-news")
 public class YoutubeAndNewsController {
     private final YoutubeAndNewsService youtubeAndNewsService;
 
     @RequestMapping(value = "/",method = RequestMethod.POST)
     public ResponseEntity<CommonResponseDto> parseYoutubeAndNews(@RequestBody YoutubeAndNewsInsertDto youtubeAndNewsCrawlingDtoList){
         CommonResponseDto commonResponseDto = youtubeAndNewsService.insertYoutubeAndNews(youtubeAndNewsCrawlingDtoList);
-        return ResponseEntity.created(URI.create("/youtube-and-news")).body(commonResponseDto);
+        return ResponseEntity.created(URI.create("/api/youtube-and-news")).body(commonResponseDto);
     }
 }

@@ -15,7 +15,7 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/url-record")
+@RequestMapping("/api/url-record")
 public class UrlRecordController {
     private final UrlRecordService urlRecordService;
 

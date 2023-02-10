@@ -14,13 +14,13 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/job")
+@RequestMapping("/api/job")
 public class JobController {
     private final JobService jobService;
 
     @RequestMapping(value = "/",method = RequestMethod.POST)
     public ResponseEntity<CommonResponseDto> insertJob(@RequestBody JobInsertRequestDto jobInsertRequestDto){
         CommonResponseDto commonResponseDto = jobService.insertJob(jobInsertRequestDto);
-        return ResponseEntity.created(URI.create("/job")).body(commonResponseDto);
+        return ResponseEntity.created(URI.create("/api/job")).body(commonResponseDto);
     }
 }
