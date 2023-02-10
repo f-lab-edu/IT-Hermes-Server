@@ -36,7 +36,7 @@ jobs:
       run: ./gradlew build -x test
 
     - name: 도커 이미지 빌드
-      run: docker build -t skkim0832/it-hermes-server . -f dev.Dockerfile-seung
+      run: docker build -t skkim0832/it-hermes-server . -f Dockerfile-seung
         
     - name: Docker Hub login
       uses: docker/login-action@v2
