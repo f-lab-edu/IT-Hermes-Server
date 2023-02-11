@@ -34,7 +34,10 @@ jobs:
       
     - name: 스프링부트 애플리케이션 빌드
       run: ./gradlew build -x test
-
+      
+    - name: 테스트코드 확인
+      run: ./gradlew test
+      
     - name: 도커 이미지 빌드
       run: docker build -t skkim0832/it-hermes-server . -f Dockerfile-seung
         
