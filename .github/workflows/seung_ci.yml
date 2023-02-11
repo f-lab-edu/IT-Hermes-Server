@@ -33,7 +33,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: 테스트코드 확인
-      run: spring_profiles_active=local ./gradlew --info test
+      run: ./gradlew test
 
     - name: 스프링부트 애플리케이션 빌드
       run: ./gradlew build -x test
