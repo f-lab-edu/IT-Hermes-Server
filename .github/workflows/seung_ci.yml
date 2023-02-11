@@ -29,6 +29,14 @@ jobs:
       with:
         java-version: 17
 
+    - name: MYSQL 세팅
+      uses: samin/mysql-action@v1
+      with:
+        character set server: 'utf8' 
+        mysql database: test_schema
+        mysql user: test
+        mysql password: test1234
+          
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
