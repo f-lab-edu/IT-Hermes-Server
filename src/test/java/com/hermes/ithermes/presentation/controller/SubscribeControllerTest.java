@@ -51,7 +51,7 @@ class SubscribeControllerTest {
 
         SubscribePutSubscribeRequestDto subscribePutSubscribeRequestDto = new SubscribePutSubscribeRequestDto("test",subscribeContentsList);
 
-        mockMvc.perform(put("/subscribe/")
+        mockMvc.perform(put("/api/subscribe/")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(subscribePutSubscribeRequestDto)))
@@ -75,7 +75,7 @@ class SubscribeControllerTest {
 
         when(subscribeService.putSubscribe(any())).thenThrow(new WrongIdOrPasswordException());
 
-        mockMvc.perform(put("/subscribe/")
+        mockMvc.perform(put("/api/subscribe/")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(subscribePutSubscribeRequestDto)))
@@ -88,7 +88,7 @@ class SubscribeControllerTest {
     void 구독조회_성공처리() throws Exception {
         SubscribeFindSubscribeRequestDto subscribeFindSubscribeRequestDto = new SubscribeFindSubscribeRequestDto("test");
 
-        mockMvc.perform(post("/subscribe/")
+        mockMvc.perform(post("/api/subscribe/")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(subscribeFindSubscribeRequestDto)))
@@ -103,7 +103,7 @@ class SubscribeControllerTest {
 
         when(subscribeService.findSubscribe(any())).thenThrow(new WrongIdOrPasswordException());
 
-        mockMvc.perform(post("/subscribe/")
+        mockMvc.perform(post("/api/subscribe/")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(subscribeFindSubscribeRequestDto)))

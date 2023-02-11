@@ -47,7 +47,7 @@ class UserControllerTest {
         userCreateUserRequestDto = new UserCreateUserRequestDto("test", "test1234!",
                 "test1234!", "김승기", JobType.BACKEND, "1", new String[]{"프론트", "백엔드", "인공지능", null, null});
 
-        mockMvc.perform(post("/user/join")
+        mockMvc.perform(post("/api/user/join")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userCreateUserRequestDto)))
@@ -64,7 +64,7 @@ class UserControllerTest {
 
         when(userService.joinUser(any())).thenThrow(new UnMatchedPasswordException());
 
-        mockMvc.perform(post("/user/join")
+        mockMvc.perform(post("/api/user/join")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userCreateUserRequestDto)))
@@ -83,7 +83,7 @@ class UserControllerTest {
         //When
         when(userService.loginUser(any())).thenReturn(new UserLoginResponseDto());
 
-        mockMvc.perform(post("/user/login")
+        mockMvc.perform(post("/api/user/login")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userLoginRequestDto)))
@@ -102,7 +102,7 @@ class UserControllerTest {
         //When
         when(userService.loginUser(any())).thenThrow(new WrongIdOrPasswordException());
 
-        mockMvc.perform(post("/user/login")
+        mockMvc.perform(post("/api/user/login")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userLoginRequestDto)))
@@ -121,7 +121,7 @@ class UserControllerTest {
 
         when(userService.updateNickname(any())).thenReturn(new CommonResponseDto());
 
-        mockMvc.perform(put("/user/nickname")
+        mockMvc.perform(put("/api/user/nickname")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userUpdateNicknameRequestDto)))
@@ -140,7 +140,7 @@ class UserControllerTest {
 
         when(userService.updateNickname(any())).thenThrow(new SameNicknameException());
 
-        mockMvc.perform(put("/user/nickname")
+        mockMvc.perform(put("/api/user/nickname")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userUpdateNicknameRequestDto)))
@@ -159,7 +159,7 @@ class UserControllerTest {
 
         when(userService.checkDuplicateNickname(any())).thenReturn(new CommonResponseDto());
 
-        mockMvc.perform(post("/user/duplicate-nickname")
+        mockMvc.perform(post("/api/user/duplicate-nickname")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDuplicateNicknameRequestDto)))
@@ -178,7 +178,7 @@ class UserControllerTest {
 
         when(userService.checkDuplicateNickname(any())).thenThrow(new SameNicknameException());
 
-        mockMvc.perform(post("/user/duplicate-nickname")
+        mockMvc.perform(post("/api/user/duplicate-nickname")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDuplicateNicknameRequestDto)))
@@ -196,7 +196,7 @@ class UserControllerTest {
 
         when(userService.checkDuplicateId(any())).thenReturn(new CommonResponseDto());
 
-        mockMvc.perform(post("/user/duplicate-id")
+        mockMvc.perform(post("/api/user/duplicate-id")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDuplicateIdRequestDto)))
@@ -213,7 +213,7 @@ class UserControllerTest {
 
         when(userService.checkDuplicateId(any())).thenThrow(new SameIdException());
 
-        mockMvc.perform(post("/user/duplicate-id")
+        mockMvc.perform(post("/api/user/duplicate-id")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDuplicateIdRequestDto)))
@@ -231,7 +231,7 @@ class UserControllerTest {
 
         when(userService.deleteUser(any())).thenReturn(new CommonResponseDto());
 
-        mockMvc.perform(put("/user/")
+        mockMvc.perform(put("/api/user/")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDeleteUserRequestDto)))
@@ -248,7 +248,7 @@ class UserControllerTest {
 
         when(userService.deleteUser(any())).thenThrow(new SameNicknameException());
 
-        mockMvc.perform(put("/user/")
+        mockMvc.perform(put("/api/user/")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDeleteUserRequestDto)))
@@ -265,7 +265,7 @@ class UserControllerTest {
 
         when(userService.findMyData(any())).thenReturn(new UserFindMyDataResponseDto("test","김승기"));
 
-        mockMvc.perform(post("/user/my-page")
+        mockMvc.perform(post("/api/user/my-page")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userFindMyDataRequestDto)))
@@ -282,7 +282,7 @@ class UserControllerTest {
 
         when(userService.findMyData(any())).thenThrow(new SameIdException());
 
-        mockMvc.perform(post("/user/my-page")
+        mockMvc.perform(post("/api/user/my-page")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDuplicateIdRequestDto)))
