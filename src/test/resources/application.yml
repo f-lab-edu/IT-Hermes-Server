@@ -1,7 +1,4 @@
 spring:
-  sql:
-    init:
-      schema-locations: classpath:schema_test.sql
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:hermes;MODE=MYSQL
@@ -14,7 +11,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: true
@@ -22,3 +19,13 @@ spring:
         jdbc:
           time_zone: Asia/Seoul
     defer-datasource-initialization: true
+
+springboot:
+  jwt:
+    secret: test123!@#
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+
+telegram-key: "5810579378:AAGNSVQz1Mzn1FjMkBuL1x-5UUz9u-jXdXc"
