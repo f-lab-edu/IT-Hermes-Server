@@ -40,3 +40,9 @@ jobs:
 
     - name: 스프링 부트 애플리케이션 코드, 테스트코드 확인
       run: ./gradlew clean build
+
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: ${{ always() }}
+      with:
+        files: build/test-results/**/*.xml
