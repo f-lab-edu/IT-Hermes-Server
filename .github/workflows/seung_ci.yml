@@ -13,8 +13,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions: write-all|read-all
-
 jobs:
   build:
 
@@ -45,8 +43,8 @@ jobs:
       run: ./gradlew --info test
 
       # Test 후 Report 생성
-    - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v2
-      if: always()
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: ${{ always() }}
       with:
-        junit_files: '**/build/test-results/test/TEST-*.xml'
+        files: build/test-results/**/*.xml
