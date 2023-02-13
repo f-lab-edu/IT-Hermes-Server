@@ -31,7 +31,7 @@ public class ContentsService {
     public List<ContentsDtoInterface> getMainContents(CategoryType type){
         Pageable pageInfo = PageRequest.of(0,10,Sort.by(OrderType.POPULAR.getOrderQuery()).descending());
         if(type.getTitle().equals("JOB")){
-            return convertEntityToDtoList(jobRepository.findJobBy(pageInfo).getContent(), new MainPageContentsDto());
+            return convertEntityToDtoList(jobRepository.findDistinctBy(pageInfo).getContent(), new MainPageContentsDto());
         }
         return pageYoutubeAndNewsConvertMainPageContentsDto(pageInfo,type);
     }
@@ -39,7 +39,7 @@ public class ContentsService {
     public List<ContentsDtoInterface> getCategoryContents(CategoryType type, int page, OrderType order){
         Pageable pageInfo = PageRequest.of(page,8, Sort.by(order.getOrderQuery()).descending());
         if(type.getTitle().equals("JOB")) {
-            return convertEntityToDtoList(jobRepository.findJobBy(pageInfo).getContent(), new ContentsDto());
+            return convertEntityToDtoList(jobRepository.findDistinctBy(pageInfo).getContent(), new ContentsDto());
         }
         return convertEntityToDtoList(youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageInfo,type).getContent(),new ContentsDto());
     }

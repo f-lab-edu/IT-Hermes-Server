@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface JobRepository extends JpaRepository<Job,Long> {
 
-    Page<ContentsEntityInterface> findJobBy(Pageable pageable);
+    Page<ContentsEntityInterface> findDistinctBy(Pageable pageable);
     List<Job> findFirst1ByContentsProviderOrderByUrlDesc(@Param("contentsProvider") ContentsProviderType contentsProvider);
     List<Job> findJobByContentsProvider(ContentsProviderType contentsProviderType);
     Job findJobByUrl(String url);
