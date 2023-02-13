@@ -23,4 +23,5 @@ public class JobController {
         CommonResponseDto commonResponseDto = jobService.insertJob(jobInsertRequestDto);
         return ResponseEntity.created(URI.create("/api/job")).body(commonResponseDto);
     }
+
 }

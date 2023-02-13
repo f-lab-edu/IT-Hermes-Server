@@ -20,4 +20,5 @@ public class CrawlingContentsLastUrlController {
         CrawlingContentsLastUrlFindAllResponseDto crawlingContentsLastUrlFindAllResponseDto = crawlingContentsLastUrlService.findAllCrawlingContentsLastTitle();
         return ResponseEntity.ok(crawlingContentsLastUrlFindAllResponseDto);
     }
+
 }
