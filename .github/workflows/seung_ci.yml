@@ -41,6 +41,11 @@ jobs:
     - name: 스프링 부트 애플리케이션 코드, 테스트코드 확인
       run: ./gradlew clean build
 
+    - name: Create Issue Branch
+      uses: robvanderleek/create-issue-branch@main
+      env:
+        GITHUB_TOKEN: ${{ secrets.SEUNGKI_GITHUB_ACCESS_TOKEN }}
+
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
