@@ -20,6 +20,7 @@ public class AppConfig {
         //updateUserChatId.updateUserChatId();
         return updateUserChatId;
     }
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
