@@ -72,7 +72,6 @@ public class SecurityConfiguration {
                 registry.addMapping("/**").allowedOrigins("http://127.0.0.1:5500");
                 registry.addMapping("/**").allowedOrigins("http://127.0.0.1:80");
                 registry.addMapping("/**").allowedOrigins("http://localhost:80");
-                registry.addMapping("/**").allowedOrigins("http://101.101.216.182:80");
                 registry.addMapping("/**").allowedMethods(ALLOWED_METHOD_NAMES.split(","));
             }
         };
