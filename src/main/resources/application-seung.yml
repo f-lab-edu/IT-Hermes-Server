@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://10.41.4.73:3306/ithermes?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: ithermes
-    password: ithermes1221
+    username: ${USERNAME}
+    password: ${PASSWORD}
 
   jpa:
     open-in-view: true
@@ -22,10 +22,10 @@ spring:
 
 springboot:
   jwt:
-    secret: test123!@#
+    secret: ${JWT_KEY}
 
 logging:
   level:
     org.hibernate.SQL: debug
 
-telegram-key: 5810579378:AAGNSVQz1Mzn1FjMkBuL1x-5UUz9u-jXdXc
+telegram-key: ${TELEGRAM_KEY}
