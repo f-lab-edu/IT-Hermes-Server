@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://10.41.82.229:3306/ithermes?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
-    password: ${datasource.password}
+    password: ${password}
 
   jpa:
     open-in-view: true
@@ -22,7 +22,7 @@ spring:
 
 springboot:
   jwt:
-    secret: ${jwt.secret}
+    secret: ithermes1221
 
 logging:
   level:
