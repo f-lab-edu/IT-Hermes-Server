@@ -14,10 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UpdateUserChatId {
 
-    @Value("${telegram-key}")
-    private String telegramKey;
     private final UserRepository userRepository;
-    TelegramBot bot = new TelegramBot(telegramKey);
+    TelegramBot bot = new TelegramBot("5810579378:AAGNSVQz1Mzn1FjMkBuL1x-5UUz9u-jXdXc");
 
     public void updateUserChatId(){
         bot.setUpdatesListener(new UpdatesListener() {

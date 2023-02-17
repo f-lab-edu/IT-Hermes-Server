@@ -16,9 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TelegramAlarm implements ExternalAlarmClient {
 
-    @Value("${telegram-key}")
-    private String telegramKey;
-    private TelegramBot bot=new TelegramBot(telegramKey);
+    private TelegramBot bot=new TelegramBot("5810579378:AAGNSVQz1Mzn1FjMkBuL1x-5UUz9u-jXdXc");
 
     private final UserRepository userRepository;
 
