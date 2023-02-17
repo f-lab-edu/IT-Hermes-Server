@@ -28,8 +28,9 @@
 
 `spring boot 3.0`, `Java 17`  
 `spring security`  
-`Mysql 8.0`,`Flyway`,`h2`,`JPA`
+`Mysql 8.0`,`Flyway`,`h2`,`JPA`  
 `Jenkins`, `Github action`  
+`Docker`, `Docker hub`  
 `Nodejs`  
 `Feign Client`  
 `Html`,`CSS`,`Javascript`  
