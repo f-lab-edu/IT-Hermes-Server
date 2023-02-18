@@ -86,7 +86,7 @@ public class AlarmService {
                 startIdx = jobRepository.findJobByUrl(subscribe.get(i).getAlarmLastUrl()).getId()+1;
             }
             for(long j = startIdx; j < jobList.size(); j++){
-                jobAlarmList.add(jobAlarmList.get((int) j));
+                jobAlarmList.add(jobList.get((int) j));
             }
             if(jobAlarmList.size()>0){
                 updateUserSubscribeContentsLastUrl(jobAlarmList.get(jobAlarmList.size()-1).getUrl(),userIdx,subscribe.get(i).getContentsProvider());
