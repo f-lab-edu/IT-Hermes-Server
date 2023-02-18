@@ -28,4 +28,4 @@ logging:
   level:
     org.hibernate.SQL: debug
 
-telegram-key: "5810579378:AAGNSVQz1Mzn1FjMkBuL1x-5UUz9u-jXdXc"
+telegram-key: ${TELEGRAM_KEY}
