@@ -17,7 +17,7 @@ public class AppConfig {
     @Bean
     public UpdateUserChatId updateUserChatId(){
         UpdateUserChatId updateUserChatId = new UpdateUserChatId(userRepository);
-        updateUserChatId.updateUserChatId();
+        //updateUserChatId.updateUserChatId();
         return updateUserChatId;
     }
 
