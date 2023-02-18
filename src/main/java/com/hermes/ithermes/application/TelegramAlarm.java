@@ -24,7 +24,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
     public void sendContentsMessage(List<AlarmDtoInterface> contentsAlarmDtoList, long userIdx) {
         for(int i = 0; i < contentsAlarmDtoList.size(); i++){
             StringBuilder youtubeAlarmMessage = new StringBuilder();
-            youtubeAlarmMessage.append("[유투브 및 뉴스 정보] + \n")
+            youtubeAlarmMessage.append("[유투브 및 뉴스 정보]" + "\n")
                     .append("[제목]" + contentsAlarmDtoList.get(i).title() + "\n")
                     .append("[본문]" + contentsAlarmDtoList.get(i).description() + "\n")
                     .append("[이미지]" + contentsAlarmDtoList.get(i).image() + "\n")
