@@ -1,6 +1,6 @@
 package com.hermes.ithermes.infrastructure;
 
-import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
+import com.hermes.ithermes.domain.entity.CrawlingContents;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
@@ -15,10 +15,9 @@ import java.util.List;
 @Repository
 public interface YoutubeAndNewsRepository extends JpaRepository<YoutubeAndNews, Long> {
 
-    Page<ContentsEntityInterface> findYoutubeAndNewsBy(Pageable pageable);
-    Page<ContentsEntityInterface> findYoutubeAndNewsByCategory(Pageable pageable, CategoryType type);
+    Page<CrawlingContents> findYoutubeAndNewsBy(Pageable pageable);
+    Page<CrawlingContents> findYoutubeAndNewsByCategory(Pageable pageable, CategoryType type);
     List<YoutubeAndNews> findFirst1ByContentsProviderOrderByUrlDesc(@Param("contentsProvider") ContentsProviderType contentsProvider);
-    List<YoutubeAndNews> findYoutubeAndNewsByContentsProvider(ContentsProviderType contentsProvider);
-    YoutubeAndNews findYoutubeAndNewsByUrl(String url);
-
+    List<YoutubeAndNews> findYoutubeAndNewsByContentsProvider(ContentsProviderType type);
+    List<YoutubeAndNews> findByUrlGreaterThanAndContentsProvider(String url,ContentsProviderType contentsProviderType);
 }

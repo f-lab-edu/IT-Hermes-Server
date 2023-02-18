@@ -6,6 +6,7 @@ import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.ActiveType;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
+import com.hermes.ithermes.domain.util.RecommendKeywordType;
 import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.SubscribeRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
@@ -16,13 +17,16 @@ import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
 import com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AlarmService {
 
     private final ExternalAlarmClient externalAlarmClient;
@@ -62,16 +66,10 @@ public class AlarmService {
     public List<AlarmDtoInterface> getUserYoutubeAndNewsAlarmContents(long userIdx, CategoryType type){
         List<Subscribe> subscribe = subscribeRepository.findByUserIdAndCategoryAndIsActive(userIdx,type,ActiveType.ACTIVE);
         List<YoutubeAndNews> youtubeAndNewsAlarmList = new ArrayList<>();
-        Long startIdx = Long.valueOf(0);
 
         for(int i = 0; i < subscribe.size(); i++){
-            List<YoutubeAndNews> youtubeAndNewsList = youtubeAndNewsRepository.findYoutubeAndNewsByContentsProvider(subscribe.get(i).getContentsProvider());
-            if(subscribe.get(i).getAlarmLastUrl()!=null){
-                startIdx = youtubeAndNewsRepository.findYoutubeAndNewsByUrl(subscribe.get(i).getAlarmLastUrl()).getId()+1;
-            }
-            for(long j = startIdx; j < youtubeAndNewsList.size(); j++) {
-                youtubeAndNewsAlarmList.add(youtubeAndNewsList.get((int) j));
-            }
+            youtubeAndNewsAlarmList = youtubeAndNewsRepository.findByUrlGreaterThanAndContentsProvider(subscribe.get(i).getAlarmLastUrl(),subscribe.get(i).getContentsProvider());
+
             if(youtubeAndNewsAlarmList.size()>0){
                 updateUserSubscribeContentsLastUrl(youtubeAndNewsAlarmList.get(youtubeAndNewsAlarmList.size()-1).getUrl(),userIdx,subscribe.get(i).getContentsProvider());
             }
@@ -85,16 +83,10 @@ public class AlarmService {
     public List<JobAlarmDto> getUserJobAlarmContents(long userIdx){
         List<Subscribe> subscribe = subscribeRepository.findByUserIdAndCategoryAndIsActive(userIdx,CategoryType.JOB,ActiveType.ACTIVE);
         List<Job> jobAlarmList = new ArrayList<>();
-        Long startIdx = Long.valueOf(0);
 
         for(int i = 0; i < subscribe.size(); i++){
-            List<Job> jobList = jobRepository.findJobByContentsProvider(subscribe.get(i).getContentsProvider());
-            if(subscribe.get(i).getAlarmLastUrl()!=null){
-                startIdx = jobRepository.findJobByUrl(subscribe.get(i).getAlarmLastUrl()).getId()+1;
-            }
-            for(long j = startIdx; j < jobList.size(); j++){
-                jobAlarmList.add(jobAlarmList.get((int) j));
-            }
+            jobAlarmList = jobRepository.findJobByUrlGreaterThanAndContentsProvider(subscribe.get(i).getAlarmLastUrl(),subscribe.get(i).getContentsProvider());
+
             if(jobAlarmList.size()>0){
                 updateUserSubscribeContentsLastUrl(jobAlarmList.get(jobAlarmList.size()-1).getUrl(),userIdx,subscribe.get(i).getContentsProvider());
             }
@@ -121,7 +113,7 @@ public class AlarmService {
                         .collect(Collectors.toList());
 
         List<YoutubeAndNews> youtubeAndNewsRecommendList = youtubeAndNewsSubscribeContents.stream()
-                .filter(m->m.isContainRecommendKeywords(userRecommendKeywords))
+                .filter(m -> m.isContainRecommendKeywords(userRecommendKeywords))
                 .collect(Collectors.toList());
 
         return youtubeAndNewsRecommendList.stream()
@@ -140,7 +132,7 @@ public class AlarmService {
                 .collect(Collectors.toList());
 
         List<Job> jobRecommendList = jobSubscribeContents.stream()
-                .filter(m->m.isContainRecommendKeywords(userRecommendKeywords))
+                .filter(m -> m.isContainRecommendKeywords(userRecommendKeywords))
                 .collect(Collectors.toList());
 
         return jobRecommendList.stream()
@@ -150,18 +142,12 @@ public class AlarmService {
     }
 
     public List<String> getRecommendKeywords(long userIdx){
-        List<String> keywords = new ArrayList<>();
-        keywords.add("머신러닝");
-        keywords.add("빅데이터");
-        keywords.add("보안");
-        keywords.add("오픈소스");
-        keywords.add("클라우드");
-        keywords.add("프레임워크");
         List<String> userCustomKeywords = userRepository.findUsersById(userIdx).getJob().getKeywords();
-        userCustomKeywords.stream()
-                .forEach(m -> keywords.add(m));
 
-        return keywords;
+        Stream.of(RecommendKeywordType.values())
+                .forEach(m -> userCustomKeywords.add(m.getName()));
+
+        return userCustomKeywords;
     }
 
 }

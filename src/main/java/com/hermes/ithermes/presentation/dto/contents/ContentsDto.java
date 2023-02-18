@@ -1,7 +1,7 @@
 package com.hermes.ithermes.presentation.dto.contents;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
+import com.hermes.ithermes.domain.entity.CrawlingContents;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import lombok.AllArgsConstructor;
@@ -32,19 +32,19 @@ public class ContentsDto implements ContentsDtoInterface {
 
     public String description;
 
-    public ContentsDto(ContentsEntityInterface contentsEntityInterface){
-        this.title = contentsEntityInterface.findTitle();
-        this.image = contentsEntityInterface.findImage();
-        this.url = contentsEntityInterface.findUrl();
-        this.category = contentsEntityInterface.findCategoryType();
-        this.contentProvider = contentsEntityInterface.findContentsProvider();
-        this.contentsDate = contentsEntityInterface.findContentsTime();
-        this.description = contentsEntityInterface.findDescription();
+    public ContentsDto(CrawlingContents crawlingContents){
+        this.title = crawlingContents.findTitle();
+        this.image = crawlingContents.findImage();
+        this.url = crawlingContents.findUrl();
+        this.category = crawlingContents.findCategoryType();
+        this.contentProvider = crawlingContents.findContentsProvider();
+        this.contentsDate = crawlingContents.findContentsTime();
+        this.description = crawlingContents.findDescription();
     }
 
     @Override
-    public ContentsDto convertEntityToDto(ContentsEntityInterface contentsEntityInterface) {
-        return new ContentsDto(contentsEntityInterface);
+    public ContentsDto convertEntityToDto(CrawlingContents crawlingContents) {
+        return new ContentsDto(crawlingContents);
     }
 
 }

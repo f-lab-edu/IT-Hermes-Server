@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterface {
+public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

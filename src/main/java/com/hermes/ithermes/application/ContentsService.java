@@ -6,7 +6,7 @@ import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
-import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
+import com.hermes.ithermes.domain.entity.CrawlingContents;
 import com.hermes.ithermes.presentation.dto.contents.MainPageContentsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,7 +48,7 @@ public class ContentsService {
     }
 
     private List<ContentsDtoInterface> pageYoutubeAndNewsConvertMainPageContentsDto(Pageable page, CategoryType type){
-        Page<ContentsEntityInterface> youtubeAndNewsContents;
+        Page<CrawlingContents> youtubeAndNewsContents;
 
         if(type.equals(CategoryType.YOUTUBE_AND_NEWS)){
             youtubeAndNewsContents = youtubeAndNewsRepository.findYoutubeAndNewsBy(page);
@@ -59,7 +59,7 @@ public class ContentsService {
         return convertEntityToDtoList(youtubeAndNewsContents.getContent(), new MainPageContentsDto());
     }
 
-    private List<ContentsDtoInterface> convertEntityToDtoList(List<ContentsEntityInterface> content, ContentsDtoInterface t){
+    private List<ContentsDtoInterface> convertEntityToDtoList(List<CrawlingContents> content, ContentsDtoInterface t){
         return content.stream().map(x->t.convertEntityToDto(x)).collect(Collectors.toList());
     }
 

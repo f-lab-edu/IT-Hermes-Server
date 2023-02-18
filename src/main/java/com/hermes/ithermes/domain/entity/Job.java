@@ -18,7 +18,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Job extends BaseEntity implements ContentsEntityInterface{
+public class Job extends BaseEntity implements CrawlingContents {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
