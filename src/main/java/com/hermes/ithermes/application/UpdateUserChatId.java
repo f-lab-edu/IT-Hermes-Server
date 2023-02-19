@@ -20,7 +20,6 @@ public class UpdateUserChatId {
     TelegramBot bot = new TelegramBot(telegramKey);
 
     public void updateUserChatId(){
-
         bot.setUpdatesListener(new UpdatesListener() {
             @Override
             public int process(List<Update> updates) {
