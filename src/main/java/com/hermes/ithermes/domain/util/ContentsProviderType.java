@@ -8,7 +8,6 @@ public enum ContentsProviderType {
     SARAMIN("SARAMIN"),
     WANTED("WANTED"),
     CODING_WORLD("CODING_WORLD"),
-    NAVER("NAVER"),
     YOZM("YOZM"),
     NOMAD_CODERS("NOMAD_CODERS"),
     DREAM_CODING("DREAM_CODING");
