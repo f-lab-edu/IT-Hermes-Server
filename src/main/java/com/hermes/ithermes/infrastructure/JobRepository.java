@@ -2,6 +2,7 @@ package com.hermes.ithermes.infrastructure;
 
 import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import com.hermes.ithermes.domain.entity.Job;
+import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public interface JobRepository extends JpaRepository<Job,Long> {
 
     Page<ContentsEntityInterface> findJobBy(Pageable pageable);
+    Page<ContentsEntityInterface> findByTitleContaining(Pageable pageable, CategoryType type,String searchKeyword);
     List<Job> findFirst1ByContentsProviderOrderByUrlDesc(@Param("contentsProvider") ContentsProviderType contentsProvider);
     List<Job> findJobByContentsProvider(ContentsProviderType contentsProviderType);
     Job findJobByUrl(String url);

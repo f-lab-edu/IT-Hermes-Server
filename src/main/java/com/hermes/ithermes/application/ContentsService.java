@@ -44,6 +44,14 @@ public class ContentsService {
         return convertEntityToDtoList(youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageInfo,type).getContent(),new ContentsDto());
     }
 
+    public List<ContentsDtoInterface> getSearchContents2(String searchKeyword, CategoryType type){
+        Pageable pageInfo = PageRequest.of(0,10,Sort.by(OrderType.POPULAR.getOrderQuery()).descending());
+        if(type.getTitle().equals("JOB")){
+            return convertEntityToDtoList(jobRepository.findByTitleContaining(pageInfo,type,searchKeyword).getContent(),new ContentsDto());
+        }
+        return convertEntityToDtoList(youtubeAndNewsRepository.findByTitleContaining(pageInfo,type,searchKeyword).getContent(),new ContentsDto());
+    }
+
     private List<ContentsDtoInterface> pageYoutubeAndNewsConvertMainPageContentsDto(Pageable page, CategoryType type){
         Page<ContentsEntityInterface> youtubeAndNewsContents;
         if(type.equals(CategoryType.YOUTUBE_AND_NEWS)){
