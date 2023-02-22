@@ -1,7 +1,7 @@
 package com.hermes.ithermes.application;
 
 
-import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
+import com.hermes.ithermes.domain.entity.CrawlingContents;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
@@ -49,7 +49,7 @@ class ContentsServiceTest {
     @DisplayName("category contents 페이징 처리 테스트")
     void checkpaging() {
         Pageable pageInfo = PageRequest.of(0,2);
-        List<ContentsEntityInterface> youtubeContents = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageInfo, CategoryType.YOUTUBE).getContent();
+        List<CrawlingContents> youtubeContents = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageInfo, CategoryType.YOUTUBE).getContent();
 
         Assertions.assertEquals(2,youtubeContents.size());
     }

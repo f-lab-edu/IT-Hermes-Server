@@ -1,7 +1,7 @@
 package com.hermes.ithermes.presentation.dto.contents;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
+import com.hermes.ithermes.domain.entity.CrawlingContents;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import lombok.AllArgsConstructor;
@@ -32,19 +32,19 @@ public class MainPageContentsDto implements ContentsDtoInterface {
 
     public Long viewCnt;
 
-    public MainPageContentsDto(ContentsEntityInterface contentsEntityInterface) {
-        this.title = contentsEntityInterface.findTitle();
-        this.image = contentsEntityInterface.findImage();
-        this.url = contentsEntityInterface.findUrl();
-        this.category = contentsEntityInterface.findCategoryType();
-        this.contentsProviderType = contentsEntityInterface.findContentsProvider();
-        this.contentsDate = contentsEntityInterface.findContentsTime();
-        this.viewCnt = contentsEntityInterface.findViewCount();
+    public MainPageContentsDto(CrawlingContents crawlingContents) {
+        this.title = crawlingContents.findTitle();
+        this.image = crawlingContents.findImage();
+        this.url = crawlingContents.findUrl();
+        this.category = crawlingContents.findCategoryType();
+        this.contentsProviderType = crawlingContents.findContentsProvider();
+        this.contentsDate = crawlingContents.findContentsTime();
+        this.viewCnt = crawlingContents.findViewCount();
     }
 
     @Override
-    public MainPageContentsDto convertEntityToDto(ContentsEntityInterface contentsEntityInterface) {
-        return new MainPageContentsDto(contentsEntityInterface);
+    public MainPageContentsDto convertEntityToDto(CrawlingContents crawlingContents) {
+        return new MainPageContentsDto(crawlingContents);
     }
 
 }
