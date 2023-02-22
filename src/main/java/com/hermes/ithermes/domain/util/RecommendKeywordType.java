@@ -5,12 +5,12 @@ import lombok.Getter;
 @Getter
 public enum RecommendKeywordType {
 
-    RecommendKeyword1("머신러닝"),
-    RecommendKeyword2("빅데이터"),
-    RecommendKeyword3("보안"),
-    RecommendKeyword4("오픈소스"),
-    RecommendKeyword5("클라우드"),
-    RecommendKeyword6("프레임워크");
+    MachineLearning("머신러닝"),
+    BigData("빅데이터"),
+    Security("보안"),
+    OpenSource("오픈소스"),
+    Cloud("클라우드"),
+    Framework("프레임워크");
 
     private String name;
 
