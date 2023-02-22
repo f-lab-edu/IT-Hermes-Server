@@ -21,5 +21,6 @@ public interface JobRepository extends JpaRepository<Job,Long> {
     Job findJobByUrl(String url);
     Optional<List<Job>> findByUrl(@Param("url") String url);
     List<Job> findJobBy();
+    Long countBy();
 
 }

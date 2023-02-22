@@ -59,9 +59,9 @@ public class ContentsService {
     }
 
     public CategoryCountDto getCategoryCount(){
-        int youtubeCnt = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(CategoryType.YOUTUBE).size();
-        int jobCnt = jobRepository.findJobBy().size();
-        int newsCnt = youtubeAndNewsRepository.findYoutubeAndNewsByCategory(CategoryType.NEWS).size();
+        Long youtubeCnt = youtubeAndNewsRepository.countYoutubeAndNewsByCategory(CategoryType.YOUTUBE);
+        Long jobCnt = jobRepository.countBy();
+        Long newsCnt = youtubeAndNewsRepository.countYoutubeAndNewsByCategory(CategoryType.NEWS);
 
         return new CategoryCountDto(youtubeCnt,jobCnt,newsCnt);
     }
