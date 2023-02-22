@@ -3,15 +3,13 @@ package com.hermes.ithermes.presentation.controller;
 import com.hermes.ithermes.application.ContentsService;
 import com.hermes.ithermes.domain.exception.NotExistsRequestParamException;
 import com.hermes.ithermes.domain.util.CategoryType;
-import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.domain.util.OrderType;
-import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
 import com.hermes.ithermes.presentation.dto.contents.CategoryCountDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframeworkㄴweb.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 

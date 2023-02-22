@@ -3,7 +3,6 @@ package com.hermes.ithermes.infrastructure;
 import java.util.List;
 
 import com.hermes.ithermes.domain.entity.CrawlingContents;
-import com.hermes.ithermes.domain.entity.ContentsEntityInterface;
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import org.springframework.data.domain.Page;
@@ -19,10 +18,8 @@ import java.util.Optional;
 public interface JobRepository extends JpaRepository<Job,Long> {
 
     Page<CrawlingContents> findJobBy(Pageable pageable);
-    List<Job> findFirst1ByContentsProviderOrderByUrlDesc(@Param("contentsProvider") ContentsProviderType contentsProvider);
-    List<Job> findJobByContentsProvider(ContentsProviderType contentsProviderType);
     List<Job> findJobByUrlGreaterThanAndContentsProvider(String url,ContentsProviderType contentsProviderType);
-    Page<ContentsEntityInterface> findDistinctBy(Pageable pageable);
+    Page<CrawlingContents> findDistinctBy(Pageable pageable);
     List<Job> findFirst1ByContentsProviderOrderByUrlDesc(@Param("contentsProvider") ContentsProviderType contentsProvider);
     List<Job> findJobByContentsProvider(ContentsProviderType contentsProviderType);
     Job findJobByUrl(String url);
