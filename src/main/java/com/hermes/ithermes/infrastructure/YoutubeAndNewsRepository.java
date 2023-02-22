@@ -23,5 +23,6 @@ public interface YoutubeAndNewsRepository extends JpaRepository<YoutubeAndNews, 
     YoutubeAndNews findYoutubeAndNewsByUrl(String url);
     Optional<YoutubeAndNews> findByUrl(@Param("url") String url);
     List<YoutubeAndNews> findYoutubeAndNewsByCategory(CategoryType categoryType);
+    List<ContentsEntityInterface> findByTitleContaining(String title);
 
 }

@@ -15,11 +15,12 @@ import java.util.Optional;
 @Repository
 public interface JobRepository extends JpaRepository<Job,Long> {
 
-    Page<ContentsEntityInterface> findDistinctBy(Pageable pageable);
+    Page<ContentsEntityInterface> findJobBy(Pageable pageable);
     List<Job> findFirst1ByContentsProviderOrderByUrlDesc(@Param("contentsProvider") ContentsProviderType contentsProvider);
     List<Job> findJobByContentsProvider(ContentsProviderType contentsProviderType);
     Job findJobByUrl(String url);
     Optional<List<Job>> findByUrl(@Param("url") String url);
     List<Job> findJobBy();
+    List<ContentsEntityInterface> findByTitleContaining(String title);
 
 }

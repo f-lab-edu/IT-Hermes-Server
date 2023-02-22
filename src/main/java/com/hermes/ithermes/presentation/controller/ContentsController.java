@@ -45,5 +45,11 @@ public class ContentsController {
         return ResponseEntity.ok(contentsService.getCategoryCount());
     }
 
+    @RequestMapping(value = "/search",method = RequestMethod.GET)
+    public ResponseEntity<List<ContentsDtoInterface>> getSearchContents(@RequestParam(value = "title") String title,CategoryType category){
+        return ResponseEntity.ok(contentsService.getSearchContents(title,category));
+    }
+
+
 
 }
