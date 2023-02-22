@@ -29,14 +29,17 @@ public class MainPageContentsDto implements ContentsDtoInterface {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime contentsDate;
-    
-    public MainPageContentsDto(CrawlingContents crawlingContents){
-        this.title = crawlingContents.findTitle();
-        this.image = crawlingContents.findImage();
-        this.url = crawlingContents.findUrl();
-        this.category = crawlingContents.findCategoryType();
-        this.contentsProviderType = crawlingContents.findContentsProvider();
-        this.contentsDate = crawlingContents.findContentsTime();
+
+    public Long viewCnt;
+
+    public MainPageContentsDto(ContentsEntityInterface contentsEntityInterface) {
+        this.title = contentsEntityInterface.findTitle();
+        this.image = contentsEntityInterface.findImage();
+        this.url = contentsEntityInterface.findUrl();
+        this.category = contentsEntityInterface.findCategoryType();
+        this.contentsProviderType = contentsEntityInterface.findContentsProvider();
+        this.contentsDate = contentsEntityInterface.findContentsTime();
+        this.viewCnt = contentsEntityInterface.findViewCount();
     }
 
     @Override

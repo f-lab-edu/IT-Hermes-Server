@@ -26,7 +26,6 @@ public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
     @Column(nullable = false, length = 1000)
     private String description;
 
-    @Column(nullable = false)
     private String image;
 
     @Column(nullable = false)
@@ -51,8 +50,8 @@ public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
     @Column(nullable = false)
     private ContentsProviderType contentsProvider;
 
-    public void initDefaultData() {
-        viewCount=0L;
+    public void updateViewCount() {
+        this.viewCount += +1L;
     }
 
     @Override
@@ -94,4 +93,10 @@ public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
         return keywordList.stream()
                 .anyMatch(m->m.contains(title));
     }
+
+    @Override
+    public Long findViewCount() {
+        return viewCount;
+    }
+
 }

@@ -38,8 +38,4 @@ public class UserFactory {
     public boolean existsByNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
-
-    public boolean existsByLoginIdAndPassword(String id, String password) {
-        return userRepository.existsByLoginIdAndPassword(id, password);
-    }
 }

@@ -3,8 +3,10 @@ package com.hermes.ithermes.presentation.controller;
 import com.hermes.ithermes.application.UserService;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.user.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,7 +16,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController()
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
@@ -27,15 +29,15 @@ public class UserController {
     @RequestMapping(value = "/join", method = RequestMethod.POST)
     public ResponseEntity<UserCreateUserRequestDto> joinUser(@Valid @RequestBody UserCreateUserRequestDto userCreateUserRequestDto) {
         userService.joinUser(userCreateUserRequestDto);
-        URI uri = URI.create("user/join/");
+        URI uri = URI.create("/api/user/join/");
 
         return ResponseEntity.created(uri).body(userCreateUserRequestDto);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<CommonResponseDto> loginUser(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
-        CommonResponseDto userLoginResponseDto = userService.loginUser(userLoginRequestDto);
-        return ResponseEntity.ok(userLoginResponseDto);
+    public ResponseEntity<UserLoginResponseDto> loginUser(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
+        UserLoginResponseDto userLoginResponseDto = userService.loginUser(userLoginRequestDto);
+        return ResponseEntity.ok().body(userLoginResponseDto);
     }
 
     @RequestMapping(value = "/duplicate-nickname", method = RequestMethod.POST)
@@ -68,4 +70,17 @@ public class UserController {
         return ResponseEntity.ok(userFindMyDataResponseDto);
     }
 
+    @RequestMapping(value = "/refresh-token", method = RequestMethod.GET)
+    public ResponseEntity<UserCheckRefreshTokenResponseDto> checkRefreshToken(HttpServletRequest request) {
+        String refreshToken = request.getHeader("HERMES-REFRESH-TOKEN");
+        UserCheckRefreshTokenResponseDto userCheckRefreshTokenResponseDto = userService.checkRefreshToken(refreshToken);
+        return ResponseEntity.ok(userCheckRefreshTokenResponseDto);
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public ResponseEntity<CommonResponseDto> logoutUser(Authentication authentication) {
+        String loginId = authentication.getName();
+        CommonResponseDto commonResponseDto = userService.userLogout(loginId);
+        return ResponseEntity.ok(commonResponseDto);
+    }
 }

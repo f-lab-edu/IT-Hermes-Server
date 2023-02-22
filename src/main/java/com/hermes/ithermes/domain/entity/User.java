@@ -41,7 +41,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Boolean isDelete;
 
-    public void changeNickname(String nickname) {
+    private String refreshToken;
+
+    public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
 
@@ -49,7 +51,11 @@ public class User extends BaseEntity {
         this.isDelete = true;
     }
 
-    public void setTelegramId(String telegramId) {
+    public void updateTelegramId(String telegramId) {
         this.telegramId = telegramId;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

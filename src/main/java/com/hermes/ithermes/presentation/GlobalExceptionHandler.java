@@ -11,7 +11,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotExistsRequestParamException.class)
     public ResponseEntity<String> NotExistsRequestValue(){
-        return new ResponseEntity("잘못된 요청 파라미터 값입니다.", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("잘못된 요청 파라미터 값입니다.", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(SameIdException.class)
@@ -48,4 +48,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
+    @ExceptionHandler(value = NoCrawlingDataException.class)
+    public ResponseEntity noCrawlingDataException(){
+        return new ResponseEntity<>("크롤링 데이터가 존재하지 않음", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = ExpireTokenException.class)
+    public ResponseEntity expireRefreshTokenException(){
+        return new ResponseEntity<>("인증 토큰 만료 혹은 유효하지 않음", HttpStatus.UNAUTHORIZED);
+    }
 }

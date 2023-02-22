@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/subscribe")
+@RequestMapping("/api/subscribe")
 public class SubscribeController {
     private final SubscribeService subscribeService;
 

@@ -64,6 +64,9 @@ public class Job extends BaseEntity implements CrawlingContents {
         viewCount=0L;
     }
 
+    public void updateViewCount() {
+        this.viewCount+=1L;
+    }
     @Override
     public String findTitle() {
         return title;
@@ -102,6 +105,11 @@ public class Job extends BaseEntity implements CrawlingContents {
     public boolean isContainRecommendKeywords(List<String> keywordList){
         return keywordList.stream()
                 .anyMatch(m->m.contains(title));
+    }
+
+    @Override
+    public Long findViewCount() {
+        return viewCount;
     }
 
 }

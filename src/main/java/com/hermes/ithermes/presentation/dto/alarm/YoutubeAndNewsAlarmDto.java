@@ -32,6 +32,7 @@ public class YoutubeAndNewsAlarmDto implements AlarmDtoInterface{
                 .image(youtubeAndNews.getImage())
                 .url(youtubeAndNews.getUrl())
                 .contentsStartAt(youtubeAndNews.getContentsStartAt())
+                .contentsProviderType(youtubeAndNews.getContentsProvider())
                 .build();
     }
 

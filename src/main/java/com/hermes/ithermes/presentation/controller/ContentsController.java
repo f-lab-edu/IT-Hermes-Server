@@ -6,18 +6,19 @@ import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
+import com.hermes.ithermes.presentation.dto.contents.CategoryCountDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframeworkㄴweb.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/contents")
+@RequestMapping("/api/contents")
 @RequiredArgsConstructor
 public class ContentsController {
 
@@ -41,5 +42,8 @@ public class ContentsController {
         return ResponseEntity.ok(contentsService.getCategoryContents(type, page,order));
     }
 
-
+    @RequestMapping(value = "/count",method = RequestMethod.GET)
+    public ResponseEntity<CategoryCountDto> getCategoryCount(){
+        return ResponseEntity.ok(contentsService.getCategoryCount());
+    }
 }

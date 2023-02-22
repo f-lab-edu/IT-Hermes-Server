@@ -14,10 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UpdateUserChatId {
 
-    @Value("${telegram-key}")
-    private String telegramKey;
     private final UserRepository userRepository;
-    TelegramBot bot = new TelegramBot(telegramKey);
+    TelegramBot bot = new TelegramBot("5810579378:AAGNSVQz1Mzn1FjMkBuL1x-5UUz9u-jXdXc");
 
     public void updateUserChatId(){
         bot.setUpdatesListener(new UpdatesListener() {
@@ -41,7 +39,7 @@ public class UpdateUserChatId {
                         bot.execute(new SendMessage(chatId,"이미 생성한 봇이 있는 유저입니다."));
                     }else{
                         User newUser = userRepository.findByNickname(userSendMessage);
-                        newUser.setTelegramId(chatId);
+                        newUser.updateTelegramId(chatId);
                         userRepository.save(newUser);
                         bot.execute(new SendMessage(chatId,"유저로 등록되었습니다."));
                     }

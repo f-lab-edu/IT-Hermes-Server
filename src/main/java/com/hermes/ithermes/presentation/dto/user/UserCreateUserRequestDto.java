@@ -30,8 +30,14 @@ public class UserCreateUserRequestDto {
     @NonNull
     @NotBlank(message = "경력은 필수 입력사항 입니다.")
     private String yearOfExperience;
-    /** 키워드는 최대 5개, 5개 이하 일 시, 배열에 null 삽입*/
+    /**
+     * 키워드는 최대 5개, 5개 이하 일 시, 배열에 null 삽입
+     */
     @NonNull
     @NotEmpty(message = "키워드는 필수 입력사항 입니다.")
     private String[] keywordList;
+
+    public void encodingPassword(final String password) {
+        this.password = password;
+    }
 }

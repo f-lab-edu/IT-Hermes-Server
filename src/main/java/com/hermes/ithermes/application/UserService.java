@@ -12,7 +12,10 @@ import com.hermes.ithermes.infrastructure.UserKeywordRegistryRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.user.*;
+import com.hermes.ithermes.presentation.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,24 +27,29 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
+    @Value("${springboot.jwt.secret}")
+    private String secretKey = "secretKey";
 
     private final UserKeywordRegistryRepository userKeywordRegistryRepository;
     private final UserFactory userFactory;
     private final KeywordFactory keywordFactory;
     private final UserRepository userRepository;
     private final UserKeywordRegistryFactory userKeywordRegistryFactory;
+    private final JwtUtil jwtUtil;
+    private final BCryptPasswordEncoder encoder;
 
     @Transactional
     public CommonResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
-        String loginId = userLoginRequestDto.getId();
-        String password = userLoginRequestDto.getPassword();
 
-        Optional.ofNullable(password.equals(userLoginRequestDto.getPasswordConfirm()))
+        Optional.ofNullable(userLoginRequestDto.getPassword().equals(userLoginRequestDto.getPasswordConfirm()))
                 .filter(v -> v)
                 .orElseThrow(() -> new UnMatchedPasswordException());
 
-        if (userFactory.existsByLoginId(loginId)) throw new SameIdException();
+        String loginId = userLoginRequestDto.getId();
+        String password = encoder.encode(userLoginRequestDto.getPassword());
+        userLoginRequestDto.encodingPassword(password);
 
+        if (userFactory.existsByLoginId(loginId)) throw new SameIdException();
         User user = userFactory.parseLoginRequestDtoToUser(userLoginRequestDto);
 
         Arrays.stream(userLoginRequestDto.getKeywordList())
@@ -55,11 +63,24 @@ public class UserService {
         return new CommonResponseDto();
     }
 
-    public CommonResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) {
+    @Transactional
+    public UserLoginResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) {
         String loginId = userLoginRequestDto.getId();
         String password = userLoginRequestDto.getPassword();
-        if (!userFactory.existsByLoginIdAndPassword(loginId, password)) throw new WrongIdOrPasswordException();
-        return new CommonResponseDto();
+
+        User user = userFactory.findLoginId(loginId).orElseThrow(() -> new WrongIdOrPasswordException());
+
+        if (!encoder.matches(password, user.getPassword())) throw new WrongIdOrPasswordException();
+
+        String refreshToken = jwtUtil.createRefreshToken(loginId);
+        user.updateRefreshToken(refreshToken);
+
+        UserLoginResponseDto userLoginResponseDto = UserLoginResponseDto.builder()
+                .message("success")
+                .accessToken(jwtUtil.createAccessToken(loginId))
+                .refreshToken(refreshToken)
+                .build();
+        return userLoginResponseDto;
     }
 
     public CommonResponseDto checkDuplicateNickname(UserDuplicateNicknameRequestDto userDuplicateNicknameRequestDto) {
@@ -80,7 +101,7 @@ public class UserService {
         if (userFactory.existsByNickname(newNickname)) throw new SameNicknameException();
 
         User user = userFactory.findLoginId(userUpdateNicknameRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
-        user.changeNickname(newNickname);
+        user.updateNickname(newNickname);
         return new CommonResponseDto();
     }
 
@@ -95,6 +116,31 @@ public class UserService {
     public UserFindMyDataResponseDto findMyData(UserFindMyDataRequestDto userFindMyDataRequestDto) {
         User user = userFactory.findLoginId(userFindMyDataRequestDto.getId()).orElseThrow(() -> new WrongIdOrPasswordException());
         return new UserFindMyDataResponseDto(user.getLoginId(), user.getNickname());
+    }
+
+    public UserCheckRefreshTokenResponseDto checkRefreshToken(String refreshToken) {
+        String token = refreshToken.split(" ")[1];
+        boolean validateToken = jwtUtil.validateToken(token, secretKey);
+        if (!validateToken) {
+            throw new ExpireTokenException();
+        }
+        String loginId = JwtUtil.getUsername(token, secretKey);
+        User user = userFactory.findLoginId(loginId).orElseThrow(() -> new ExpireTokenException());
+        String storedRefreshToken = user.getRefreshToken();
+        if (!token.equals(storedRefreshToken)) throw new ExpireTokenException();
+        String accessToken = jwtUtil.createAccessToken(loginId);
+        return UserCheckRefreshTokenResponseDto
+                .builder()
+                .accessToken(accessToken)
+                .message("success")
+                .build();
+    }
+
+    @Transactional
+    public CommonResponseDto userLogout(String loginId) {
+        User user = userFactory.findLoginId(loginId).orElseThrow(()->new WrongIdOrPasswordException());
+        user.updateRefreshToken(null);
+        return new CommonResponseDto();
     }
 
 }

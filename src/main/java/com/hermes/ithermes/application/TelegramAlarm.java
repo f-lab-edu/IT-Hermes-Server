@@ -16,9 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TelegramAlarm implements ExternalAlarmClient {
 
-    @Value("${telegram-key}")
-    private String telegramKey;
-    private TelegramBot bot=new TelegramBot(telegramKey);
+    private TelegramBot bot=new TelegramBot("5810579378:AAGNSVQz1Mzn1FjMkBuL1x-5UUz9u-jXdXc");
 
     private final UserRepository userRepository;
 
@@ -26,8 +24,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
     public void sendContentsMessage(List<AlarmDtoInterface> contentsAlarmDtoList, long userIdx) {
         for(int i = 0; i < contentsAlarmDtoList.size(); i++){
             StringBuilder youtubeAlarmMessage = new StringBuilder();
-
-            youtubeAlarmMessage.append("[유투브 및 뉴스 정보] + \n")
+            youtubeAlarmMessage.append("[유투브 및 뉴스 정보]" + "\n")
                     .append("[제목]" + contentsAlarmDtoList.get(i).title() + "\n")
                     .append("[본문]" + contentsAlarmDtoList.get(i).description() + "\n")
                     .append("[이미지]" + contentsAlarmDtoList.get(i).image() + "\n")

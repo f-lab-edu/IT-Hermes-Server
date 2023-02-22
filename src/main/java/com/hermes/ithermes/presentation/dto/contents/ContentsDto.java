@@ -32,6 +32,8 @@ public class ContentsDto implements ContentsDtoInterface {
 
     public String description;
 
+    public Long viewCnt;
+
     public ContentsDto(CrawlingContents crawlingContents){
         this.title = crawlingContents.findTitle();
         this.image = crawlingContents.findImage();

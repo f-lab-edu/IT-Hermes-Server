@@ -6,8 +6,6 @@ import com.hermes.ithermes.domain.util.GradeType;
 import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.presentation.dto.job.JobCrawlingDto;
 import com.hermes.ithermes.presentation.dto.job.JobInsertRequestDto;
-import com.hermes.ithermes.presentation.dto.job.JobLastUrlRequestDto;
-import com.hermes.ithermes.presentation.dto.job.JobLastUrlResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +18,7 @@ import java.util.List;
 public class JobFactory {
     private final JobRepository jobRepository;
 
-    public List<Job> parseJob(JobInsertRequestDto jobInsertRequestDto) {
+    public List<Job> insertJob(JobInsertRequestDto jobInsertRequestDto) {
         List<Job> jobList = new ArrayList<>();
         List<JobCrawlingDto> jobCrawlingDtoList = jobInsertRequestDto.getJobCrawlingDtoList();
         ContentsProviderType contentsProvider = jobInsertRequestDto.getContentsProvider();
@@ -65,21 +63,5 @@ public class JobFactory {
             jobList.add(job);
         });
         return jobList;
-    }
-
-    public JobLastUrlResponseDto findJobLastUrl(JobLastUrlRequestDto jobLastUrlRequestDto) {
-        ContentsProviderType contentsProvider = jobLastUrlRequestDto.getContentsProvider();
-        List<Job> lastYoutubeAndNews = jobRepository.findFirst1ByContentsProviderOrderByUrlDesc(contentsProvider);
-        if (!lastYoutubeAndNews.isEmpty()) {
-            return JobLastUrlResponseDto
-                    .builder()
-                    .lastUrl(lastYoutubeAndNews.get(0).getUrl())
-                    .contentsProvider(contentsProvider)
-                    .build();
-        }
-        return JobLastUrlResponseDto
-                .builder()
-                .contentsProvider(contentsProvider)
-                .build();
     }
 }

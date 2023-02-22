@@ -15,12 +15,14 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
     Optional<List<Subscribe>> findByUserId(@Param("userId") Long userId);
 
     @Query("select s.contentsProvider from Subscribe s where s.isActive = :active and s.user.id = :userId and s.category = :category")
-    List<ContentsProviderType> findContentsProvider(@Param("active")ActiveType active, @Param("userId") Long userId, @Param("category") CategoryType categoryType);
+    List<ContentsProviderType> findContentsProvider(@Param("active") ActiveType active, @Param("userId") Long userId, @Param("category") CategoryType categoryType);
 
     boolean existsByUserId(@Param("userId") Long userId);
 
-    List<Subscribe> findByUserIdAndCategoryAndIsActive(@Param("userId")Long userId,@Param("category")CategoryType categoryType,@Param("active")ActiveType active);
+    Optional<Subscribe> findByContentsProvider(@Param("contentsProvider") ContentsProviderType contentsProvider);
 
-    Subscribe findByUserIdAndContentsProvider(Long userId,ContentsProviderType contentsProviderType);
+    List<Subscribe> findByUserIdAndCategoryAndIsActive(@Param("userId") Long userId, @Param("category") CategoryType categoryType, @Param("active") ActiveType active);
+
+    Subscribe findByUserIdAndContentsProvider(Long userId, ContentsProviderType contentsProviderType);
 
 }

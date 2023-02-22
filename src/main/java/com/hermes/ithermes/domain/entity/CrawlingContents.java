@@ -15,5 +15,6 @@ public interface CrawlingContents {
     ContentsProviderType findContentsProvider();
     LocalDateTime findContentsTime();
     String findDescription();
+    Long findViewCount();
 
 }

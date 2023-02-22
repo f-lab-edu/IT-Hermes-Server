@@ -99,7 +99,7 @@ public class AlarmService {
 
     public void updateUserSubscribeContentsLastUrl(String lastUrl,long userIdx,ContentsProviderType contentsProvider){
         Subscribe subscribe = subscribeRepository.findByUserIdAndContentsProvider(userIdx,contentsProvider);
-        subscribe.setAlarmLastUrl(lastUrl);
+        subscribe.updateAlarmLastUrl(lastUrl);
         subscribeRepository.save(subscribe);
     }
 
