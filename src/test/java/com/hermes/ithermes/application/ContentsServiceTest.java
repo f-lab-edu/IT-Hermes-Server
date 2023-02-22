@@ -39,10 +39,10 @@ class ContentsServiceTest {
     }
 
     @Test
-    @DisplayName("main contents를 10개 반환하는지 테스트")
+    @DisplayName("main contents를 11개 반환하는지 테스트")
     void checkMainContentsCount(){
         List<ContentsDtoInterface> results = contentsService.getMainContents(CategoryType.YOUTUBE);
-        Assertions.assertEquals(10, results.size());
+        Assertions.assertEquals(11, results.size());
     }
 
     @Test
