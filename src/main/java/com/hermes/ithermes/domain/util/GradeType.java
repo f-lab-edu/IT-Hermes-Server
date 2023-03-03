@@ -18,7 +18,7 @@ public enum GradeType {
         this.maxExperience = maxExperience;
     }
 
-    public GradeType checkGradleType(int experience) {
+    public static GradeType checkGradleType(int experience) {
         if (experience < BEGINNER.minExperience) return GradeType.BEGINNER;
         else if (experience > 0 && experience <= 4) return GradeType.JUNIOR;
         else if (experience > 4 && experience < 10) return GradeType.INTERMEDIATE;

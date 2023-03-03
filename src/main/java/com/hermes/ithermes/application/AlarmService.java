@@ -2,11 +2,9 @@ package com.hermes.ithermes.application;
 
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.Subscribe;
+import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
-import com.hermes.ithermes.domain.util.ActiveType;
-import com.hermes.ithermes.domain.util.CategoryType;
-import com.hermes.ithermes.domain.util.ContentsProviderType;
-import com.hermes.ithermes.domain.util.RecommendKeywordType;
+import com.hermes.ithermes.domain.util.*;
 import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.SubscribeRepository;
 import com.hermes.ithermes.infrastructure.UserRepository;
@@ -82,10 +80,11 @@ public class AlarmService {
 
     public List<JobAlarmDto> getUserJobAlarmContents(long userIdx){
         List<Subscribe> subscribe = subscribeRepository.findByUserIdAndCategoryAndIsActive(userIdx,CategoryType.JOB,ActiveType.ACTIVE);
+        int userExperienceYear = userRepository.findUsersById(userIdx).getYearOfExperience();
         List<Job> jobAlarmList = new ArrayList<>();
 
         for(int i = 0; i < subscribe.size(); i++){
-            jobAlarmList = jobRepository.findJobByUrlGreaterThanAndContentsProvider(subscribe.get(i).getAlarmLastUrl(),subscribe.get(i).getContentsProvider());
+            jobAlarmList = jobRepository.findJobByUrlGreaterThanAndContentsProviderAndGrade(subscribe.get(i).getAlarmLastUrl(),subscribe.get(i).getContentsProvider(),GradeType.checkGradleType(userExperienceYear));
 
             if(jobAlarmList.size()>0){
                 updateUserSubscribeContentsLastUrl(jobAlarmList.get(jobAlarmList.size()-1).getUrl(),userIdx,subscribe.get(i).getContentsProvider());
@@ -97,7 +96,7 @@ public class AlarmService {
                 .collect(Collectors.toList());
     }
 
-    public void updateUserSubscribeContentsLastUrl(String lastUrl,long userIdx,ContentsProviderType contentsProvider){
+    public void updateUserSubscribeContentsLastUrl(String lastUrl, long userIdx, ContentsProviderType contentsProvider){
         Subscribe subscribe = subscribeRepository.findByUserIdAndContentsProvider(userIdx,contentsProvider);
         subscribe.updateAlarmLastUrl(lastUrl);
         subscribeRepository.save(subscribe);
