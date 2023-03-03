@@ -31,7 +31,7 @@ public class UpdateUserChatId {
                     }
 
                     if(userRepository.existsUserByNickname(userSendMessage) == false){
-                        bot.execute(new SendMessage(chatId,"먼저 회원가입을 진행해주세요."));
+                        bot.execute(new SendMessage(chatId,"존재하지 않는 유저입니다. 먼저 회원가입을 진행해주세요."));
                         return UpdatesListener.CONFIRMED_UPDATES_ALL;
                     }
 
