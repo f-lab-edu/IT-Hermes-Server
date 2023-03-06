@@ -15,6 +15,7 @@ import com.hermes.ithermes.presentation.dto.user.*;
 import com.hermes.ithermes.presentation.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,7 @@ public class UserService {
     private final UserKeywordRegistryFactory userKeywordRegistryFactory;
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder encoder;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Transactional
     public CommonResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
@@ -80,6 +82,8 @@ public class UserService {
                 .accessToken(jwtUtil.createAccessToken(loginId))
                 .refreshToken(refreshToken)
                 .build();
+
+        setRedisRefreshToken(loginId, refreshToken);
         return userLoginResponseDto;
     }
 
@@ -127,6 +131,9 @@ public class UserService {
         String loginId = JwtUtil.getUsername(token, secretKey);
         User user = userFactory.findLoginId(loginId).orElseThrow(() -> new ExpireTokenException());
         String storedRefreshToken = user.getRefreshToken();
+        String redisRefreshToken = getRedisRefreshToken(loginId);
+        /** 레디스 캐쉬 존재 유무 확인 */
+        if (!token.equals(redisRefreshToken)) throw new ExpireTokenException();
         if (!token.equals(storedRefreshToken)) throw new ExpireTokenException();
         String accessToken = jwtUtil.createAccessToken(loginId);
         return UserCheckRefreshTokenResponseDto
@@ -141,6 +148,14 @@ public class UserService {
         User user = userFactory.findLoginId(loginId).orElseThrow(()->new WrongIdOrPasswordException());
         user.updateRefreshToken(null);
         return new CommonResponseDto();
+    }
+
+    private void setRedisRefreshToken(String key, String value) {
+        redisTemplate.opsForValue().set(key,value);
+    }
+
+    private String getRedisRefreshToken(String key) {
+        return redisTemplate.opsForValue().get(key);
     }
 
 }

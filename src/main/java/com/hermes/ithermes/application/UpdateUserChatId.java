@@ -14,10 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UpdateUserChatId {
 
-    @Value("${telegram-key}")
-    private String telegramKey;
     private final UserRepository userRepository;
-    TelegramBot bot = new TelegramBot(telegramKey);
+    TelegramBot bot = new TelegramBot("5810579378:AAGNSVQz1Mzn1FjMkBuL1x-5UUz9u-jXdXc");
 
     public void updateUserChatId(){
         bot.setUpdatesListener(new UpdatesListener() {
@@ -26,14 +24,17 @@ public class UpdateUserChatId {
                 for(Update update : updates){
                     String chatId = update.message().chat().id().toString();
                     String userSendMessage = update.message().text();
+
                     if(userSendMessage.equals("/start")){
                         bot.execute(new SendMessage(chatId, "IT-Hermes에서 사용하는 닉네임을 입력해주세요."));
                         return UpdatesListener.CONFIRMED_UPDATES_ALL;
                     }
+
                     if(userRepository.existsUserByNickname(userSendMessage) == false){
-                        bot.execute(new SendMessage(chatId,"먼저 회원가입을 진행해주세요."));
+                        bot.execute(new SendMessage(chatId,"존재하지 않는 유저입니다. 먼저 회원가입을 진행해주세요."));
                         return UpdatesListener.CONFIRMED_UPDATES_ALL;
                     }
+
                     if(userRepository.existsUserByNicknameAndTelegramId(chatId,userSendMessage) == true){
                         bot.execute(new SendMessage(chatId,"이미 생성한 봇이 있는 유저입니다."));
                     }else{
@@ -42,10 +43,13 @@ public class UpdateUserChatId {
                         userRepository.save(newUser);
                         bot.execute(new SendMessage(chatId,"유저로 등록되었습니다."));
                     }
+
                     return UpdatesListener.CONFIRMED_UPDATES_ALL;
                 }
+
                 return UpdatesListener.CONFIRMED_UPDATES_ALL;
             }
+
         });
     }
 }

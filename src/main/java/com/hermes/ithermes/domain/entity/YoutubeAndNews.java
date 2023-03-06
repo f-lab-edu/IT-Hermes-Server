@@ -7,13 +7,14 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterface {
+public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,10 +89,14 @@ public class YoutubeAndNews extends BaseEntity implements ContentsEntityInterfac
         return description;
     }
 
+    public boolean isContainRecommendKeywords(List<String> keywordList){
+        return keywordList.stream()
+                .anyMatch(m->m.contains(title));
+    }
+
     @Override
     public Long findViewCount() {
         return viewCount;
     }
-
 
 }

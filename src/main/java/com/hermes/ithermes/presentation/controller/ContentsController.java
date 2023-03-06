@@ -44,6 +44,4 @@ public class ContentsController {
     public ResponseEntity<CategoryCountDto> getCategoryCount(){
         return ResponseEntity.ok(contentsService.getCategoryCount());
     }
-
-
 }
