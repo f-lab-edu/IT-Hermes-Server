@@ -44,8 +44,8 @@ public class ContentsController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ResponseEntity<List<ContentsDtoInterface>> getSearchContents(@RequestParam(value = "type")CategoryType type,@RequestParam(value = "search")String search){
-        return ResponseEntity.ok(contentsService.getSearchContents(search,type));
+    public ResponseEntity<List<ContentsDtoInterface>> getSearchContents(@RequestParam(value = "type")CategoryType type,@RequestParam(value = "search")String search,@RequestParam(value = "page")int page){
+        return ResponseEntity.ok(contentsService.getSearchContents(page,search,type));
     }
 
 }
