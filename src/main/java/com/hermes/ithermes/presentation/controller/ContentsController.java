@@ -8,10 +8,7 @@ import com.hermes.ithermes.presentation.dto.contents.CategoryCountDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,7 +27,6 @@ public class ContentsController {
         return ResponseEntity.ok(contentsService.getMainContents(type));
     }
 
-
     @RequestMapping(value = "/category",method = RequestMethod.GET)
     public ResponseEntity<List<ContentsDtoInterface>> getCategoryContents(@RequestParam(value = "type") CategoryType type, @RequestParam(value = "page")int page,
                                                                           @RequestParam(value = "order",required = false)OrderType order){
@@ -44,4 +40,16 @@ public class ContentsController {
     public ResponseEntity<CategoryCountDto> getCategoryCount(){
         return ResponseEntity.ok(contentsService.getCategoryCount());
     }
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public ResponseEntity<List<ContentsDtoInterface>> getSearchContents(@RequestParam(value = "type")CategoryType type,@RequestParam(value = "search")String search,@RequestParam(value = "page")int page){
+        return ResponseEntity.ok(contentsService.getSearchContents(page,search,type));
+    }
+
+    @RequestMapping(value = "/deleteCache",method = RequestMethod.GET)
+    public ResponseEntity<String> deleteCacheContents(){
+        contentsService.deleteContentsCache();
+        return ResponseEntity.ok("success");
+    }
+
 }
