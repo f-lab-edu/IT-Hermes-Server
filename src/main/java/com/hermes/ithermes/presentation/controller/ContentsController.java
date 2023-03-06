@@ -48,5 +48,4 @@ public class ContentsController {
         return ResponseEntity.ok(contentsService.getSearchContents(search,type));
     }
 
-
 }

@@ -32,6 +32,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
                     .append("[url]" + contentsAlarmDtoList.get(i).url() + "\n")
                     .append("[일자]" + contentsAlarmDtoList.get(i).contentsStartAt() + "\n")
                     .append("[서비스]" + contentsAlarmDtoList.get(i).contentsProvider() + "\n");
+
             bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),youtubeAlarmMessage.toString()));
         }
     }
@@ -40,6 +41,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
     public void sendJobMessage(List<JobAlarmDto> jobAlarmDtoList, long userIdx) {
         for(int i = 0;  i < jobAlarmDtoList.size(); i++) {
             StringBuilder jobAlarmMessage = new StringBuilder();
+
             jobAlarmMessage.append("[채용 정보]" + "\n")
                     .append("[제목]" + jobAlarmDtoList.get(i).getTitle() + "\n")
                     .append("[회사]" + jobAlarmDtoList.get(i).getCompany() + "\n")
@@ -47,6 +49,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
                     .append("[url]" + jobAlarmDtoList.get(i).getUrl() + "\n")
                     .append("[서비스]" + jobAlarmDtoList.get(i).getContentsProviderType() + "\n")
                     .append("[마감일]" + jobAlarmDtoList.get(i).getContentsEndAt());
+
             bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),jobAlarmMessage.toString()));
         }
     }

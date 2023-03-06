@@ -6,7 +6,7 @@ import com.hermes.ithermes.domain.util.ContentsProviderType;
 import java.time.LocalDateTime;
 
 
-public interface ContentsEntityInterface {
+public interface CrawlingContents {
 
     String findTitle();
     String findImage();

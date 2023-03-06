@@ -11,13 +11,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Job extends BaseEntity implements ContentsEntityInterface{
+public class Job extends BaseEntity implements CrawlingContents {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -101,8 +102,14 @@ public class Job extends BaseEntity implements ContentsEntityInterface{
         return company;
     }
 
+    public boolean isContainRecommendKeywords(List<String> keywordList){
+        return keywordList.stream()
+                .anyMatch(m->m.contains(title));
+    }
+
     @Override
     public Long findViewCount() {
         return viewCount;
     }
+
 }
