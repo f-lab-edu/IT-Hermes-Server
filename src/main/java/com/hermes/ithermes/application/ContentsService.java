@@ -33,7 +33,7 @@ public class ContentsService {
         Pageable pageInfo = PageRequest.of(0,12,Sort.by(OrderType.POPULAR.getOrderQuery()).descending());
         
         if(type.getTitle().equals("JOB")){
-            return convertEntityToDtoList(jobRepository.findDistinctBy(pageInfo).getContent(), new MainPageContentsDto());
+            return convertEntityToDtoList(jobRepository.findJobBy(pageInfo).getContent(), new MainPageContentsDto());
         }
 
         return pageYoutubeAndNewsConvertMainPageContentsDto(pageInfo,type);
@@ -43,10 +43,18 @@ public class ContentsService {
         Pageable pageInfo = PageRequest.of(page,12, Sort.by(order.getOrderQuery()).descending());
 
         if(type.getTitle().equals("JOB")) {
-            return convertEntityToDtoList(jobRepository.findDistinctBy(pageInfo).getContent(), new ContentsDto());
+            return convertEntityToDtoList(jobRepository.findJobBy(pageInfo).getContent(), new ContentsDto());
         }
 
         return convertEntityToDtoList(youtubeAndNewsRepository.findYoutubeAndNewsByCategory(pageInfo,type).getContent(),new ContentsDto());
+    }
+
+    public List<ContentsDtoInterface> getSearchContents2(String searchKeyword, CategoryType type){
+        Pageable pageInfo = PageRequest.of(0,10,Sort.by(OrderType.POPULAR.getOrderQuery()).descending());
+        if(type.getTitle().equals("JOB")){
+            return convertEntityToDtoList(jobRepository.findByTitleContaining(pageInfo,type,searchKeyword).getContent(),new ContentsDto());
+        }
+        return convertEntityToDtoList(youtubeAndNewsRepository.findByTitleContaining(pageInfo,type,searchKeyword).getContent(),new ContentsDto());
     }
 
     private List<ContentsDtoInterface> pageYoutubeAndNewsConvertMainPageContentsDto(Pageable page, CategoryType type){
@@ -71,6 +79,14 @@ public class ContentsService {
         Long newsCnt = youtubeAndNewsRepository.countYoutubeAndNewsByCategory(CategoryType.NEWS);
 
         return new CategoryCountDto(youtubeCnt,jobCnt,newsCnt);
+    }
+
+    public List<ContentsDtoInterface> getSearchContents(String title,CategoryType categoryType){
+        if(categoryType==CategoryType.JOB){
+            return convertEntityToDtoList(jobRepository.findByTitleContaining(title),new ContentsDto());
+        }else{
+            return convertEntityToDtoList(youtubeAndNewsRepository.findByTitleContaining(title),new ContentsDto());
+        }
     }
 
 }
