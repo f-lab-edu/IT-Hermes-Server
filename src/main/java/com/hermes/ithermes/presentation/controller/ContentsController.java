@@ -7,7 +7,6 @@ import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.presentation.dto.contents.CategoryCountDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import lombok.RequiredArgsConstructor;
-import okhttp3.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,20 +43,10 @@ public class ContentsController {
         return ResponseEntity.ok(contentsService.getCategoryCount());
     }
 
-    @RequestMapping(value = "/search",method = RequestMethod.GET)
-    public ResponseEntity<List<ContentsDtoInterface>> getSearchContents(@RequestParam(value = "title") String title,CategoryType category){
-        return ResponseEntity.ok(contentsService.getSearchContents(title,category));
-    }
-
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public ResponseEntity<List<ContentsDtoInterface>> getSearchContents(@RequestParam(value = "type")CategoryType type,@RequestParam(value = "search")String search){
         return ResponseEntity.ok(contentsService.getSearchContents(search,type));
     }
 
-    /*
-    @RequestMapping(value = "/search/autocomplete",method = RequestMethod.GET)
-    public ResponseEntity<List<String>> getAutoCompleteSearch(@RequestParam(value = "type")CategoryType type,@RequestParam(value = "keyword")String keyword){
-        return ResponseEntity.ok();
-    }*/
 
 }
