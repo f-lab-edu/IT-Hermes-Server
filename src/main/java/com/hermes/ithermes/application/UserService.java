@@ -15,6 +15,7 @@ import com.hermes.ithermes.presentation.dto.user.*;
 import com.hermes.ithermes.presentation.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,7 @@ public class UserService {
     private final UserKeywordRegistryFactory userKeywordRegistryFactory;
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder encoder;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Transactional
     public CommonResponseDto joinUser(UserCreateUserRequestDto userLoginRequestDto) {
@@ -73,13 +75,14 @@ public class UserService {
         if (!encoder.matches(password, user.getPassword())) throw new WrongIdOrPasswordException();
 
         String refreshToken = jwtUtil.createRefreshToken(loginId);
-        user.updateRefreshToken(refreshToken);
+        setRedisRefreshToken(loginId, refreshToken);
 
         UserLoginResponseDto userLoginResponseDto = UserLoginResponseDto.builder()
                 .message("success")
                 .accessToken(jwtUtil.createAccessToken(loginId))
                 .refreshToken(refreshToken)
                 .build();
+
         return userLoginResponseDto;
     }
 
@@ -125,9 +128,10 @@ public class UserService {
             throw new ExpireTokenException();
         }
         String loginId = JwtUtil.getUsername(token, secretKey);
-        User user = userFactory.findLoginId(loginId).orElseThrow(() -> new ExpireTokenException());
-        String storedRefreshToken = user.getRefreshToken();
-        if (!token.equals(storedRefreshToken)) throw new ExpireTokenException();
+        String redisRefreshToken = getRedisRefreshToken(loginId);
+        /** 레디스 캐쉬 존재 유무 확인 */
+        if (!token.equals(redisRefreshToken)) throw new ExpireTokenException();
+
         String accessToken = jwtUtil.createAccessToken(loginId);
         return UserCheckRefreshTokenResponseDto
                 .builder()
@@ -138,9 +142,19 @@ public class UserService {
 
     @Transactional
     public CommonResponseDto userLogout(String loginId) {
-        User user = userFactory.findLoginId(loginId).orElseThrow(()->new WrongIdOrPasswordException());
-        user.updateRefreshToken(null);
+        deleteRedisRefreshToken(loginId);
         return new CommonResponseDto();
     }
 
+    private void setRedisRefreshToken(String key, String value) {
+        redisTemplate.opsForValue().set(key, value);
+    }
+
+    private String getRedisRefreshToken(String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
+
+    private void deleteRedisRefreshToken(String key) {
+        redisTemplate.delete(key);
+    }
 }
