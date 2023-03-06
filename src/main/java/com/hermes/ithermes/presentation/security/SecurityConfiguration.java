@@ -46,7 +46,7 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests().requestMatchers("/contents/main","/url-record/","/contents/count").permitAll()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/api/contents/main","/api/url-record/","/api/contents/count","/api/contents/search").permitAll()
+                .authorizeHttpRequests().requestMatchers("/api/contents/main","/api/url-record/","/api/contents/count","/api/contents/search","/api/contents/refreshCache").permitAll()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/**").authenticated()
                 .and()

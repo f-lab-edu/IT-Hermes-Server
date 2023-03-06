@@ -39,6 +39,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'com.h2database:h2'
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'net.sf.ehcache:ehcache:2.10.3'
 
 }
 
