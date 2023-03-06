@@ -19,7 +19,6 @@ public class ContentsController {
 
     private final ContentsService contentsService;
 
-    @CrossOrigin
     @RequestMapping(value = "/main",method = RequestMethod.GET)
     public ResponseEntity<List<ContentsDtoInterface>> getMainContents(@RequestParam(value = "type") CategoryType type){
         if(!CategoryType.isContainCategoryType(type.getTitle())){
@@ -27,7 +26,6 @@ public class ContentsController {
         }
         return ResponseEntity.ok(contentsService.getMainContents(type));
     }
-
 
     @RequestMapping(value = "/category",method = RequestMethod.GET)
     public ResponseEntity<List<ContentsDtoInterface>> getCategoryContents(@RequestParam(value = "type") CategoryType type, @RequestParam(value = "page")int page,
@@ -46,6 +44,12 @@ public class ContentsController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public ResponseEntity<List<ContentsDtoInterface>> getSearchContents(@RequestParam(value = "type")CategoryType type,@RequestParam(value = "search")String search,@RequestParam(value = "page")int page){
         return ResponseEntity.ok(contentsService.getSearchContents(page,search,type));
+    }
+
+    @RequestMapping(value = "/deleteCache",method = RequestMethod.GET)
+    public ResponseEntity<String> deleteCacheContents(){
+        contentsService.deleteContentsCache();
+        return ResponseEntity.ok("success");
     }
 
 }

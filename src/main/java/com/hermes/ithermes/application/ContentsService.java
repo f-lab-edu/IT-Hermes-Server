@@ -10,6 +10,8 @@ import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import com.hermes.ithermes.domain.entity.CrawlingContents;
 import com.hermes.ithermes.presentation.dto.contents.MainPageContentsDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,8 +30,8 @@ public class ContentsService {
     private final YoutubeAndNewsRepository youtubeAndNewsRepository;
     private final JobRepository jobRepository;
 
+    @Cacheable(value = "top12ContentsCache")
     public List<ContentsDtoInterface> getMainContents(CategoryType type){
-
         Pageable pageInfo = PageRequest.of(0,12,Sort.by(OrderType.POPULAR.getOrderQuery()).descending());
         
         if(type.getTitle().equals("JOB")){
@@ -81,5 +83,10 @@ public class ContentsService {
             return convertEntityToDtoList(youtubeAndNewsRepository.findByTitleContaining(pageInfo,categoryType,title).getContent(),new ContentsDto());
         }
     }
+
+    @CacheEvict(value = "top12ContentsCache",allEntries = true)
+    public void deleteContentsCache(){
+    }
+
 
 }

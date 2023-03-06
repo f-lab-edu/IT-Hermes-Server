@@ -8,6 +8,7 @@ import com.hermes.ithermes.domain.exception.SameNicknameException;
 import com.hermes.ithermes.domain.exception.UnMatchedPasswordException;
 import com.hermes.ithermes.domain.exception.WrongIdOrPasswordException;
 import com.hermes.ithermes.domain.factory.KeywordFactory;
+import com.hermes.ithermes.domain.factory.RedisFactory;
 import com.hermes.ithermes.domain.factory.UserFactory;
 import com.hermes.ithermes.domain.factory.UserKeywordRegistryFactory;
 import com.hermes.ithermes.domain.util.JobType;
@@ -51,6 +52,9 @@ class UserServiceTest {
     private BCryptPasswordEncoder encoder;
     @Mock
     private JwtUtil jwtUtil;
+    @Mock
+    private RedisFactory redisFactory;
+
 
     private UserCreateUserRequestDto userCreateUserRequestDto;
     private User user;
@@ -121,7 +125,8 @@ class UserServiceTest {
         when(userFactory.findLoginId(any())).thenReturn(Optional.ofNullable(user));
         when(jwtUtil.createAccessToken(any())).thenReturn("1q2w3e4r!");
         when(jwtUtil.createRefreshToken(any())).thenReturn("1q2w3e4r!");
-        when(encoder.matches(any(),any())).thenReturn(true);
+        when(encoder.matches(any(), any())).thenReturn(true);
+        when(redisFactory.setRedisRefreshToken(any(),any())).thenReturn("1q2w3e4r!");
         //Then
         assertEquals("success", userService.loginUser(userLoginRequestDto).getMessage());
     }
