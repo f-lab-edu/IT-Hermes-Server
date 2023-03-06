@@ -75,7 +75,7 @@ public class UserService {
         if (!encoder.matches(password, user.getPassword())) throw new WrongIdOrPasswordException();
 
         String refreshToken = jwtUtil.createRefreshToken(loginId);
-        user.updateRefreshToken(refreshToken);
+        setRedisRefreshToken(loginId, refreshToken);
 
         UserLoginResponseDto userLoginResponseDto = UserLoginResponseDto.builder()
                 .message("success")
@@ -83,7 +83,6 @@ public class UserService {
                 .refreshToken(refreshToken)
                 .build();
 
-        setRedisRefreshToken(loginId, refreshToken);
         return userLoginResponseDto;
     }
 
@@ -129,12 +128,10 @@ public class UserService {
             throw new ExpireTokenException();
         }
         String loginId = JwtUtil.getUsername(token, secretKey);
-        User user = userFactory.findLoginId(loginId).orElseThrow(() -> new ExpireTokenException());
-        String storedRefreshToken = user.getRefreshToken();
         String redisRefreshToken = getRedisRefreshToken(loginId);
         /** 레디스 캐쉬 존재 유무 확인 */
         if (!token.equals(redisRefreshToken)) throw new ExpireTokenException();
-        if (!token.equals(storedRefreshToken)) throw new ExpireTokenException();
+
         String accessToken = jwtUtil.createAccessToken(loginId);
         return UserCheckRefreshTokenResponseDto
                 .builder()
@@ -145,17 +142,19 @@ public class UserService {
 
     @Transactional
     public CommonResponseDto userLogout(String loginId) {
-        User user = userFactory.findLoginId(loginId).orElseThrow(()->new WrongIdOrPasswordException());
-        user.updateRefreshToken(null);
+        deleteRedisRefreshToken(loginId);
         return new CommonResponseDto();
     }
 
     private void setRedisRefreshToken(String key, String value) {
-        redisTemplate.opsForValue().set(key,value);
+        redisTemplate.opsForValue().set(key, value);
     }
 
     private String getRedisRefreshToken(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 
+    private void deleteRedisRefreshToken(String key) {
+        redisTemplate.delete(key);
+    }
 }

@@ -4,6 +4,10 @@ spring:
     url: jdbc:mysql://10.41.82.229:3306/ithermes?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: ${PASSWORD}
+  redis:
+    host: 10.41.82.229
+    port: 6379
+    timeout: 3000
 
   jpa:
     open-in-view: true
