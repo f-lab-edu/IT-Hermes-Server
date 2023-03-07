@@ -13,7 +13,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,13 +21,8 @@ public interface JobRepository extends JpaRepository<Job,Long> {
     Page<CrawlingContents> findJobBy(Pageable pageable);
     Page<CrawlingContents> findByTitleContaining(Pageable pageable,CategoryType type,String searchKeyword);
     List<Job> findJobByUrlGreaterThanAndContentsProviderAndGrade(String url, ContentsProviderType contentsProviderType, GradeType gradeType);
-    Page<CrawlingContents> findDistinctBy(Pageable pageable);
-    List<Job> findFirst1ByContentsProviderOrderByUrlDesc(@Param("contentsProvider") ContentsProviderType contentsProvider);
     List<Job> findJobByContentsProvider(ContentsProviderType contentsProviderType);
-    Job findJobByUrl(String url);
     Optional<List<Job>> findByUrl(@Param("url") String url);
-    List<Job> findJobBy();
-    //List<CrawlingContents> findByTitleContaining(String title);
     Long countBy();
 
 }
