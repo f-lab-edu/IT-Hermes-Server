@@ -18,6 +18,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
 
     private TelegramBot bot=new TelegramBot("5810579378:AAGNSVQz1Mzn1FjMkBuL1x-5UUz9u-jXdXc");
 
+
     private final UserRepository userRepository;
 
     @Override

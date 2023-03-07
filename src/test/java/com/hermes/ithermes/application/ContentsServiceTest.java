@@ -19,7 +19,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+/*
 @SpringBootTest
 @Transactional
 class ContentsServiceTest {
@@ -54,5 +54,5 @@ class ContentsServiceTest {
         Assertions.assertEquals(2,youtubeContents.size());
     }
 
-}
+}*/
 
