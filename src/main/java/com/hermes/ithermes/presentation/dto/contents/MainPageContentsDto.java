@@ -9,13 +9,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class MainPageContentsDto implements ContentsDtoInterface {
+public class MainPageContentsDto implements ContentsDtoInterface, Serializable {
 
     public String title;
 
