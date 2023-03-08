@@ -41,6 +41,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'net.sf.ehcache:ehcache:2.10.3'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	// https://mvnrepository.com/artifact/redis.clients/jedis
+	implementation 'redis.clients:jedis'
+
 }
 
 tasks.named('test') {

@@ -5,9 +5,7 @@ spring:
     username: ${username}
     password: ${password}
   redis:
-    hostName: localhost
-    portNumber: 6379
-    timeoutDuration: 3000
+    ipAddress: localhost
 
   jpa:
     open-in-view: true

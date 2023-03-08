@@ -5,9 +5,7 @@ spring:
     username: root
     password: ${PASSWORD}
   redis:
-    hostName: 10.41.82.229
-    portNumber: 6379
-    timeoutDuration: 3000
+    ipAddress: 10.41.82.229
 
   jpa:
     open-in-view: true
