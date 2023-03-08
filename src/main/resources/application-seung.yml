@@ -6,7 +6,6 @@ spring:
     password: ${DATASOURCE_PASSWORD}
   redis:
     ipAddress: 10.41.4.73
-
   jpa:
     open-in-view: true
     hibernate:
