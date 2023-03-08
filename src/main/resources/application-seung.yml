@@ -5,9 +5,7 @@ spring:
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
   redis:
-    hostName: 10.41.4.73
-    portNumber: 6379
-    timeoutDuration: 3000
+    ipAddress: 10.41.4.73
 
   jpa:
     open-in-view: true

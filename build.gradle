@@ -40,7 +40,7 @@ dependencies {
 	testImplementation 'com.h2database:h2'
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'net.sf.ehcache:ehcache:2.10.3'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.7.2'
 }
 
 tasks.named('test') {
