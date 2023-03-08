@@ -17,6 +17,7 @@ public class RedisConfig {
     private String ipAddress;
 
     LettuceConnectionFactory lettuceConnectionFactory() {
+        log.info("[lettuce ip 설정 확인]: {}", ipAddress);
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(ipAddress, 6379);
         LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisStandaloneConfiguration);
         lettuceConnectionFactory.afterPropertiesSet();
@@ -25,6 +26,7 @@ public class RedisConfig {
 
     @Bean
     public RedisTemplate<String, String> redisTemplate() {
+        log.info("[redisTemplate 설정 확인]: {}", ipAddress);
         RedisTemplate<String, String> template = new RedisTemplate<>();
         template.setConnectionFactory(lettuceConnectionFactory());
         template.setKeySerializer(new StringRedisSerializer());
