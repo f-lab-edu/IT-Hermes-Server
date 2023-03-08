@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -18,16 +17,15 @@ public class RedisConfig {
 
     LettuceConnectionFactory lettuceConnectionFactory() {
         log.info("[lettuce ip 설정 확인]: {}", ipAddress);
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(ipAddress, 6379);
-        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisStandaloneConfiguration);
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(ipAddress,6379);
         lettuceConnectionFactory.afterPropertiesSet();
         return lettuceConnectionFactory;
     }
 
     @Bean
-    public RedisTemplate<String, String> redisTemplate() {
+    public RedisTemplate<?, ?> redisTemplate() {
         log.info("[redisTemplate 설정 확인]: {}", ipAddress);
-        RedisTemplate<String, String> template = new RedisTemplate<>();
+        RedisTemplate<?, ?> template = new RedisTemplate<>();
         template.setConnectionFactory(lettuceConnectionFactory());
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
