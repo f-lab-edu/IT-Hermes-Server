@@ -3,11 +3,9 @@ package com.hermes.ithermes.application;
 import com.hermes.ithermes.infrastructure.*;
 import com.hermes.ithermes.presentation.dto.alarm.AlarmDtoInterface;
 import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
-import com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,13 +16,15 @@ public class TelegramAlarm implements ExternalAlarmClient {
 
     private TelegramBot bot=new TelegramBot("5810579378:AAGNSVQz1Mzn1FjMkBuL1x-5UUz9u-jXdXc");
 
-
     private final UserRepository userRepository;
 
     @Override
     public void sendContentsMessage(List<AlarmDtoInterface> contentsAlarmDtoList, long userIdx) {
+        String userTelegramId = userRepository.findTelegramIdByUserId(userIdx);
+
         for(int i = 0; i < contentsAlarmDtoList.size(); i++){
             StringBuilder youtubeAlarmMessage = new StringBuilder();
+
             youtubeAlarmMessage.append("[유투브 및 뉴스 정보]" + "\n")
                     .append("[제목]" + contentsAlarmDtoList.get(i).title() + "\n")
                     .append("[본문]" + contentsAlarmDtoList.get(i).description() + "\n")
@@ -33,12 +33,15 @@ public class TelegramAlarm implements ExternalAlarmClient {
                     .append("[일자]" + contentsAlarmDtoList.get(i).contentsStartAt() + "\n")
                     .append("[서비스]" + contentsAlarmDtoList.get(i).contentsProvider() + "\n");
 
-            bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),youtubeAlarmMessage.toString()));
+            bot.execute(new SendMessage(userTelegramId,youtubeAlarmMessage.toString()));
         }
+
     }
 
     @Override
     public void sendJobMessage(List<JobAlarmDto> jobAlarmDtoList, long userIdx) {
+        String telegramId = userRepository.findTelegramIdByUserId(userIdx);
+
         for(int i = 0;  i < jobAlarmDtoList.size(); i++) {
             StringBuilder jobAlarmMessage = new StringBuilder();
 
@@ -50,7 +53,8 @@ public class TelegramAlarm implements ExternalAlarmClient {
                     .append("[서비스]" + jobAlarmDtoList.get(i).getContentsProviderType() + "\n")
                     .append("[마감일]" + jobAlarmDtoList.get(i).getContentsEndAt());
 
-            bot.execute(new SendMessage(userRepository.findTelegramIdByUserId(userIdx),jobAlarmMessage.toString()));
+            bot.execute(new SendMessage(telegramId,jobAlarmMessage.toString()));
         }
+
     }
 }
