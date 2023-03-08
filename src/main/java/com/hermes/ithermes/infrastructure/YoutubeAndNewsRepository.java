@@ -18,7 +18,7 @@ public interface YoutubeAndNewsRepository extends JpaRepository<YoutubeAndNews, 
 
     Page<CrawlingContents> findYoutubeAndNewsBy(Pageable pageable);
     Page<CrawlingContents> findYoutubeAndNewsByCategory(Pageable pageable, CategoryType type);
-    Page<CrawlingContents> findByTitleContaining(Pageable pageable,CategoryType type,String searchKeyword);
+    Page<CrawlingContents> findByTitleContainingAndCategory(Pageable pageable,String searchKeyword,CategoryType type);
     List<YoutubeAndNews> findByUrlGreaterThanAndContentsProvider(String url,ContentsProviderType contentsProviderType);
     List<YoutubeAndNews> findYoutubeAndNewsByContentsProvider(ContentsProviderType contentsProvider);
     Optional<YoutubeAndNews> findByUrl(@Param("url") String url);

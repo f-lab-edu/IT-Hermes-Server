@@ -78,9 +78,9 @@ public class ContentsService {
     public List<ContentsDtoInterface> getSearchContents(int page,String title,CategoryType categoryType){
         Pageable pageInfo = PageRequest.of(page,12);
         if(categoryType==CategoryType.JOB){
-            return convertEntityToDtoList(jobRepository.findByTitleContaining(pageInfo,categoryType,title).getContent(),new ContentsDto());
+            return convertEntityToDtoList(jobRepository.findByTitleContaining(pageInfo,title).getContent(),new ContentsDto());
         }else{
-            return convertEntityToDtoList(youtubeAndNewsRepository.findByTitleContaining(pageInfo,categoryType,title).getContent(),new ContentsDto());
+            return convertEntityToDtoList(youtubeAndNewsRepository.findByTitleContainingAndCategory(pageInfo,title,categoryType).getContent(),new ContentsDto());
         }
     }
 

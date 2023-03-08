@@ -19,7 +19,7 @@ import java.util.Optional;
 public interface JobRepository extends JpaRepository<Job,Long> {
 
     Page<CrawlingContents> findJobBy(Pageable pageable);
-    Page<CrawlingContents> findByTitleContaining(Pageable pageable,CategoryType type,String searchKeyword);
+    Page<CrawlingContents> findByTitleContaining(Pageable pageable,String searchKeyword);
     List<Job> findJobByUrlGreaterThanAndContentsProviderAndGrade(String url, ContentsProviderType contentsProviderType, GradeType gradeType);
     List<Job> findJobByContentsProvider(ContentsProviderType contentsProviderType);
     Optional<List<Job>> findByUrl(@Param("url") String url);
