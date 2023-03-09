@@ -21,7 +21,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsUserByNickname(String nickname);
 
-    List<User> findByTelegramIdIsNotNull();
+    @Query("SELECT u.id FROM User u where u.telegramId is not null and u.isDelete=false")
+    List<Long> findUserId();
 
     @Query("SELECT u.telegramId FROM User u where u.id=:id")
     String findTelegramIdByUserId(Long id);

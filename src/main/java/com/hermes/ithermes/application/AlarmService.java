@@ -34,9 +34,7 @@ public class AlarmService {
     private final JobRepository jobRepository;
 
     public CommonResponseDto sendSubscribeAlarm() {
-        List<Long> userIdArr = userRepository.findByTelegramIdIsNotNull().stream()
-                .map(m -> m.getId())
-                .collect(Collectors.toList());
+        List<Long> userIdArr = userRepository.findUserId();
 
         for (int i = 0; i < userIdArr.size(); i++) {
             externalAlarmClient.sendContentsMessage(getUserYoutubeAndNewsAlarmContents(userIdArr.get(i),CategoryType.YOUTUBE), userIdArr.get(i));
@@ -48,9 +46,7 @@ public class AlarmService {
     }
 
     public CommonResponseDto sendRecommendAlarm(){
-        List<Long> userIdArr = userRepository.findByTelegramIdIsNotNull().stream()
-                .map(m -> m.getId())
-                .collect(Collectors.toList());
+        List<Long> userIdArr = userRepository.findUserId();
 
         for(int i = 0; i < userIdArr.size(); i++){
             externalAlarmClient.sendContentsMessage(getUserRecommendAlarmContents(userIdArr.get(i),CategoryType.YOUTUBE), userIdArr.get(i));
@@ -64,10 +60,13 @@ public class AlarmService {
     public List<AlarmDtoInterface> getUserYoutubeAndNewsAlarmContents(long userIdx, CategoryType type){
         List<Subscribe> subscribe = subscribeRepository.findByUserIdAndCategoryAndIsActive(userIdx,type,ActiveType.ACTIVE);
         List<YoutubeAndNews> youtubeAndNewsAlarmList = new ArrayList<>();
+        System.out.println("-------");
+        System.out.println(subscribe.size());
 
         for(int i = 0; i < subscribe.size(); i++){
-            youtubeAndNewsAlarmList = youtubeAndNewsRepository.findByUrlGreaterThanAndContentsProvider(subscribe.get(i).getAlarmLastUrl(),subscribe.get(i).getContentsProvider());
-
+            youtubeAndNewsAlarmList = youtubeAndNewsRepository.findYoutubeAndNewsUrl(subscribe.get(i).getAlarmLastUrl(),subscribe.get(i).getContentsProvider());
+            System.out.println("*********");
+            System.out.println(youtubeAndNewsAlarmList.size());
             if(youtubeAndNewsAlarmList.size()>0){
                 updateUserSubscribeContentsLastUrl(youtubeAndNewsAlarmList.get(youtubeAndNewsAlarmList.size()-1).getUrl(),userIdx,subscribe.get(i).getContentsProvider());
             }
@@ -99,7 +98,6 @@ public class AlarmService {
     public void updateUserSubscribeContentsLastUrl(String lastUrl, long userIdx, ContentsProviderType contentsProvider){
         Subscribe subscribe = subscribeRepository.findByUserIdAndContentsProvider(userIdx,contentsProvider);
         subscribe.updateAlarmLastUrl(lastUrl);
-        subscribeRepository.save(subscribe);
     }
 
     public List<AlarmDtoInterface> getUserRecommendAlarmContents(long userIdx, CategoryType type){
