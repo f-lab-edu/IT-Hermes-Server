@@ -13,8 +13,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class TelegramAlarm implements ExternalAlarmClient {
-
-    private TelegramBot bot=new TelegramBot("5810579378:AAGNSVQz1Mzn1FjMkBuL1x-5UUz9u-jXdXc");
+    private final TelegramBot telegramBot;
 
     private final UserRepository userRepository;
 
@@ -33,7 +32,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
                     .append("[일자]" + contentsAlarmDtoList.get(i).contentsStartAt() + "\n")
                     .append("[서비스]" + contentsAlarmDtoList.get(i).contentsProvider() + "\n");
 
-            bot.execute(new SendMessage(userTelegramId,youtubeAlarmMessage.toString()));
+            telegramBot.execute(new SendMessage(userTelegramId,youtubeAlarmMessage.toString()));
         }
 
     }
@@ -53,7 +52,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
                     .append("[서비스]" + jobAlarmDtoList.get(i).getContentsProviderType() + "\n")
                     .append("[마감일]" + jobAlarmDtoList.get(i).getContentsEndAt());
 
-            bot.execute(new SendMessage(telegramId,jobAlarmMessage.toString()));
+            telegramBot.execute(new SendMessage(telegramId,jobAlarmMessage.toString()));
         }
 
     }
