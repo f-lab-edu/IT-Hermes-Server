@@ -5,14 +5,12 @@ import com.hermes.ithermes.domain.entity.Subscribe;
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.*;
-import com.hermes.ithermes.infrastructure.JobRepository;
-import com.hermes.ithermes.infrastructure.SubscribeRepository;
-import com.hermes.ithermes.infrastructure.UserRepository;
-import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
+import com.hermes.ithermes.infrastructure.*;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.alarm.AlarmDtoInterface;
 import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
 import com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto;
+import com.hermes.ithermes.presentation.dto.crawlingcontentslasttitle.CrawlingContentsLastUrlFindAllResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +30,7 @@ public class AlarmService {
     private final SubscribeRepository subscribeRepository;
     private final YoutubeAndNewsRepository youtubeAndNewsRepository;
     private final JobRepository jobRepository;
+    private final CrawlingContentsLastUrlRepository crawlingContentsLastUrlRepository;
 
     public CommonResponseDto sendSubscribeAlarm() {
         List<Long> userIdArr = userRepository.findUserId();
@@ -62,7 +61,7 @@ public class AlarmService {
         List<YoutubeAndNews> youtubeAndNewsAlarmList = new ArrayList<>();
 
         for(int i = 0; i < subscribe.size(); i++){
-            youtubeAndNewsAlarmList = youtubeAndNewsRepository.findYoutubeAndNewsUrl("",subscribe.get(i).getContentsProvider());
+            youtubeAndNewsAlarmList = youtubeAndNewsRepository.findYoutubeAndNewsUrl(crawlingContentsLastUrlRepository.findByContentsProvider(subscribe.get(i).getContentsProvider()).orElseThrow().getLastUrl(),subscribe.get(i).getContentsProvider());
         }
 
         return youtubeAndNewsAlarmList.stream()
