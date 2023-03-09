@@ -60,16 +60,9 @@ public class AlarmService {
     public List<AlarmDtoInterface> getUserYoutubeAndNewsAlarmContents(long userIdx, CategoryType type){
         List<Subscribe> subscribe = subscribeRepository.findByUserIdAndCategoryAndIsActive(userIdx,type,ActiveType.ACTIVE);
         List<YoutubeAndNews> youtubeAndNewsAlarmList = new ArrayList<>();
-        System.out.println("-------");
-        System.out.println(subscribe.size());
 
         for(int i = 0; i < subscribe.size(); i++){
-            youtubeAndNewsAlarmList = youtubeAndNewsRepository.findYoutubeAndNewsUrl(subscribe.get(i).getAlarmLastUrl(),subscribe.get(i).getContentsProvider());
-            System.out.println("*********");
-            System.out.println(youtubeAndNewsAlarmList.size());
-            if(youtubeAndNewsAlarmList.size()>0){
-                updateUserSubscribeContentsLastUrl(youtubeAndNewsAlarmList.get(youtubeAndNewsAlarmList.size()-1).getUrl(),userIdx,subscribe.get(i).getContentsProvider());
-            }
+            youtubeAndNewsAlarmList = youtubeAndNewsRepository.findYoutubeAndNewsUrl("",subscribe.get(i).getContentsProvider());
         }
 
         return youtubeAndNewsAlarmList.stream()
@@ -83,21 +76,12 @@ public class AlarmService {
         List<Job> jobAlarmList = new ArrayList<>();
 
         for(int i = 0; i < subscribe.size(); i++){
-            jobAlarmList = jobRepository.findJobByUrlGreaterThanAndContentsProviderAndGrade(subscribe.get(i).getAlarmLastUrl(),subscribe.get(i).getContentsProvider(),GradeType.checkGradleType(userExperienceYear));
-
-            if(jobAlarmList.size()>0){
-                updateUserSubscribeContentsLastUrl(jobAlarmList.get(jobAlarmList.size()-1).getUrl(),userIdx,subscribe.get(i).getContentsProvider());
-            }
+            jobAlarmList = jobRepository.findJobByUrlGreaterThanAndContentsProviderAndGrade("",subscribe.get(i).getContentsProvider(),GradeType.checkGradleType(userExperienceYear));
         }
 
         return jobAlarmList.stream()
                 .map(m -> JobAlarmDto.convertEntityToDto(m))
                 .collect(Collectors.toList());
-    }
-
-    public void updateUserSubscribeContentsLastUrl(String lastUrl, long userIdx, ContentsProviderType contentsProvider){
-        Subscribe subscribe = subscribeRepository.findByUserIdAndContentsProvider(userIdx,contentsProvider);
-        subscribe.updateAlarmLastUrl(lastUrl);
     }
 
     public List<AlarmDtoInterface> getUserRecommendAlarmContents(long userIdx, CategoryType type){
