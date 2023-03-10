@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.domain.util.GradeType;
+import com.hermes.ithermes.domain.util.JobType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,6 +60,10 @@ public class Job extends BaseEntity implements CrawlingContents {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private GradeType grade;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private JobType jobType;
 
     public void initDefaultData() {
         viewCount=0L;
