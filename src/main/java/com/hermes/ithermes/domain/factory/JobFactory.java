@@ -3,6 +3,7 @@ package com.hermes.ithermes.domain.factory;
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.domain.util.GradeType;
+import com.hermes.ithermes.domain.util.JobType;
 import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.presentation.dto.job.JobCrawlingDto;
 import com.hermes.ithermes.presentation.dto.job.JobInsertRequestDto;
@@ -23,6 +24,7 @@ public class JobFactory {
         List<JobCrawlingDto> jobCrawlingDtoList = jobInsertRequestDto.getJobCrawlingDtoList();
         ContentsProviderType contentsProvider = jobInsertRequestDto.getContentsProvider();
         GradeType grade = jobInsertRequestDto.getGrade();
+        JobType jobType = jobInsertRequestDto.getJob();
         jobCrawlingDtoList.stream().forEach(v -> {
             String company = v.getCompany();
             String title = v.getTitle();
@@ -58,6 +60,7 @@ public class JobFactory {
                     .isDelete(false)
                     .viewCount(0L)
                     .contentsProvider(contentsProvider)
+                    .jobType(jobType)
                     .build();
 
             jobList.add(job);

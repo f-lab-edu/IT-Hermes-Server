@@ -1,5 +1,6 @@
 package com.hermes.ithermes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hermes.ithermes.application.UpdateUserChatId;
 import com.hermes.ithermes.infrastructure.UserRepository;
 import com.pengrad.telegrambot.TelegramBot;
@@ -33,5 +34,10 @@ public class AppConfig {
     @Bean
     public TelegramBot telegramBot() {
         return new TelegramBot(telegramKey);
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 }

@@ -1,6 +1,10 @@
 package com.hermes.ithermes.presentation.dto.contents;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.hermes.ithermes.domain.entity.CrawlingContents;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
@@ -29,6 +33,8 @@ public class MainPageContentsDto implements ContentsDtoInterface, Serializable {
     public ContentsProviderType contentsProviderType;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     public LocalDateTime contentsDate;
 
     public Long viewCnt;

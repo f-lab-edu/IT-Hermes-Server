@@ -53,6 +53,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>("크롤링 데이터가 존재하지 않음", HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = JsonParseException.class)
+    public ResponseEntity jsonParseException(){
+        return new ResponseEntity<>("JSON 데이터 파싱 중 오류 발생", HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(value = ExpireTokenException.class)
     public ResponseEntity expireRefreshTokenException(){
         return new ResponseEntity<>("인증 토큰 만료 혹은 유효하지 않음", HttpStatus.UNAUTHORIZED);
