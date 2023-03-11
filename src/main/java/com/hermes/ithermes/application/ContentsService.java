@@ -15,6 +15,7 @@ import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import com.hermes.ithermes.presentation.dto.contents.MainPageContentsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +40,7 @@ public class ContentsService {
     private final RedisTemplate<String, Object> cacheRedisTemplate;
     private final ObjectMapper objectMapper;
 
+    @Cacheable("top12ContentsCache")
     public List<ContentsDtoInterface> getMainContents(CategoryType type) {
         Pageable pageInfo = PageRequest.of(0, 12, Sort.by(OrderType.POPULAR.getOrderQuery()).descending());
         if (type.getTitle().equals("JOB")) {
