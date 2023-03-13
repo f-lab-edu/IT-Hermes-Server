@@ -36,7 +36,8 @@
 `Html`,`CSS`,`Javascript`  
 `Github`    
 
-
+## :thought_balloon: 전체 구조    
+![3245916C-C696-41D7-B55F-64B1CC8CD5E0_1_105_c](https://user-images.githubusercontent.com/70764912/224724135-427d0e34-2096-4d3c-908c-9f152c07f500.jpeg)
 
 
 ## :thought_balloon: CI/CD 구조  
