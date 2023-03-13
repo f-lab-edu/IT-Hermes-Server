@@ -11,7 +11,7 @@ spring:
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    show-sql: true
+    show-sql: false
     properties:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
@@ -26,6 +26,6 @@ springboot:
 
 logging:
   level:
-    org.hibernate.SQL: debug
+    org.hibernate.SQL: false
 
 telegram-key: ${TELEGRAM_KEY}
