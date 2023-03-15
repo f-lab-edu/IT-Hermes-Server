@@ -6,6 +6,7 @@ import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.presentation.dto.contents.CategoryCountDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
+import com.hermes.ithermes.presentation.dto.contents.SearchContentsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,7 @@ public class ContentsController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ResponseEntity<List<ContentsDtoInterface>> getSearchContents(@RequestParam(value = "type")CategoryType type,@RequestParam(value = "search")String search,@RequestParam(value = "page")int page){
+    public ResponseEntity<SearchContentsDto> getSearchContents(@RequestParam(value = "type")CategoryType type, @RequestParam(value = "search")String search, @RequestParam(value = "page")int page){
         return ResponseEntity.ok(contentsService.getSearchContents(page,search,type));
     }
 

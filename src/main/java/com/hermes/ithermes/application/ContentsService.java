@@ -9,13 +9,11 @@ import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
-import com.hermes.ithermes.presentation.dto.contents.CategoryCountDto;
-import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
-import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
-import com.hermes.ithermes.presentation.dto.contents.MainPageContentsDto;
+import com.hermes.ithermes.presentation.dto.contents.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -101,12 +99,13 @@ public class ContentsService {
         return new CategoryCountDto(youtubeCnt, jobCnt, newsCnt);
     }
 
-    public List<ContentsDtoInterface> getSearchContents(int page, String title, CategoryType categoryType) {
+    public SearchContentsDto getSearchContents(int page, String title, CategoryType categoryType) {
         Pageable pageInfo = PageRequest.of(page, 12);
         if (categoryType == CategoryType.JOB) {
-            return convertEntityToDtoList(jobRepository.findByTitleContaining(pageInfo, title).getContent(), new ContentsDto());
+            List<CrawlingContents> jobSearchContents = jobRepository.findByTitleContaining(pageInfo,title).getContent();
+            return new SearchContentsDto(jobSearchContents.size(),convertEntityToDtoList(jobSearchContents, new ContentsDto()));
         } else {
-            return convertEntityToDtoList(youtubeAndNewsRepository.findByTitleContainingAndCategory(pageInfo, title, categoryType).getContent(), new ContentsDto());
+            return new SearchContentsDto(youtubeAndNewsRepository.findByTitleContainingAndCategory(pageInfo, title, categoryType).getContent().size(),convertEntityToDtoList(youtubeAndNewsRepository.findByTitleContainingAndCategory(pageInfo, title, categoryType).getContent(), new ContentsDto()));
         }
     }
 
