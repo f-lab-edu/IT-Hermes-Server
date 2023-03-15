@@ -40,22 +40,6 @@
 ![3245916C-C696-41D7-B55F-64B1CC8CD5E0_1_105_c](https://user-images.githubusercontent.com/70764912/224724135-427d0e34-2096-4d3c-908c-9f152c07f500.jpeg)
 
 
-## :thought_balloon: CI/CD 구조  
-![BEA9BE37-622E-4D68-91C0-7B62ACCA92EE](https://user-images.githubusercontent.com/70764912/224013250-d7b65d5b-8af2-44af-bcfb-15ce072db496.jpeg)
-
-
-
-## :thought_balloon: 애플리케이션 프로세스 구조    
-![7B15936F-7D34-4358-B5FA-7B80E1B7F4B8_1_105_c](https://user-images.githubusercontent.com/70764912/224013410-1cc5e532-2629-4ce4-a6bc-bfec43fd6d3b.jpeg)
-
-
-## :thought_balloon: 배치/크롤링 구조    
-![608230A8-9C2E-4732-ACDE-0D46017FA8D9_1_105_c](https://user-images.githubusercontent.com/70764912/224013526-201a520d-e82d-42d2-be80-3c9858884675.jpeg)
-
-
-## :thought_balloon: 구독/추천정보 알림 로직 구조    
-![97897687-1851-4335-A423-460CE163D504](https://user-images.githubusercontent.com/70764912/224013743-50b78866-ee92-4348-863d-7e08aa10c73d.jpeg)
-
 
 
 
