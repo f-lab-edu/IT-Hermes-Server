@@ -3,11 +3,14 @@ package com.hermes.ithermes.domain.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
+import com.hermes.ithermes.domain.util.GradeType;
+import com.hermes.ithermes.domain.util.JobType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,9 +18,10 @@ import java.util.List;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
+@NoArgsConstructor
+@Document(indexName = "jobsearch")
+public class JobSearch extends BaseEntity implements CrawlingContents {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,18 +30,24 @@ public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false, length = 1000)
-    private String description;
-
-    private String image;
-
     @Column(nullable = false)
     private String url;
+
+    @Column(nullable = false)
+    private String location;
+
+    @Column(nullable = false)
+    private String company;
 
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(nullable = false)
     private LocalDateTime contentsStartAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(nullable = false)
+    private LocalDateTime contentsEndAt;
 
     @Column(nullable = false)
     private Long viewCount;
@@ -47,16 +57,23 @@ public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private CategoryType category;
+    private ContentsProviderType contentsProvider;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ContentsProviderType contentsProvider;
+    private GradeType grade;
 
-    public void updateViewCount() {
-        this.viewCount += +1L;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private JobType jobType;
+
+    public void initDefaultData() {
+        viewCount=0L;
     }
 
+    public void updateViewCount() {
+        this.viewCount+=1L;
+    }
     @Override
     public String findTitle() {
         return title;
@@ -64,7 +81,7 @@ public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
 
     @Override
     public String findImage() {
-        return image;
+        return null;
     }
 
     @Override
@@ -74,7 +91,7 @@ public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
 
     @Override
     public CategoryType findCategoryType() {
-        return category;
+        return CategoryType.JOB;
     }
 
     @Override
@@ -84,12 +101,12 @@ public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
 
     @Override
     public LocalDateTime findContentsTime() {
-        return contentsStartAt;
+        return contentsEndAt;
     }
 
     @Override
     public String findDescription() {
-        return description;
+        return company;
     }
 
     public boolean isContainRecommendKeywords(List<String> keywordList){

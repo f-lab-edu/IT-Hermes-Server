@@ -1,13 +1,12 @@
 package com.hermes.ithermes.domain.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +16,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
+@Document(indexName = "youtubeandnewssearch")
+public class YoutubeAndNewsSearch extends BaseEntity implements CrawlingContents {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
