@@ -6,6 +6,9 @@ spring:
     password: ${password}
   redis:
     ipAddress: localhost
+  elasticSearch:
+    ipAddress: localhost
+    port: 9200
 
   jpa:
     open-in-view: true

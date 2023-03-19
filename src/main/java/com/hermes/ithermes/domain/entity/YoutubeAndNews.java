@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(indexName = "youtubeandnewssearch")
 public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
 
     @Id
