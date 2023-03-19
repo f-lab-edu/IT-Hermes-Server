@@ -9,6 +9,8 @@ import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
+import com.hermes.ithermes.infrastructure.elastic.JobSearchRepository;
+import com.hermes.ithermes.infrastructure.elastic.YoutubeAndNewsSearchRepository;
 import com.hermes.ithermes.presentation.dto.contents.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -37,6 +39,8 @@ public class ContentsService {
     private final JobRepository jobRepository;
     private final RedisTemplate<String, Object> cacheRedisTemplate;
     private final ObjectMapper objectMapper;
+    private final YoutubeAndNewsSearchRepository youtubeAndNewsSearchRepository;
+    private final JobSearchRepository jobSearchRepository;
 
     @Cacheable("top12ContentsCache")
     public List<ContentsDtoInterface> getMainContents(CategoryType type) {
@@ -101,10 +105,10 @@ public class ContentsService {
 
     public SearchContentsDto getSearchContents(String title, CategoryType categoryType) {
         if (categoryType == CategoryType.JOB) {
-            List<CrawlingContents> jobSearchContents = jobRepository.findByTitleContaining(title);
+            List<CrawlingContents> jobSearchContents = jobSearchRepository.findByTitleContaining(title);
             return new SearchContentsDto(jobSearchContents.size(),convertEntityToDtoList(jobSearchContents, new ContentsDto()));
         } else {
-            List<CrawlingContents> youtubeSearchContents = youtubeAndNewsRepository.findByTitleContainingAndCategory(title,categoryType);
+            List<CrawlingContents> youtubeSearchContents = youtubeAndNewsSearchRepository.findByTitleContainingAndCategory(title,categoryType);
             return new SearchContentsDto(youtubeSearchContents.size(),convertEntityToDtoList(youtubeSearchContents, new ContentsDto()));
         }
     }
