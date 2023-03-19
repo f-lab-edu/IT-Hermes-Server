@@ -72,10 +72,11 @@ public class AlarmService {
     public List<JobAlarmDto> getUserJobAlarmContents(long userIdx){
         List<Subscribe> subscribe = subscribeRepository.findByUserIdAndCategoryAndIsActive(userIdx,CategoryType.JOB,ActiveType.ACTIVE);
         int userExperienceYear = userRepository.findUsersById(userIdx).getYearOfExperience();
+        JobType jobType = userRepository.findUsersById(userIdx).getJob();
         List<Job> jobAlarmList = new ArrayList<>();
 
         for(int i = 0; i < subscribe.size(); i++){
-            jobAlarmList = jobRepository.findJobByUrlGreaterThanAndContentsProviderAndGrade("",subscribe.get(i).getContentsProvider(),GradeType.checkGradleType(userExperienceYear));
+            jobAlarmList = jobRepository.findJobByUrlGreater(crawlingContentsLastUrlRepository.findByContentsProvider(subscribe.get(i).getContentsProvider()).get().getLastUrl(),subscribe.get(i).getContentsProvider(),GradeType.checkGradleType(userExperienceYear),jobType);
         }
 
         return jobAlarmList.stream()
