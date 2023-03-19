@@ -10,7 +10,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Document(indexName = "YoutubeAndNews")
 @Entity
 @Getter
 @Builder
