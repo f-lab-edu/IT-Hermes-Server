@@ -29,5 +29,6 @@ springboot:
 logging:
   level:
     org.hibernate.SQL: false
+    org.springframework.data.elasticsearch.client.WIRE: TRACE
 
 telegram-key: ${telegram-key}
