@@ -53,10 +53,6 @@ public class YoutubeAndNewsSearch extends BaseEntity implements CrawlingContents
     @Column(nullable = false)
     private ContentsProviderType contentsProvider;
 
-    public void updateViewCount() {
-        this.viewCount += +1L;
-    }
-
     @Override
     public String findTitle() {
         return title;
@@ -90,11 +86,6 @@ public class YoutubeAndNewsSearch extends BaseEntity implements CrawlingContents
     @Override
     public String findDescription() {
         return description;
-    }
-
-    public boolean isContainRecommendKeywords(List<String> keywordList){
-        return keywordList.stream()
-                .anyMatch(m->m.contains(title));
     }
 
     @Override
