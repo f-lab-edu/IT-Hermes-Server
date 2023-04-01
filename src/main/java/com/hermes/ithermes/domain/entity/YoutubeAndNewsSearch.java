@@ -4,6 +4,7 @@ package com.hermes.ithermes.domain.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
+import com.hermes.ithermes.domain.util.ElasticSearchType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -52,6 +53,9 @@ public class YoutubeAndNewsSearch extends BaseEntity implements CrawlingContents
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ContentsProviderType contentsProvider;
+
+    @Enumerated(EnumType.STRING)
+    private ElasticSearchType elasticSearchType;
 
     @Override
     public String findTitle() {
