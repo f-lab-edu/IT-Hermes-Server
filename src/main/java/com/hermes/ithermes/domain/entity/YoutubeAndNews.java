@@ -55,7 +55,6 @@ public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
     private ContentsProviderType contentsProvider;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private ElasticSearchType elasticSearchType;
 
     public void updateViewCount() {
