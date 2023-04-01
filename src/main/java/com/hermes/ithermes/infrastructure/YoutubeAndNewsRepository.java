@@ -23,7 +23,7 @@ public interface YoutubeAndNewsRepository extends JpaRepository<YoutubeAndNews, 
     @Query("select yn from YoutubeAndNews yn where yn.id<(select inneryn.id from YoutubeAndNews inneryn where inneryn.url=:url and inneryn.contentsProvider=:contentsProviderType) and yn.contentsProvider=:contentsProviderType")
     List<YoutubeAndNews> findYoutubeAndNewsByUrlGreater(@Param("url") String url,@Param("contentsProviderType") ContentsProviderType contentsProviderType);
     List<YoutubeAndNews> findYoutubeAndNewsByContentsProvider(ContentsProviderType contentsProvider);
-    Optional<YoutubeAndNews> findByUrl(@Param("url") String url);
+    Optional<List<YoutubeAndNews>> findByUrl(@Param("url") String url);
     Long countYoutubeAndNewsByCategory(@Param("category") CategoryType category);
 
 }

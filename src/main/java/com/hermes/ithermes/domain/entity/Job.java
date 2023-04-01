@@ -63,6 +63,7 @@ public class Job extends BaseEntity implements CrawlingContents {
     private JobType jobType;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "READY")
     private ElasticSearchType elasticSearchType;
 
     public void initDefaultData() {
