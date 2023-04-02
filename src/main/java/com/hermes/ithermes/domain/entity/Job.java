@@ -73,6 +73,9 @@ public class Job extends BaseEntity implements CrawlingContents {
     public void updateViewCount() {
         this.viewCount+=1L;
     }
+
+    public void updateElasticSearchType() {this.elasticSearchType=ElasticSearchType.DONE; }
+
     @Override
     public String findTitle() {
         return title;
@@ -116,6 +119,22 @@ public class Job extends BaseEntity implements CrawlingContents {
     @Override
     public Long findViewCount() {
         return viewCount;
+    }
+
+    public static JobSearch convertESEntitiy(Job job){
+        return JobSearch.builder()
+                .title(job.getTitle())
+                .url(job.getUrl())
+                .location(job.getLocation())
+                .company(job.getCompany())
+                .contentsStartAt(job.getContentsStartAt())
+                .contentsEndAt(job.getContentsEndAt())
+                .viewCount(job.getViewCount())
+                .isDelete(job.getIsDelete())
+                .contentsProvider(job.getContentsProvider())
+                .grade(job.getGrade())
+                .jobType(job.getJobType())
+                .build();
     }
 
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hermes.ithermes.domain.entity.CrawlingContents;
+import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.exception.JsonParseException;
 import com.hermes.ithermes.domain.util.CategoryType;
@@ -119,11 +120,18 @@ public class ContentsService {
     }
 
     public void updateElasticsearch(){
-        List<YoutubeAndNews> crawlingContents = youtubeAndNewsRepository.findByElasticSearchType(ElasticSearchType.READY);
-        crawlingContents.stream()
+        List<YoutubeAndNews> youtubeAndNewsCrawlingContents = youtubeAndNewsRepository.findByElasticSearchType(ElasticSearchType.READY);
+        youtubeAndNewsCrawlingContents.stream()
                 .forEach(v -> {
                     v.updateElasticSearchType();
                     youtubeAndNewsSearchRepository.save(YoutubeAndNews.convertESentity(v));
+                });
+
+        List<Job> jobCrawlingContents = jobRepository.findByElasticSearchType(ElasticSearchType.READY);
+        jobCrawlingContents.stream()
+                .forEach(v -> {
+                    v.updateElasticSearchType();
+                    jobSearchRepository.save(Job.convertESEntitiy(v));
                 });
         }
 
