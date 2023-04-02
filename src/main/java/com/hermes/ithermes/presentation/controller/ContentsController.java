@@ -55,6 +55,7 @@ public class ContentsController {
 
     @RequestMapping(value = "/elasticsearch",method = RequestMethod.GET)
     public ResponseEntity<String> updateContentsElasticSearch(){
+        contentsService.updateElasticsearch();
         return ResponseEntity.ok("success");
     }
 

@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hermes.ithermes.domain.entity.CrawlingContents;
+import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.exception.JsonParseException;
 import com.hermes.ithermes.domain.util.CategoryType;
+import com.hermes.ithermes.domain.util.ElasticSearchType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
@@ -31,7 +33,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class ContentsService {
 
     private final YoutubeAndNewsRepository youtubeAndNewsRepository;
@@ -115,6 +117,15 @@ public class ContentsService {
     @CacheEvict(value = "top12ContentsCache", allEntries = true)
     public void deleteContentsCache() {
     }
+
+    public void updateElasticsearch(){
+        List<YoutubeAndNews> crawlingContents = youtubeAndNewsRepository.findByElasticSearchType(ElasticSearchType.READY);
+        crawlingContents.stream()
+                .forEach(v -> {
+                    v.updateElasticSearchType();
+                    youtubeAndNewsSearchRepository.save(YoutubeAndNews.convertESentity(v));
+                });
+        }
 
 
 }

@@ -61,6 +61,8 @@ public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
         this.viewCount += +1L;
     }
 
+    public void updateElasticSearchType() { this.elasticSearchType=ElasticSearchType.DONE; }
+
     @Override
     public String findTitle() {
         return title;
@@ -105,5 +107,21 @@ public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
     public Long findViewCount() {
         return viewCount;
     }
+
+    public static YoutubeAndNewsSearch convertESentity(YoutubeAndNews youtubeAndNews){
+        return YoutubeAndNewsSearch.builder()
+                .title(youtubeAndNews.getTitle())
+                .description(youtubeAndNews.getDescription())
+                .image(youtubeAndNews.getImage())
+                .url(youtubeAndNews.getUrl())
+                .contentsStartAt(youtubeAndNews.getContentsStartAt())
+                .viewCount(youtubeAndNews.getViewCount())
+                .isDelete(youtubeAndNews.getIsDelete())
+                .category(youtubeAndNews.getCategory())
+                .contentsProvider(youtubeAndNews.getContentsProvider())
+                .build();
+
+    }
+
 
 }

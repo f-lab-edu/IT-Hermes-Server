@@ -7,12 +7,15 @@ import com.hermes.ithermes.domain.util.ContentsProviderType;
 import com.hermes.ithermes.domain.util.ElasticSearchType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
 @Getter
 @Builder
 @NoArgsConstructor
@@ -20,9 +23,10 @@ import java.util.List;
 @Document(indexName = "youtubeandnewssearch")
 public class YoutubeAndNewsSearch extends BaseEntity implements CrawlingContents {
 
+    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @Column(nullable = false)
     private String title;
@@ -35,9 +39,8 @@ public class YoutubeAndNewsSearch extends BaseEntity implements CrawlingContents
     @Column(nullable = false)
     private String url;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime contentsStartAt;
 
     @Column(nullable = false)
@@ -53,9 +56,6 @@ public class YoutubeAndNewsSearch extends BaseEntity implements CrawlingContents
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ContentsProviderType contentsProvider;
-
-    @Enumerated(EnumType.STRING)
-    private ElasticSearchType elasticSearchType;
 
     @Override
     public String findTitle() {
@@ -96,5 +96,6 @@ public class YoutubeAndNewsSearch extends BaseEntity implements CrawlingContents
     public Long findViewCount() {
         return viewCount;
     }
+
 
 }

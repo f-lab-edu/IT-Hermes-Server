@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface YoutubeAndNewsSearchRepository extends ElasticsearchRepository<YoutubeAndNewsSearch, Long> {
     List<CrawlingContents> findByTitleContainingAndCategory(String title, CategoryType categoryType);
+    void save(YoutubeAndNewsSearch youtubeAndNewsSearch);
 }
