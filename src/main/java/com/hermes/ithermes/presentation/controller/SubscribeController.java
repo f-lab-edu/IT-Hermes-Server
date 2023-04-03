@@ -38,4 +38,9 @@ public class SubscribeController {
         List<SubscribeContentsDto> subscribe = subscribeService.findSubscribe(subscribeFindSubscribeRequestDto);
         return ResponseEntity.ok(subscribe);
     }
+
+    @RequestMapping(value = "/elasticsearch", method = RequestMethod.GET)
+    public ResponseEntity<String> updateSubscribeElasticSearch(){
+        return ResponseEntity.ok("success");
+    }
 }

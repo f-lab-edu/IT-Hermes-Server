@@ -36,8 +36,8 @@ public class UrlRecordService {
         List<Job> jobList = jobRepository.findByUrl(url).orElseThrow(() -> new NoCrawlingDataException());
 
         if (jobList.isEmpty()) {
-            YoutubeAndNews youtubeAndNews = youtubeAndNewsRepository.findByUrl(url).orElseThrow(() -> new NoCrawlingDataException());
-            youtubeAndNews.updateViewCount();
+            List<YoutubeAndNews> youtubeAndNewsList = youtubeAndNewsRepository.findByUrl(url).orElseThrow(() -> new NoCrawlingDataException());
+            if (!youtubeAndNewsList.isEmpty()) youtubeAndNewsList.stream().forEach(youtubeAndNews -> youtubeAndNews.updateViewCount());
         } else {
             jobList.stream().forEach(job -> job.updateViewCount());
         }

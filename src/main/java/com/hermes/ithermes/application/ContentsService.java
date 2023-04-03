@@ -4,16 +4,20 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hermes.ithermes.domain.entity.CrawlingContents;
+import com.hermes.ithermes.domain.entity.Job;
+import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.exception.JsonParseException;
 import com.hermes.ithermes.domain.util.CategoryType;
+import com.hermes.ithermes.domain.util.ElasticSearchType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.infrastructure.JobRepository;
 import com.hermes.ithermes.infrastructure.YoutubeAndNewsRepository;
+import com.hermes.ithermes.infrastructure.elastic.JobSearchRepository;
+import com.hermes.ithermes.infrastructure.elastic.YoutubeAndNewsSearchRepository;
 import com.hermes.ithermes.presentation.dto.contents.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,13 +34,15 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class ContentsService {
 
     private final YoutubeAndNewsRepository youtubeAndNewsRepository;
     private final JobRepository jobRepository;
     private final RedisTemplate<String, Object> cacheRedisTemplate;
     private final ObjectMapper objectMapper;
+    private final YoutubeAndNewsSearchRepository youtubeAndNewsSearchRepository;
+    private final JobSearchRepository jobSearchRepository;
 
     @Cacheable("top12ContentsCache")
     public List<ContentsDtoInterface> getMainContents(CategoryType type) {
@@ -101,10 +107,10 @@ public class ContentsService {
 
     public SearchContentsDto getSearchContents(String title, CategoryType categoryType) {
         if (categoryType == CategoryType.JOB) {
-            List<CrawlingContents> jobSearchContents = jobRepository.findByTitleContaining(title);
+            List<CrawlingContents> jobSearchContents = jobSearchRepository.findByTitleContaining(title);
             return new SearchContentsDto(jobSearchContents.size(),convertEntityToDtoList(jobSearchContents, new ContentsDto()));
         } else {
-            List<CrawlingContents> youtubeSearchContents = youtubeAndNewsRepository.findByTitleContainingAndCategory(title,categoryType);
+            List<CrawlingContents> youtubeSearchContents = youtubeAndNewsSearchRepository.findByTitleContainingAndCategory(title,categoryType);
             return new SearchContentsDto(youtubeSearchContents.size(),convertEntityToDtoList(youtubeSearchContents, new ContentsDto()));
         }
     }
@@ -112,6 +118,22 @@ public class ContentsService {
     @CacheEvict(value = "top12ContentsCache", allEntries = true)
     public void deleteContentsCache() {
     }
+
+    public void updateElasticsearch(){
+        List<YoutubeAndNews> youtubeAndNewsCrawlingContents = youtubeAndNewsRepository.findByElasticSearchType(ElasticSearchType.READY);
+        youtubeAndNewsCrawlingContents.stream()
+                .forEach(v -> {
+                    v.updateElasticSearchType();
+                    youtubeAndNewsSearchRepository.save(YoutubeAndNews.convertESentity(v));
+                });
+
+        List<Job> jobCrawlingContents = jobRepository.findByElasticSearchType(ElasticSearchType.READY);
+        jobCrawlingContents.stream()
+                .forEach(v -> {
+                    v.updateElasticSearchType();
+                    jobSearchRepository.save(Job.convertESEntitiy(v));
+                });
+        }
 
 
 }

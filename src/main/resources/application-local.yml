@@ -6,6 +6,9 @@ spring:
     password: ${password}
   redis:
     ipAddress: localhost
+  elasticSearch:
+    ipAddress: localhost
+    port: 9200
 
   jpa:
     open-in-view: true
@@ -28,6 +31,7 @@ springboot:
 
 logging:
   level:
-    org.hibernate.SQL: false
+    org.hibernate.SQL: debug
+    springframework.data.elasticsearch.client.WIRE: TRACE
 
 telegram-key: ${telegram-key}

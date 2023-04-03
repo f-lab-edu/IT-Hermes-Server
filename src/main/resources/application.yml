@@ -4,6 +4,11 @@ spring:
     url: jdbc:mysql://10.41.4.73:3306/ithermes?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: ithermes
     password: ithermes1221
+  redis:
+    ipAddress: localhost
+  elasticSearch:
+    ipAddress: localhost
+    port: 9200
 
   jpa:
     open-in-view: true
@@ -27,5 +32,6 @@ springboot:
 logging:
   level:
     org.hibernate.SQL: debug
+    springframework.data.elasticsearch.client.WIRE: TRACE
 
 telegram-key: 5810579378:AAGNSVQz1Mzn1FjMkBuL1x-5UUz9u-jXdXc

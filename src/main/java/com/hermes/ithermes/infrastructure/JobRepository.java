@@ -5,6 +5,7 @@ import java.util.List;
 import com.hermes.ithermes.domain.entity.CrawlingContents;
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
+import com.hermes.ithermes.domain.util.ElasticSearchType;
 import com.hermes.ithermes.domain.util.GradeType;
 import com.hermes.ithermes.domain.util.JobType;
 import org.springframework.data.domain.Page;
@@ -26,5 +27,6 @@ public interface JobRepository extends JpaRepository<Job,Long> {
     List<Job> findJobByContentsProvider(ContentsProviderType contentsProviderType);
     Optional<List<Job>> findByUrl(@Param("url") String url);
     Long countBy();
+    List<Job> findByElasticSearchType(ElasticSearchType elasticSearchType);
 
 }

@@ -7,16 +7,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Job extends BaseEntity implements CrawlingContents {
+@Document(indexName = "jobsearch")
+public class JobSearch extends BaseEntity implements CrawlingContents {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,14 +37,12 @@ public class Job extends BaseEntity implements CrawlingContents {
     @Column(nullable = false)
     private String company;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime contentsStartAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime contentsEndAt;
 
     @Column(nullable = false)
@@ -63,18 +64,7 @@ public class Job extends BaseEntity implements CrawlingContents {
     private JobType jobType;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "READY")
     private ElasticSearchType elasticSearchType;
-
-    public void initDefaultData() {
-        viewCount=0L;
-    }
-
-    public void updateViewCount() {
-        this.viewCount+=1L;
-    }
-
-    public void updateElasticSearchType() {this.elasticSearchType=ElasticSearchType.DONE; }
 
     @Override
     public String findTitle() {
@@ -111,30 +101,9 @@ public class Job extends BaseEntity implements CrawlingContents {
         return company;
     }
 
-    public boolean isContainRecommendKeywords(List<String> keywordList){
-        return keywordList.stream()
-                .anyMatch(m->m.contains(title));
-    }
-
     @Override
     public Long findViewCount() {
         return viewCount;
-    }
-
-    public static JobSearch convertESEntitiy(Job job){
-        return JobSearch.builder()
-                .title(job.getTitle())
-                .url(job.getUrl())
-                .location(job.getLocation())
-                .company(job.getCompany())
-                .contentsStartAt(job.getContentsStartAt())
-                .contentsEndAt(job.getContentsEndAt())
-                .viewCount(job.getViewCount())
-                .isDelete(job.getIsDelete())
-                .contentsProvider(job.getContentsProvider())
-                .grade(job.getGrade())
-                .jobType(job.getJobType())
-                .build();
     }
 
 }
