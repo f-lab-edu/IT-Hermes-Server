@@ -20,6 +20,9 @@ import java.util.List;
 @AllArgsConstructor
 public class YoutubeAndNews extends BaseEntity implements CrawlingContents {
 
+    @Version
+    private Integer version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

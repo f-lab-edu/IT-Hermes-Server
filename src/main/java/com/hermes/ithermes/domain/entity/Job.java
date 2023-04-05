@@ -17,6 +17,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Job extends BaseEntity implements CrawlingContents {
+    
+    @Version
+    private Integer version;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
