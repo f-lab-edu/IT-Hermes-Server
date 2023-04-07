@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UpdateUserChatId {
 
-    private final RabbitTemplate rabbitTemplate;
+    private final TelegramBot telegramBot;
 
     public void updateUserChatId(UserRepository userRepository){
 
