@@ -7,14 +7,17 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 public class UpdateUserChatId {
-    private final TelegramBot telegramBot;
+
+    private final RabbitTemplate rabbitTemplate;
 
     public void updateUserChatId(UserRepository userRepository){
+
         telegramBot.setUpdatesListener(new UpdatesListener() {
             @Override
             public int process(List<Update> updates) {

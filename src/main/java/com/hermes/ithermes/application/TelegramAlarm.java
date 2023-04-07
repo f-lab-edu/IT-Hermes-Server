@@ -6,6 +6,7 @@ import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,9 +14,10 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class TelegramAlarm implements ExternalAlarmClient {
-    private final TelegramBot telegramBot;
 
     private final UserRepository userRepository;
+
+    private final RabbitTemplate rabbitTemplate;
 
     @Override
     public void sendContentsMessage(List<AlarmDtoInterface> contentsAlarmDtoList, long userIdx) {
@@ -32,7 +34,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
                     .append("[일자]" + contentsAlarmDtoList.get(i).contentsStartAt() + "\n")
                     .append("[서비스]" + contentsAlarmDtoList.get(i).contentsProvider() + "\n");
 
-            telegramBot.execute(new SendMessage(userTelegramId,youtubeAlarmMessage.toString()));
+            rabbitTemplate.convertAndSend("hello.exchange","hello.key",new SendMessage(userTelegramId,youtubeAlarmMessage.toString()));
         }
 
     }
@@ -52,7 +54,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
                     .append("[서비스]" + jobAlarmDtoList.get(i).getContentsProviderType() + "\n")
                     .append("[마감일]" + jobAlarmDtoList.get(i).getContentsEndAt());
 
-            telegramBot.execute(new SendMessage(telegramId,jobAlarmMessage.toString()));
+            rabbitTemplate.convertAndSend("hello.exchange","hello.key",new SendMessage(telegramId,jobAlarmMessage.toString()));
         }
 
     }

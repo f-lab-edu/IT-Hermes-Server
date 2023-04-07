@@ -16,6 +16,7 @@ import com.hermes.ithermes.infrastructure.elastic.JobSearchRepository;
 import com.hermes.ithermes.infrastructure.elastic.YoutubeAndNewsSearchRepository;
 import com.hermes.ithermes.presentation.dto.contents.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -44,8 +45,11 @@ public class ContentsService {
     private final YoutubeAndNewsSearchRepository youtubeAndNewsSearchRepository;
     private final JobSearchRepository jobSearchRepository;
 
+    private final RabbitTemplate rabbitTemplate;
+
     @Cacheable("top12ContentsCache")
     public List<ContentsDtoInterface> getMainContents(CategoryType type) {
+        rabbitTemplate.convertAndSend("hello.exchange","hello.key",type);
         Pageable pageInfo = PageRequest.of(0, 12, Sort.by(OrderType.POPULAR.getOrderQuery()).descending());
         if (type.getTitle().equals("JOB")) {
             return convertEntityToDtoList(jobRepository.findJobBy(pageInfo).getContent(), new MainPageContentsDto());
