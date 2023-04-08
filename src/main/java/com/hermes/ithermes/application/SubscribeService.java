@@ -29,7 +29,7 @@ public class SubscribeService {
 
     public List<SubscribeContentsDto> findSubscribe(SubscribeFindSubscribeRequestDto subscribeFindSubScribeRequestDto) {
         List<Subscribe> subscribes = subscribeFactory.parseFindSubscribeDtoToSubscribes(subscribeFindSubScribeRequestDto);
-        List<SubscribeContentsDto> contentsProviderTypes = subscribeFactory.findActiveContentsProviderType(subscribes);
+        List<SubscribeContentsDto> contentsProviderTypes = SubscribeFactory.findActiveContentsProviderType(subscribes);
 
         return contentsProviderTypes;
     }

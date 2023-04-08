@@ -3,6 +3,7 @@ package com.hermes.ithermes.domain.factory;
 import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.infrastructure.UserRepository;
 import com.hermes.ithermes.presentation.dto.user.UserCreateUserRequestDto;
+import com.hermes.ithermes.presentation.dto.user.UserFindUserListResponseDto;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -37,5 +38,16 @@ public class UserFactory {
 
     public boolean existsByNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
+    }
+
+    public static UserFindUserListResponseDto parseUserToRequestUserDto(User user) {
+
+        return UserFindUserListResponseDto.builder()
+                .loginId(user.getLoginId())
+                .nickname(user.getNickname())
+                .jobType(user.getJob().name())
+                .yearOfExperience(user.getYearOfExperience())
+                .subscribeList(SubscribeFactory.findActiveContentsProviderType(user.getSubscribes()))
+                .build();
     }
 }

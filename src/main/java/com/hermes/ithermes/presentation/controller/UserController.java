@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController()
 @RequestMapping("/api/user")
@@ -56,6 +57,12 @@ public class UserController {
     public ResponseEntity<CommonResponseDto> checkDuplicateNickname(@Valid @RequestBody UserUpdateNicknameRequestDto userUpdateNicknameRequestDto) {
         CommonResponseDto userUpdateNicknameResponseDto = userService.updateNickname(userUpdateNicknameRequestDto);
         return ResponseEntity.ok(userUpdateNicknameResponseDto);
+    }
+
+    @RequestMapping(value = "/user-list", method = RequestMethod.GET)
+    public ResponseEntity<List<UserFindUserListResponseDto>> findUserList() {
+        List<UserFindUserListResponseDto> userList = userService.findUserList();
+        return ResponseEntity.ok(userList);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.PUT)

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -144,5 +145,10 @@ public class UserService {
     public CommonResponseDto userLogout(String loginId) {
         redisFactory.deleteRedisRefreshToken(loginId);
         return new CommonResponseDto();
+    }
+
+    public List<UserFindUserListResponseDto> findUserList() {
+        List<User> userList = userRepository.findAll();
+        return userList.stream().map(user -> UserFactory.parseUserToRequestUserDto(user)).toList();
     }
 }

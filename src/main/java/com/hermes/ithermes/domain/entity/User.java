@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Where;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -47,6 +49,13 @@ public class User extends BaseEntity {
 
     public void isDelete() {
         this.isDelete = true;
+    }
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "userId")
+    List<Subscribe> subscribes;
+
+    public void setSubscribes(List<Subscribe> subscribes) {
+        this.subscribes = subscribes;
     }
 
     public void updateTelegramId(String telegramId) {

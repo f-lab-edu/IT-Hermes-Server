@@ -58,7 +58,7 @@ public class SubscribeFactory {
         return findSubscribeByUserId(userId).orElseThrow(null);
     }
 
-    public List<SubscribeContentsDto> findActiveContentsProviderType(List<Subscribe> subscribes) {
+    public static List<SubscribeContentsDto> findActiveContentsProviderType(List<Subscribe> subscribes) {
         return subscribes.stream().map(v -> new SubscribeContentsDto(v.getContentsProvider().getTitle(), v.getIsActive().getTitle())).collect(Collectors.toList());
     }
 
