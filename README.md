@@ -42,7 +42,12 @@
 ## :thought_balloon: 전체 구조    
 ![68A30EE6-7C85-4FD7-B51C-AFB90683363D_1_105_c](https://user-images.githubusercontent.com/70764912/230696042-70781f1d-6f8f-46d4-9e45-86ad4fa57cb5.jpeg)
 
+<br>
 
+## :page_facing_up: 기술 스택 
+
+<hr>
+## :page_facing_up: 트러블슈팅 개선
 
 
 
