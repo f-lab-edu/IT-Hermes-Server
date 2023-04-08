@@ -36,7 +36,7 @@
 `Nodejs, NCP`  
 `Feign Client`  
 `Html`,`CSS`,`Javascript`  
-`Redis`,`ElasticSearch`   
+`RabbitMQ`,`ElasticSearch`   
 `Redis`,`EH Cache`
 
 ## :thought_balloon: 전체 구조    
