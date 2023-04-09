@@ -148,7 +148,7 @@ public class UserService {
     }
 
     public List<UserFindUserListResponseDto> findUserList() {
-        List<User> userList = userRepository.findAll();
-        return userList.stream().map(user -> UserFactory.parseUserToRequestUserDto(user)).toList();
+        List<User> userAndSubscribe = userRepository.findUserAndSubscribe();
+        return userAndSubscribe.stream().map(user -> UserFactory.parseUserToRequestUserDto(user)).toList();
     }
 }

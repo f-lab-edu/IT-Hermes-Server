@@ -50,12 +50,12 @@ public class User extends BaseEntity {
     public void isDelete() {
         this.isDelete = true;
     }
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
-    List<Subscribe> subscribes;
+    List<Subscribe> subscribe;
 
-    public void setSubscribes(List<Subscribe> subscribes) {
-        this.subscribes = subscribes;
+    public void setSubscribe(List<Subscribe> subscribe) {
+        this.subscribe = subscribe;
     }
 
     public void updateTelegramId(String telegramId) {

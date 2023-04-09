@@ -11,6 +11,10 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    @Query("SELECT u FROM User u JOIN FETCH u.subscribe")
+    List<User> findUserAndSubscribe();
+
     Optional<User> findByLoginId(@Param("loginId") String loginId);
 
     boolean existsByNickname(@Param("nickname") String nickname);

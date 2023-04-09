@@ -47,7 +47,7 @@ public class UserFactory {
                 .nickname(user.getNickname())
                 .jobType(user.getJob().name())
                 .yearOfExperience(user.getYearOfExperience())
-                .subscribeList(SubscribeFactory.findActiveContentsProviderType(user.getSubscribes()))
+                .subscribeList(SubscribeFactory.findActiveContentsProviderType(user.getSubscribe()))
                 .build();
     }
 }
