@@ -10,6 +10,7 @@ import com.hermes.ithermes.domain.util.GradeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +21,9 @@ import java.util.Optional;
 public interface JobRepository extends JpaRepository<Job,Long> {
 
     Page<CrawlingContents> findJobBy(Pageable pageable);
-    Page<CrawlingContents> findByTitleContaining(Pageable pageable,CategoryType type,String searchKeyword);
+    @Query(value = "SELECT * FROM Job WHERE MATCH(title) "
+            + "AGAINST (?)", nativeQuery = true)
+    Page<Job> findByTitleContaining(String searchKeyword,Pageable pageable);
     List<Job> findJobByUrlGreaterThanAndContentsProviderAndGrade(String url, ContentsProviderType contentsProviderType, GradeType gradeType);
     Page<CrawlingContents> findDistinctBy(Pageable pageable);
     List<Job> findFirst1ByContentsProviderOrderByUrlDesc(@Param("contentsProvider") ContentsProviderType contentsProvider);

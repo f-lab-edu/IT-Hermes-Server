@@ -5,6 +5,7 @@ import com.hermes.ithermes.domain.exception.NotExistsRequestParamException;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.OrderType;
 import com.hermes.ithermes.presentation.dto.contents.CategoryCountDto;
+import com.hermes.ithermes.presentation.dto.contents.ContentsDto;
 import com.hermes.ithermes.presentation.dto.contents.ContentsDtoInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -47,5 +48,11 @@ public class ContentsController {
     public ResponseEntity<List<ContentsDtoInterface>> getSearchContents(@RequestParam(value = "type")CategoryType type,@RequestParam(value = "search")String search,@RequestParam(value = "page")int page){
         return ResponseEntity.ok(contentsService.getSearchContents(page,search,type));
     }
+
+    @RequestMapping(value = "/job", method = RequestMethod.GET)
+    public ResponseEntity<List<ContentsDto>> getSearchJobContents(@RequestParam(value = "type")CategoryType type, @RequestParam(value = "search")String search, @RequestParam(value = "page")int page){
+        return ResponseEntity.ok(contentsService.getJobContents(page,search));
+    }
+
 
 }

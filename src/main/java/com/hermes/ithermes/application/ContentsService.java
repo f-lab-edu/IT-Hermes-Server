@@ -76,10 +76,17 @@ public class ContentsService {
     public List<ContentsDtoInterface> getSearchContents(int page,String title,CategoryType categoryType){
         Pageable pageInfo = PageRequest.of(page,12);
         if(categoryType==CategoryType.JOB){
-            return convertEntityToDtoList(jobRepository.findByTitleContaining(pageInfo,categoryType,title).getContent(),new ContentsDto());
+            return convertEntityToDtoList(youtubeAndNewsRepository.findByTitleContainingAndCategory(pageInfo,title,categoryType).getContent(),new ContentsDto());
         }else{
-            return convertEntityToDtoList(youtubeAndNewsRepository.findByTitleContaining(pageInfo,categoryType,title).getContent(),new ContentsDto());
+            return convertEntityToDtoList(youtubeAndNewsRepository.findByTitleContainingAndCategory(pageInfo,title,categoryType).getContent(),new ContentsDto());
         }
+    }
+
+    public List<ContentsDto> getJobContents(int page,String title){
+        Pageable pageInfo = PageRequest.of(page,12);
+        return jobRepository.findByTitleContaining(title,pageInfo).stream()
+                .map(m->ContentsDto.convertJobSearch(m))
+                .collect(Collectors.toList());
     }
 
 }

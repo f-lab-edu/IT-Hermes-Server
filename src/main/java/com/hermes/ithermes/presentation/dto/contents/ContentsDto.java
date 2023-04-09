@@ -2,6 +2,7 @@ package com.hermes.ithermes.presentation.dto.contents;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hermes.ithermes.domain.entity.CrawlingContents;
+import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.util.CategoryType;
 import com.hermes.ithermes.domain.util.ContentsProviderType;
 import lombok.AllArgsConstructor;
@@ -47,6 +48,16 @@ public class ContentsDto implements ContentsDtoInterface {
     @Override
     public ContentsDto convertEntityToDto(CrawlingContents crawlingContents) {
         return new ContentsDto(crawlingContents);
+    }
+
+    public static ContentsDto convertJobSearch(Job job){
+        return ContentsDto.builder()
+                .title(job.getTitle())
+                .image(null)
+                .url(job.getUrl())
+                .category(CategoryType.JOB)
+                .contentProvider(job.getContentsProvider())
+                .build();
     }
 
 }
