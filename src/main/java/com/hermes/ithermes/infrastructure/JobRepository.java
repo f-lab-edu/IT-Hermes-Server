@@ -22,7 +22,7 @@ public interface JobRepository extends JpaRepository<Job,Long> {
 
     Page<CrawlingContents> findJobBy(Pageable pageable);
     @Query(value = "SELECT * FROM Job WHERE MATCH(title) "
-            + "AGAINST (?)", nativeQuery = true)
+                        + "AGAINST (?)", nativeQuery = true)
     Page<Job> findByTitleContaining(String searchKeyword,Pageable pageable);
     List<Job> findJobByUrlGreaterThanAndContentsProviderAndGrade(String url, ContentsProviderType contentsProviderType, GradeType gradeType);
     Page<CrawlingContents> findDistinctBy(Pageable pageable);
