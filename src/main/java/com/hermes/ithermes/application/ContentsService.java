@@ -105,10 +105,11 @@ public class ContentsService {
         return new CategoryCountDto(youtubeCnt, jobCnt, newsCnt);
     }
 
-    public SearchContentsDto getSearchContents(String title, CategoryType categoryType) {
+    public SearchContentsDto getSearchContents(String title, CategoryType categoryType,int page) {
+        Pageable pageInfo = PageRequest.of(page, 12);
         if (categoryType == CategoryType.JOB) {
-            List<CrawlingContents> jobSearchContents = jobSearchRepository.findByTitleContaining(title);
-            return new SearchContentsDto(jobSearchContents.size(),convertEntityToDtoList(jobSearchContents, new ContentsDto()));
+            Page<CrawlingContents> jobSearchContents = jobSearchRepository.findByTitleContaining(pageInfo,title);
+            return new SearchContentsDto(jobSearchContents.getContent().size(),convertEntityToDtoList(jobSearchContents.getContent(), new ContentsDto()));
         } else {
             List<CrawlingContents> youtubeSearchContents = youtubeAndNewsSearchRepository.findByTitleContainingAndCategory(title,categoryType);
             return new SearchContentsDto(youtubeSearchContents.size(),convertEntityToDtoList(youtubeSearchContents, new ContentsDto()));
