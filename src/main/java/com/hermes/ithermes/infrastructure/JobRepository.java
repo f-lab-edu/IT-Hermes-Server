@@ -22,7 +22,7 @@ public interface JobRepository extends JpaRepository<Job,Long> {
 
     Page<CrawlingContents> findJobBy(Pageable pageable);
     List<CrawlingContents> findByTitleContaining(String searchKeyword);
-    @Query("select jn from Job jn where jn.id<(select innerjn.id from Job innerjn where innerjn.url=:url and innerjn.contentsProvider=:contentsProviderType and innerjn.grade=:GradeType and innerjn.jobType=:JobType) and jn.contentsProvider=:contentsProviderType and jn.grade=:GradeType and jn.jobType=:JobType")
+    @Query("select jn from Job jn where jn.id>(select innerjn.id from Job innerjn where innerjn.url=:url and innerjn.contentsProvider=:contentsProviderType and innerjn.grade=:GradeType and innerjn.jobType=:JobType) and jn.contentsProvider=:contentsProviderType and jn.grade=:GradeType and jn.jobType=:JobType")
     List<Job> findJobByUrlGreater(@Param("url") String url, @Param("contentsProviderType") ContentsProviderType contentsProvider, @Param("GradeType") GradeType gradeType, @Param("JobType")JobType jobType);
     List<Job> findJobByContentsProvider(ContentsProviderType contentsProviderType);
     Optional<List<Job>> findByUrl(@Param("url") String url);
