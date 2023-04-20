@@ -1,6 +1,6 @@
 # PROJECT IT-Hermes
 
-:paperclip: [서비스 링크](https://it-hermes.store)  
+:paperclip: [서비스 링크](https://it-hermes.site)  
 
 :paperclip: [IT-Hermes 크롤링서버 레포](https://github.com/f-lab-edu/IT-Hermes-Crawling)  
 :paperclip: [IT-Hermes 배치서버 레포](https://github.com/f-lab-edu/IT-Hermes-Batch)  
