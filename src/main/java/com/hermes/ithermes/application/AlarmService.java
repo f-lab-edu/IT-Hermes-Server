@@ -61,7 +61,12 @@ public class AlarmService {
         List<YoutubeAndNews> youtubeAndNewsAlarmList = new ArrayList<>();
 
         for(int i = 0; i < subscribe.size(); i++){
-            youtubeAndNewsAlarmList = youtubeAndNewsRepository.findYoutubeAndNewsByUrlGreater(crawlingContentsLastUrlRepository.findByContentsProvider(subscribe.get(i).getContentsProvider()).get().getLastUrl(),subscribe.get(i).getContentsProvider());
+            List<YoutubeAndNews> tmpYoutube = youtubeAndNewsRepository.findYoutubeAndNewsByUrlGreater(crawlingContentsLastUrlRepository.findByContentsProvider(subscribe.get(i).getContentsProvider()).get().getLastUrl(),subscribe.get(i).getContentsProvider());
+            tmpYoutube.stream().forEach(v ->
+                    youtubeAndNewsAlarmList.add(v));
+            System.out.println("-----------");
+            System.out.println(subscribe.get(i).getContentsProvider());
+            System.out.println(youtubeAndNewsAlarmList.size());
         }
 
         return youtubeAndNewsAlarmList.stream()
