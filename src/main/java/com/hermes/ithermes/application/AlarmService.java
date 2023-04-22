@@ -12,7 +12,6 @@ import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
 import com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.index.DocIDMerger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +48,12 @@ public class AlarmService {
             externalAlarmClient.sendContentsMessage(getUserYoutubeAndNewsAlarmContents(newsAlarm.get(i)),alarmUser.getTelegramId());
         }
 
+        /*
+        for(int i = 0; i < jobAlarm.size(); i++){
+            User alarmUser = jobAlarm.get(i).getUser();
+            externalAlarmClient.sendJobMessage(getUserJobAlarmContents(jobAlarm.get(i)),alarmUser.getTelegramId());
+        }*/
+
         return new CommonResponseDto();
     }
 
@@ -58,7 +63,7 @@ public class AlarmService {
         for(int i = 0; i < userIdArr.size(); i++){
             //externalAlarmClient.sendContentsMessage(getUserRecommendAlarmContents(userIdArr.get(i),CategoryType.YOUTUBE), userIdArr.get(i));
            // externalAlarmClient.sendContentsMessage(getUserRecommendAlarmContents(userIdArr.get(i),CategoryType.NEWS), userIdArr.get(i));
-            externalAlarmClient.sendJobMessage(getUserRecommendAlarmJobContents(userIdArr.get(i)),userIdArr.get(i));
+            //externalAlarmClient.sendJobMessage(getUserRecommendAlarmJobContents(userIdArr.get(i)),userIdArr.get(i));
         }
 
         return new CommonResponseDto();
@@ -75,15 +80,10 @@ public class AlarmService {
                 .collect(Collectors.toList());
     }
 
-    public List<JobAlarmDto> getUserJobAlarmContents(long userIdx){
-        List<Subscribe> subscribe = subscribeRepository.findByUserIdAndCategoryAndIsActive(userIdx,CategoryType.JOB,ActiveType.ACTIVE);
-        int userExperienceYear = userRepository.findUsersById(userIdx).getYearOfExperience();
-        JobType jobType = userRepository.findUsersById(userIdx).getJob();
+    public List<JobAlarmDto> getUserJobAlarmContents(Subscribe jobSubscribe){
         List<Job> jobAlarmList = new ArrayList<>();
 
-        for(int i = 0; i < subscribe.size(); i++){
-            jobAlarmList = jobRepository.findJobByUrlGreater(crawlingContentsLastUrlRepository.findByContentsProvider(subscribe.get(i).getContentsProvider()).get().getLastUrl(),subscribe.get(i).getContentsProvider(),GradeType.checkGradleType(userExperienceYear),jobType);
-        }
+        jobAlarmList = jobRepository.findJobByUrlGreater(crawlingContentsLastUrlRepository.findByContentsProvider(jobSubscribe.getContentsProvider()).get().getLastUrl(),jobSubscribe.getContentsProvider(),GradeType.checkGradleType(jobSubscribe.getUser().getYearOfExperience()),jobSubscribe.getUser().getJob());
 
         return jobAlarmList.stream()
                 .map(m -> JobAlarmDto.convertEntityToDto(m))

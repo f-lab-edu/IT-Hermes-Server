@@ -37,8 +37,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
     }
 
     @Override
-    public void sendJobMessage(List<JobAlarmDto> jobAlarmDtoList, long userIdx) {
-        String telegramId = userRepository.findTelegramIdByUserId(userIdx);
+    public void sendJobMessage(List<JobAlarmDto> jobAlarmDtoList, String telegramId) {
 
         for(int i = 0;  i < jobAlarmDtoList.size(); i++) {
             StringBuilder jobAlarmMessage = new StringBuilder();
