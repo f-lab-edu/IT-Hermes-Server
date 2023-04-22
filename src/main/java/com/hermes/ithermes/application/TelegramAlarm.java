@@ -1,6 +1,5 @@
 package com.hermes.ithermes.application;
 
-import com.hermes.ithermes.infrastructure.*;
 import com.hermes.ithermes.presentation.dto.alarm.AlarmDtoInterface;
 import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
 import com.pengrad.telegrambot.TelegramBot;
@@ -14,8 +13,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TelegramAlarm implements ExternalAlarmClient {
     private final TelegramBot telegramBot;
-
-    private final UserRepository userRepository;
 
     @Override
     public void sendContentsMessage(List<AlarmDtoInterface> contentsAlarmDtoList, String telegramId) {

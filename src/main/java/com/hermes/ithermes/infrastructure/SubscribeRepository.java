@@ -21,10 +21,6 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
 
     Optional<Subscribe> findByContentsProvider(@Param("contentsProvider") ContentsProviderType contentsProvider);
 
-    List<Subscribe> findByUserIdAndCategoryAndIsActive(@Param("userId") Long userId, @Param("category") CategoryType categoryType, @Param("active") ActiveType active);
-
-    Subscribe findByUserIdAndContentsProvider(Long userId, ContentsProviderType contentsProviderType);
-
     @Query(value = "select s from Subscribe s join fetch s.user u where u.telegramId is not null and s.isActive= :active and s.category = :category")
     List<Subscribe> findAlarmJoin(@Param("active") ActiveType active,@Param("category") CategoryType categoryType);
 
