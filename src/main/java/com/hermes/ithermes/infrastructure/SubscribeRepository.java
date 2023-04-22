@@ -25,4 +25,7 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
 
     Subscribe findByUserIdAndContentsProvider(Long userId, ContentsProviderType contentsProviderType);
 
+    @Query(value = "select s from Subscribe s join fetch s.user u where u.telegramId is not null")
+    List<Subscribe> findAlarmJoin();
+
 }

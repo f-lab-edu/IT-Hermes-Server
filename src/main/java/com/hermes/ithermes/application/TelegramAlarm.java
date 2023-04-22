@@ -18,8 +18,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
     private final UserRepository userRepository;
 
     @Override
-    public void sendContentsMessage(List<AlarmDtoInterface> contentsAlarmDtoList, long userIdx) {
-        String userTelegramId = userRepository.findTelegramIdByUserId(userIdx);
+    public void sendContentsMessage(List<AlarmDtoInterface> contentsAlarmDtoList, String telegramId) {
 
         for(int i = 0; i < contentsAlarmDtoList.size(); i++){
             StringBuilder youtubeAlarmMessage = new StringBuilder();
@@ -32,7 +31,7 @@ public class TelegramAlarm implements ExternalAlarmClient {
                     .append("[일자]" + contentsAlarmDtoList.get(i).contentsStartAt() + "\n")
                     .append("[서비스]" + contentsAlarmDtoList.get(i).contentsProvider() + "\n");
 
-            telegramBot.execute(new SendMessage(userTelegramId,youtubeAlarmMessage.toString()));
+            telegramBot.execute(new SendMessage(telegramId,youtubeAlarmMessage.toString()));
         }
 
     }

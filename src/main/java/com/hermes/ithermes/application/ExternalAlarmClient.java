@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ExternalAlarmClient {
 
-    void sendContentsMessage(List<AlarmDtoInterface> youtubeAlarmDtoList, long userIdx);
+    void sendContentsMessage(List<AlarmDtoInterface> youtubeAlarmDtoList, String telegramId);
     void sendJobMessage(List<JobAlarmDto> jobAlarmDtoList, long userIdx);
 
 }
