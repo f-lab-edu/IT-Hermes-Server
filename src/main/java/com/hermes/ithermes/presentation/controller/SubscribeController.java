@@ -41,6 +41,7 @@ public class SubscribeController {
 
     @RequestMapping(value = "/elasticsearch", method = RequestMethod.GET)
     public ResponseEntity<String> updateSubscribeElasticSearch(){
+        subscribeService.updateElasticsearch();
         return ResponseEntity.ok("success");
     }
 }

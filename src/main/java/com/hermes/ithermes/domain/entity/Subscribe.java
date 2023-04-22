@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.lucene.index.DocIDMerger;
 
 @Entity
 @Getter
@@ -42,6 +43,16 @@ public class Subscribe extends BaseEntity {
 
     public void changeUpdateAt(ActiveType activeType) {
         this.isActive = activeType;
+    }
+
+    public static AlarmSearch convertESentity(Subscribe subscribe){
+        return AlarmSearch.builder()
+                .userId(subscribe.getUser().getId())
+                .category(subscribe.getCategory())
+                .contentsProvider(subscribe.getContentsProvider())
+                .telegramId(subscribe.getUser().getTelegramId())
+                .build();
+
     }
 
 }

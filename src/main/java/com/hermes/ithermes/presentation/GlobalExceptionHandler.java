@@ -62,4 +62,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity expireRefreshTokenException(){
         return new ResponseEntity<>("인증 토큰 만료 혹은 유효하지 않음", HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(value = NoAlarmDataException.class)
+    public ResponseEntity noAlarmDataException(){
+        return new ResponseEntity<>("알림데이터가 존재하지 않습니다,", HttpStatus.NOT_FOUND);
+    }
 }
