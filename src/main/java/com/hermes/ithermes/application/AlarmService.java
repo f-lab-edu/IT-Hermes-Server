@@ -2,6 +2,7 @@ package com.hermes.ithermes.application;
 
 import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.Subscribe;
+import com.hermes.ithermes.domain.entity.User;
 import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.util.*;
 import com.hermes.ithermes.infrastructure.*;
@@ -11,6 +12,7 @@ import com.hermes.ithermes.presentation.dto.alarm.JobAlarmDto;
 import com.hermes.ithermes.presentation.dto.alarm.YoutubeAndNewsAlarmDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.lucene.index.DocIDMerger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,15 +35,18 @@ public class AlarmService {
     private final CrawlingContentsLastUrlRepository crawlingContentsLastUrlRepository;
 
     public CommonResponseDto sendSubscribeAlarm() {
-        List<Subscribe> youtubeJoinAlarmDto = subscribeRepository.findAlarmJoin();
-        //List<AlarmDto> newsAlarmDto = subscribeRepository.findAlarmJoin(ActiveType.ACTIVE,CategoryType.NEWS);
-        //List<AlarmDto> jobAlarmDto = subscribeRepository.findAlarmJoin(ActiveType.ACTIVE,CategoryType.JOB);
+        List<Subscribe> youtubeAlarm = subscribeRepository.findAlarmJoin(ActiveType.ACTIVE,CategoryType.YOUTUBE);
+        List<Subscribe> newsAlarm = subscribeRepository.findAlarmJoin(ActiveType.ACTIVE,CategoryType.NEWS);
+        List<Subscribe> jobAlarm = subscribeRepository.findAlarmJoin(ActiveType.ACTIVE,CategoryType.JOB);
 
-        System.out.println("-----------");
-        System.out.println(youtubeJoinAlarmDto.size());
+        for(int i = 0; i< youtubeAlarm.size(); i++){
+            User alarmUser = youtubeAlarm.get(i).getUser();
+            externalAlarmClient.sendContentsMessage(getUserYoutubeAndNewsAlarmContents(youtubeAlarm.get(i)),alarmUser.getTelegramId());
+        }
 
-        for(int i = 0; i< youtubeJoinAlarmDto.size(); i++){
-            externalAlarmClient.sendContentsMessage(getUserYoutubeAndNewsAlarmContents(youtubeJoinAlarmDto.get(i).getUser().getId(), youtubeJoinAlarmDto.get(i).getCategory(), youtubeJoinAlarmDto.get(i).getContentsProvider()), youtubeJoinAlarmDto.get(i).getUser().getTelegramId());
+        for(int i = 0; i < newsAlarm.size(); i++){
+            User alarmUser = newsAlarm.get(i).getUser();
+            externalAlarmClient.sendContentsMessage(getUserYoutubeAndNewsAlarmContents(newsAlarm.get(i)),alarmUser.getTelegramId());
         }
 
         return new CommonResponseDto();
@@ -60,13 +65,10 @@ public class AlarmService {
     }
 
 
-    public List<AlarmDtoInterface> getUserYoutubeAndNewsAlarmContents(long userIdx, CategoryType type,ContentsProviderType contentsProviderType){
-        List<Subscribe> subscribe = subscribeRepository.findByUserIdAndCategoryAndIsActive(userIdx,type,ActiveType.ACTIVE);
+    public List<AlarmDtoInterface> getUserYoutubeAndNewsAlarmContents(Subscribe youtubeAndNewsSubscribe) {
         List<YoutubeAndNews> youtubeAndNewsAlarmList = new ArrayList<>();
 
-        for(int i = 0; i < subscribe.size(); i++){
-            youtubeAndNewsAlarmList = youtubeAndNewsRepository.findYoutubeAndNewsByUrlGreater(crawlingContentsLastUrlRepository.findByContentsProvider(subscribe.get(i).getContentsProvider()).get().getLastUrl(),subscribe.get(i).getContentsProvider());
-        }
+        youtubeAndNewsAlarmList = youtubeAndNewsRepository.findYoutubeAndNewsByUrlGreater(crawlingContentsLastUrlRepository.findByContentsProvider(youtubeAndNewsSubscribe.getContentsProvider()).get().getLastUrl(),youtubeAndNewsSubscribe.getContentsProvider());
 
         return youtubeAndNewsAlarmList.stream()
                 .map(m -> YoutubeAndNewsAlarmDto.convertEntityToDto(m))
