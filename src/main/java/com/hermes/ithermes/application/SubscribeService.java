@@ -1,8 +1,13 @@
 package com.hermes.ithermes.application;
 
+import com.hermes.ithermes.domain.entity.Job;
 import com.hermes.ithermes.domain.entity.Subscribe;
+import com.hermes.ithermes.domain.entity.YoutubeAndNews;
 import com.hermes.ithermes.domain.factory.SubscribeFactory;
+import com.hermes.ithermes.domain.util.ActiveType;
+import com.hermes.ithermes.domain.util.ElasticSearchType;
 import com.hermes.ithermes.infrastructure.SubscribeRepository;
+import com.hermes.ithermes.infrastructure.elastic.AlarmSearchRepository;
 import com.hermes.ithermes.presentation.dto.CommonResponseDto;
 import com.hermes.ithermes.presentation.dto.subscribe.SubscribeContentsDto;
 import com.hermes.ithermes.presentation.dto.subscribe.SubscribeFindSubscribeRequestDto;
@@ -19,6 +24,7 @@ import java.util.List;
 public class SubscribeService {
     private final SubscribeRepository subscribeRepository;
     private final SubscribeFactory subscribeFactory;
+    private final AlarmSearchRepository alarmSearchRepository;
 
     @Transactional
     public CommonResponseDto putSubscribe(SubscribePutSubscribeRequestDto subscribePutSubscribeRequestDto) {
@@ -32,5 +38,14 @@ public class SubscribeService {
         List<SubscribeContentsDto> contentsProviderTypes = SubscribeFactory.findActiveContentsProviderType(subscribes);
 
         return contentsProviderTypes;
+    }
+
+    public void updateElasticsearch(){
+        List<Subscribe> subscribesList = subscribeRepository.findAlarmJoin(ActiveType.ACTIVE);
+        subscribesList.stream()
+                .map(v -> Subscribe.convertESentity(v))
+                .forEach(v ->
+                    alarmSearchRepository.save(v)
+                );
     }
 }

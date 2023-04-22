@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface AlarmSearchRepository extends ElasticsearchRepository<AlarmSearch,Long> {
 
     Optional<List<AlarmSearch>> findByCategory(CategoryType categoryType);
+    void save(AlarmSearch alarmSearch);
+
 }
