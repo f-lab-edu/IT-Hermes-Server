@@ -35,3 +35,9 @@ logging:
     springframework.data.elasticsearch.client.WIRE: TRACE
 
 telegram-key: ${TELEGRAM_KEY}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
