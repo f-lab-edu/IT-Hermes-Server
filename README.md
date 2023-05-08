@@ -46,4 +46,3 @@
 
 <br>
 
-## :page_facing_up: 트러블슈팅 개선
